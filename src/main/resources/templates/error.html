@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http//www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<main layout:fragment="content" class="container d-flex justify-content-center align-items-center" style="min-height: 40vh;">
+	<section>
+		<h1 class="text-center" th:text="${error}"></h1>
+		<p class="text-center">해당 페이지는 지원하지 않습니다.</p>
+	</section>
+</main>
+</html>

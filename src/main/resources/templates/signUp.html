@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http//www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<main layout:fragment="content" class="container my-2">
+    <h1 class="text-center">사용자 가입</h1>
+    <form th:action="@{/signUp}" method="post">
+        <div class="mb-3">
+          <label for="name" class="form-label">이름</label>
+          <input type="text" class="form-control" id="name" name="name" placeholder="사용자 이름을 입력하세요." required autocomplete="off">
+        </div>
+        <div class="mb-3">
+          <label for="pwd" class="form-label">비밀번호</label>
+          <input type="password" class="form-control" id="pwd" name="pwd" placeholder="사용자 비밀번호를 입력하세요." required autocomplete="off">
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">이메일</label>
+          <input type="email" class="form-control" id="email" name="email" placeholder="사용자 이메일를 입력하세요." required autocomplete="off">
+        </div>
+        <div class="mb-3">
+          <label for="phone" class="form-label">전화번호</label>
+          <input type="text" class="form-control" id="phone" name="phone" placeholder="사용자 전화번호를 입력하세요." autocomplete="off">
+        </div>
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-dark">가입</button>
+        </div>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
+            <a href="/" class="btn btn-warning">취소</a>
+        </div>
+    </form>        
+</main>
+</html>

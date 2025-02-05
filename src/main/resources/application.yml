@@ -1,0 +1,47 @@
+server:
+  port: 8080
+  servlet:
+    session:
+      timeout: ${REDIS_TIMEOUT}
+
+spring:
+  application:
+    name: app2
+  profiles:
+    active: dev
+# ENV 설정
+  config:
+    import: optional:file:.env[.properties]
+# database 설정
+  datasource:
+    driver-class-name: ${DB_DRIVER}
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+# Redis 설정
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
+      timeout: ${REDIS_TIMEOUT}
+# Spring Session 설정
+  session:
+#    store-type: redis
+    redis:
+      repository-type: default
+      flush-mode: immediate
+      namespace: ${REDIS_NAMESPACE}
+# file size 설정
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+# log level 설정
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+      thymeleaf: DEBUG
