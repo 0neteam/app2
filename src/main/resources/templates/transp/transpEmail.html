@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security6"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+
+<head>
+    <style>
+        #transportTable {
+            display: none;
+        }
+    </style>
+    <title>운송자 정보 입력</title>
+</head>
+
+<body>
+    <h1>운송자 정보 입력</h1>
+    <hr>
+    <h2>운송자 정보를 입력해주세요.</h2>
+    <form action="#" method="POST">
+        <label for="name">이름:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="phone">휴대폰:</label>
+        <input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{3,4}-[0-9]{4}" required ><br><br>
+
+        <button type="submit">전송</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security6"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+
+<head>
+    <style>
+        #transportTable {
+            display: none;
+        }
+    </style>
+    <script>
+        function loadTransportStatus() {
+            const transportTable = document.getElementById('transportTable');
+            transportTable.style.display = transportTable.style.display === 'none' ? 'table' : 'none';
+        }
+    </script>
+</head>
+
+<main layout:fragment="content" class="container my-2">
+    <div>
+        <input type="button" id="transportStatusBtn" class="btn btn-light" value="운송 진행 현황" onclick="loadTransportStatus()">
+    </div>
+    <table id="transportTable" class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>운송 번호</th>
+                <th>견적서 번호</th>
+                <th>운송자 번호</th>
+                <th>운송 일시</th>
+                <th>운송 상태</th>
+            </tr>
+        </thead>
+    </table>
+</main>
+</html>
