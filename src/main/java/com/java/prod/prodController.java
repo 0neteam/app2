@@ -11,7 +11,6 @@ public class prodController {
 	
 	@GetMapping("/inventory")
 	public String prod() {
-	
 		return "prod/inventory";
 	}
 	
