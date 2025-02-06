@@ -1,5 +1,86 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http//www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security6"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<main layout:fragment="content" class="container my-2">
+	<div class="container">
+     
+
+        <!-- 메인 콘텐츠 -->
+        <div class="main-content">
+            <h1>재고현황</h1>
+
+            <!-- 검색과 버튼들 -->
+            <div class="search-bar">
+                <select id="search-type">
+                    <option value="all">전체</option>
+                    <option value="code">품목코드</option>
+                    <option value="name">품목명</option>
+                </select>
+                <input type="text" id="search-input" placeholder="검색...">
+                <button id="search-btn">검색</button>
+                <button id="add-btn">추가</button>
+                <button id="view-btn">조회</button>
+            </div>
+
+            <!-- 테이블 -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>품목코드</th>
+                        <th>품목명</th>
+                        <th>재고수량</th>
+                        <th>판매가</th>
+                        <th>비고</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>001</td>
+                        <td>상품 A</td>
+                        <td>100</td>
+                        <td>5000</td>
+                        <td>비고 내용</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>002</td>
+                        <td>상품 B</td>
+                        <td>50</td>
+                        <td>15000</td>
+                        <td>비고 내용</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>003</td>
+                        <td>상품 C</td>
+                        <td>200</td>
+                        <td>2000</td>
+                        <td>비고 내용</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>004</td>
+                        <td>상품 D</td>
+                        <td>150</td>
+                        <td>7000</td>
+                        <td>비고 내용</td>
+                    </tr>
+                    
+                    
+                    
+                    
+                    <!-- 더 많은 데이터 -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+</html>
+
 
 
 
@@ -132,90 +213,7 @@ table tbody tr:nth-child(even) {
 
 
 <body>
-    <div class="container">
-        <!-- 사이드바 -->
-        <nav class="sidebar">
-            <ul>
-                <li><a href="#">수주관리</a></li>
-                <li><a href="#">수주조회</a></li>
-                <li><a href="#">외주관리</a></li>
-                <li><a href="#">운송</a></li>
-                <li><a href="#">상품관리</a></li>
-                <li><a href="#">재고현황</a></li>
-            </ul>
-        </nav>
-
-        <!-- 메인 콘텐츠 -->
-        <div class="main-content">
-            <h1>재고현황</h1>
-
-            <!-- 검색과 버튼들 -->
-            <div class="search-bar">
-                <select id="search-type">
-                    <option value="all">전체</option>
-                    <option value="code">품목코드</option>
-                    <option value="name">품목명</option>
-                </select>
-                <input type="text" id="search-input" placeholder="검색...">
-                <button id="search-btn">검색</button>
-                <button id="add-btn">추가</button>
-                <button id="view-btn">조회</button>
-            </div>
-
-            <!-- 테이블 -->
-            <table>
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>품목코드</th>
-                        <th>품목명</th>
-                        <th>재고수량</th>
-                        <th>판매가</th>
-                        <th>비고</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>001</td>
-                        <td>상품 A</td>
-                        <td>100</td>
-                        <td>5000</td>
-                        <td>비고 내용</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>002</td>
-                        <td>상품 B</td>
-                        <td>50</td>
-                        <td>15000</td>
-                        <td>비고 내용</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>003</td>
-                        <td>상품 C</td>
-                        <td>200</td>
-                        <td>2000</td>
-                        <td>비고 내용</td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>004</td>
-                        <td>상품 D</td>
-                        <td>150</td>
-                        <td>7000</td>
-                        <td>비고 내용</td>
-                    </tr>
-                    
-                    
-                    
-                    
-                    <!-- 더 많은 데이터 -->
-                </tbody>
-            </table>
-        </div>
-    </div>
+    
 </body>
 
 <!-- 모달 창 -->
