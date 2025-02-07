@@ -32,6 +32,15 @@
                 <th>운송 상태</th>
             </tr>
         </thead>
+        <tbody>
+            <tr th:each="transport : ${transplist}">
+                <td th:text="${transport.transpNo}"></td>
+                <td th:text="${transport.quoNo}"></td>
+                <td th:text="${transport.driverNo}"></td>
+                <td th:text="${transport.transpDate}"></td>
+            	<td th:text="${transport.transpStatus != null ? transport.transpStatus : '미정'}"></td>
+            </tr>
+        </tbody>
     </table>
 </main>
 </html>

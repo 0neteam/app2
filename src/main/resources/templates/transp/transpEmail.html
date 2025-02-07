@@ -5,6 +5,14 @@
       layout:decorate="~{layouts/default}">
 
 <head>
+    <script>
+        function autoHyphen(input) {
+            input.value = input.value
+                .replace(/[^0-9]/g, '')
+                .replace(/^(\d{3})(\d{4})(\d{4})$/, '$1-$2-$3');
+        }
+    </script>
+
     <style>
     
     </style>
@@ -15,12 +23,14 @@
         <h1>운송자 정보 입력</h1>
         <hr>
         <h2>운송자 정보를 입력해주세요.</h2>
-        <form action="/submit" method="POST">
+        <form action="/InfoSave" method="POST">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+            <input type="hidden" name="bizNo" th:value="${bizNo}">
             <label for="name">이름&nbsp&nbsp&nbsp:</label>
-            <input type="text" id="name" name="name" required><br><br>
+            <input type="text" id="driverName" name="driverName" required><br><br>
 
             <label for="phone">휴대폰:</label>
-            <input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{3,4}-[0-9]{4}" required><br><br>
+            <input type="text" id="driverPhone" name="driverPhone" maxlength="13" oninput="autoHyphen(this)" required><br><br>
 
             <button type="submit">전송</button>
             <hr>
