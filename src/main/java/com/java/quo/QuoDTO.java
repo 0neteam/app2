@@ -1,5 +1,6 @@
 package com.java.quo;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import lombok.AllArgsConstructor;
@@ -19,10 +20,9 @@ import lombok.ToString;
 public class QuoDTO {
 	
 	private int quoNo;
-	private int orderNo;
-	private int bizNo;
-	private Date quoDate;
+	private String bizName;
+	private LocalDate quoDate;
+	private LocalDate deliDate;
 	private String quoStatus;
-	private int qty;
-	private String departure;
+	private String category;
 }
