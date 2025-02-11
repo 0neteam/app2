@@ -15,6 +15,11 @@ public class QuoDaoImp implements QuoDao{
 	public List<QuoDTO> list(QuoDTO quoDTO) {
 		return quoMapper.list(quoDTO);
 	}
+
+	@Override
+	public QuoModalDTO quoModal(int no) {
+		return quoMapper.quoModal(no);
+	}
 	
 
 }

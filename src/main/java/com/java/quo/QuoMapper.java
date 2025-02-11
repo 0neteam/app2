@@ -8,16 +8,30 @@ import org.apache.ibatis.annotations.Select;
 public interface QuoMapper {
 	
 	@Select({"<script>"
-			+"SELECT quoNo, quoDate, quoStatus, deliDate FROM mfr_quo"
-			+"<if test='category ==\"수주번호\"'>WHERE quoNo = #{quoNo}</if> "
-			+"<if test='category ==\"발주일자\"'>WHERE quoDate = #{quoDate}</if> "
-			+"<if test='category ==\"납기일자\"'>WHERE deliDate = #{deliDate}</if> "
-			+"<if test='category ==\"승인상태\"'>WHERE quoStatus = #{quoStatus}</if> "
+			+"SELECT mq.quoNo, mq.quoDate, mq.quoStatus, mq.deliDate, mc.bizName "
+			+"  FROM mfr_quo AS mq "
+			+" INNER JOIN mfr_client AS mc "
+			+"    ON mq.bizNo = mc.bizNo "
+//			+ "where mq.quoNo == 'Y' "
+			+"<if test='category == \"수주번호\"'>where mq.quoNo = #{quoNo}</if> "
+			+"<if test='category == \"발주업체\"'>where mc.bizName = #{bizName}</if> "
+			+"<if test='category == \"발주일자\"'>where mq.quoDate = #{quoDate}</if> "
+			+"<if test='category == \"납기일자\"'>where mq.deliDate = #{deliDate}</if> "
+			+"<if test='category == \"승인상태\"'>where mq.quoStatus = #{quoStatus}</if> "
 			+ "</script>"
 			})
 	public List<QuoDTO> list(QuoDTO quoDTO);
 	
-//	+ "Join mfr_client on mfr_quo.bizNo = mfr_client.bizNo"
-//	+"<if test='category == 2'>WHERE bizName = #{bizName}</if> "
+	@Select({"<script>"
+			+ "select mq.quoNO, mq.quoDate, ms.itemCode, ms.price, ms.name, mq.qty, mq.quoDate, mq.deliDate "
+			+ "from mfr_quo as mq "
+			+ " left join mfr_stock as ms "
+			+ "on mq.itemCode = ms.itemCode "
+			+ "where mq.quoNo = #{no} "
+			+ "</script>"
+		
+	})
+	public QuoModalDTO quoModal(int no);
+	
 
 }
