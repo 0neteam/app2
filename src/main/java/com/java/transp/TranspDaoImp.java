@@ -19,9 +19,22 @@ public class TranspDaoImp implements TranspDao {
 	}
 
 	@Override
+	public TranspInfoDTO findDriverInfo(int transpMailNo) {
+		return transpMapper.findDriverInfo(transpMailNo);
+	}
+	
+	@Override
 	public TranspInfoDTO InfoSave(TranspInfoDTO transpInfoDTO) {
 		int status = transpMapper.InfoSave(transpInfoDTO);
 		return (status == 1) ? transpInfoDTO : null;
 	}
+
+	@Override
+	public List<String> transpmail() {
+		return transpMapper.transpmail();
+	}
+
+
+
 
 }

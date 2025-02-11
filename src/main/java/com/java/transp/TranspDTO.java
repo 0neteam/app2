@@ -1,7 +1,5 @@
 package com.java.transp;
 
-import java.time.LocalDate;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,9 +16,10 @@ import lombok.ToString;
 public class TranspDTO {
 
 	private int transpNo;
-	private int quoNo;
-	private int driverNo;
-	private LocalDate transpDate;
+	private int orderNo;
+	private String departure;
+	private String dstn;
+	private String driverName;
 	private String transpStatus;
-	
+	private int transpMailNo;
 }

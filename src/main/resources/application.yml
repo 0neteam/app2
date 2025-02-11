@@ -9,6 +9,18 @@ spring:
     name: app2
   profiles:
     active: dev
+# 메일 설정
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: mfr.0neteam.co.kr@gmail.com
+    password: p11190neteam
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 # ENV 설정
   config:
     import: optional:file:.env[.properties]
@@ -45,3 +57,4 @@ logging:
       springframework:
         web: DEBUG
       thymeleaf: DEBUG
+
