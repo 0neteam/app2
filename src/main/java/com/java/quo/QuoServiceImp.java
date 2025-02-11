@@ -52,7 +52,6 @@ public class QuoServiceImp implements QuoService{
 		}else if (category.equals("승인상태")) {
 			QuoDTO quoDTO = QuoDTO.builder().category(category).quoStatus(search).build();
 			List<QuoDTO> quoDTOs = quoDao.list(quoDTO);
-			model.addAttribute("result", quoDTOs);
 			return "quo/quo";
 		} else {
 		return "quo/quo";
