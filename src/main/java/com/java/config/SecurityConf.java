@@ -5,44 +5,65 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import jakarta.servlet.http.HttpSession;
 
-@Configuration
-@EnableWebSecurity(debug = true)
-@EnableMethodSecurity
+@Configuration // 설정 클래스를 나타내는 어노테이션
+@EnableWebSecurity(debug = true) // Spring Security를 활성화하고 디버그 모드를 켬
+@EnableMethodSecurity // 메서드 수준의 보안 설정을 활성화
 public class SecurityConf {
-	
-	@Bean
-	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.logout(logout -> {
-			logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"));
-			logout.invalidateHttpSession(true);
-			logout.clearAuthentication(true);
-			logout.logoutSuccessUrl("/");
-			logout.permitAll();	
-		});
-		http.formLogin(form -> {
-			form.loginPage("/signIn");
-			form.loginProcessingUrl("/signIn");
-			form.usernameParameter("email");
-			form.passwordParameter("pwd");
-			form.successHandler((req, res, auth) -> {
-				HttpSession httpSession = req.getSession();
-				httpSession.setAttribute("user", auth.getPrincipal());
-				res.sendRedirect("/");
-			});
-			form.failureHandler((req, res, exc) -> res.sendRedirect("/"));
-			form.permitAll();
-		});
-		http.authorizeHttpRequests(req -> {
-			req.requestMatchers("/", "/signUp").permitAll();
-			req.requestMatchers("/webjars/**").permitAll();
-			req.anyRequest().authenticated();
-		});
-		return http.build();
-	}
-	
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(); // 비밀번호 암호화를 위한 BCryptPasswordEncoder 빈 등록
+    }
+    
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.logout(logout -> {
+            logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET")); // GET 요청으로 로그아웃 가능
+            logout.invalidateHttpSession(true); // 로그아웃 시 세션 무효화
+            logout.clearAuthentication(true); // 인증 정보 삭제
+            logout.logoutSuccessUrl("/"); // 로그아웃 성공 시 리디렉션할 URL 설정
+            logout.permitAll(); // 모든 사용자에게 로그아웃 허용
+        });
+        
+        http.formLogin(form -> {
+            form.loginPage("/signIn"); // 커스텀 로그인 페이지 설정
+            form.loginProcessingUrl("/signIn"); // 로그인 처리 URL 설정
+            form.usernameParameter("email"); // 로그인 시 입력할 사용자 ID 파라미터명 지정
+            form.passwordParameter("pwd"); // 로그인 시 입력할 비밀번호 파라미터명 지정
+            
+            form.successHandler((req, res, auth) -> {
+                HttpSession session = req.getSession();
+                session.setAttribute("user", auth.getPrincipal()); // 로그인 성공 시 세션에 사용자 정보 저장
+                res.sendRedirect("/"); // 로그인 성공 후 리디렉션
+            });
+            
+            form.failureHandler((req, res, exc) -> {
+                res.sendRedirect("/"); // 로그인 실패 시 메인 페이지로 이동
+            });
+            
+            form.permitAll(); // 로그인 페이지는 모든 사용자 접근 가능
+        });
+            
+        http.authorizeHttpRequests(req -> {
+            req.requestMatchers("/", "/signUp").permitAll(); // 메인 페이지 및 회원가입 페이지는 인증 없이 접근 가능
+            req.requestMatchers("/css/**").permitAll();
+            req.requestMatchers("/js/**").permitAll(); 
+            req.requestMatchers("/user/create/checkemail").permitAll();
+            req.requestMatchers("/webjars/**").permitAll(); // 정적 리소스(webjars) 접근 허용
+           
+            req.requestMatchers("/**").permitAll(); //인증때문에 안되는 부분이 있을시 해제하여 확인
+            
+            req.anyRequest().authenticated(); // 그 외 모든 요청은 인증 필요
+                        
+        });
+        
+        return http.build(); // 설정을 적용한 SecurityFilterChain 반환
+    }
 }
