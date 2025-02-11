@@ -38,8 +38,8 @@ public class TestController {
     @GetMapping("/signIn")
 	public String signIn() {return "signIn";}
 	
-	@GetMapping("/signUp")
-	public String signUp() {return "signUp";}
+//	@GetMapping("/signUp")
+//	public String signUp() {return "signUp";}
 	
 	@PostMapping("/test")
 	public String test() {return "redirect:/";}
