@@ -45,7 +45,8 @@ function openPostcode() {
     }).open();
 }
 
-// 이메일 중복 확인 함수
+
+//이메일 중복 체크 함수
 function checkDuplicateEmail() {
     var emailId = document.getElementById('email_id').value;
     var emailDomain = document.getElementById('email_domain').value;
@@ -57,34 +58,29 @@ function checkDuplicateEmail() {
 		return;
 	}
 
-	const _csrf = document.querySelector('input[name="_csrf"]').value;
-	//console.log("_csrf: ", _csrf); // 이메일 값 확인
-    
+	var _csrf = document.querySelector('input[name="_csrf"]').value;
+    var params = {email, _csrf}
+    console.log(params);
 
-	// ajax 요청
-	$.ajax({
-	    url: '/user/create/checkemail',  // 이메일 중복 확인 API 엔드포인트
-	    method: 'POST',
-	    contentType: 'application/x-www-form-urlencoded',  // URL 인코딩 방식으로 전송
-	    data: { 
-	        email: email,  // 이메일 값
-	        _csrf: _csrf   // CSRF 토큰 값
-	    },
-	    success: function(res) {
-	        if (res.status === "OK") {
-	            $('#email_duple_chk').val('OK');  // email_duple_chk 아이디 값을 가지는 hidden 엘리먼트 - 상태값 관리 : WAIT(중복확인대기), OK(중복확인완료), FAIL(중복된상태)
-	            alert("이메일 사용 가능합니다.");
-	        } else {
-	            $('#email_duple_chk').val('FAIL');
-	            alert("이미 사용 중인 이메일입니다.");
-	        }
-	    },
-	    error: function(xhr, status, error) {
-	        console.log("Error: " + error);
-	    }
-	});
+    $.ajax({
+        url: '/user/create/checkemail',
+        method: 'POST',
+        data: params
+    }).done(data => {
+		if (data.status === "OK") {
+            $('#email_duple_chk').val('OK');  // email_duple_chk 아이디 값을 가지는 hidden 엘리먼트 - 상태값 관리 : WAIT(중복확인대기), OK(중복확인완료), FAIL(중복된상태)
+            alert("이메일 사용 가능합니다.");
+        } else {
+            $('#email_duple_chk').val('FAIL');
+            alert("이미 사용 중인 이메일입니다.");
+        }
+    }).fail(error => {
+        console.log(error);
+    });
 
 }
+
+
 
 
 document.addEventListener('DOMContentLoaded', function() {

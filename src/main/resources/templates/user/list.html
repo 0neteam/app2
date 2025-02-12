@@ -4,15 +4,14 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default}">      
 
-	
 <main layout:fragment="content" class="container my-2">
 
 <link rel="stylesheet" href="/css/user/create.css">
-<link rel="stylesheet" href="/css/user/list.css">	
+<link rel="stylesheet" href="/css/user/list.css">		
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="/js/user/create.js"></script>
 <script src="/js/user/list.js"></script>
-
+	        
     <div class="container mt-5">
         <h2 class="mb-4">사원정보</h2>
         
@@ -31,7 +30,7 @@
                 </select>
 
                 <!-- 동적으로 표시되는 검색 입력 필드 -->
-                <input type="text" id="searchKeyword" class="form-control me-2" placeholder="검색어" style="width: 200px; margin-top:10px;">
+                <input type="text" id="searchKeyword" class="form-control me-2" placeholder="검색어" style="width: 200px;">
 
                 <!-- 검색 버튼 -->
                 <button type="button" class="btn btn-primary" onclick="searchEmployee()">검색</button>
@@ -50,17 +49,18 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- 'users'는 Controller에서 전달된 데이터입니다. -->
-                <tr th:each="r, iterStat : ${rs}">
-                    <td th:text="${iterStat.index + 1}"></td> <!-- 인덱스를 1부터 시작하도록 설정 -->
-                    <td th:text="${r.userNo}"></td>
-                    <td th:text="${r.name}"></td>
-                    <td th:text="${r.deptName}"></td>
-                    <td>
-                        <button class="del-btn btn btn-danger btn-sm" th:data-user-no="${r.userNo}" onclick="deleteEmployee(this)">삭제</button>
-                    </td>
-                </tr>
-            </tbody>
+			    <!-- 'users'는 Controller에서 전달된 데이터입니다. -->
+			    <tr th:each="r, iterStat : ${rs}" style="cursor: pointer;" th:onclick="'window.location.href=\'/user/detail?userNo=' + ${r.userNo} + '\''">
+			        <td th:text="${iterStat.index + 1}"></td> <!-- 인덱스를 1부터 시작하도록 설정 -->
+			        <td th:text="${r.userNo}"></td>
+			        <td th:text="${r.name}"></td>
+			        <td th:text="${r.deptName}"></td>
+			        <td>
+			            <button class="del-btn btn btn-danger btn-sm" th:data-user-no="${r.userNo}" onclick="deleteEmployee(this)">삭제</button>
+			        </td>
+			    </tr>
+			</tbody>
+
         </table>
     </div>
 

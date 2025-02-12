@@ -68,4 +68,28 @@ public class UserDaoImp implements UserDao {
 		return userMapper.findByDept(deptName);
 	}
 
+	@Override
+	public UserDTO detailByUserNo(String userNo) {
+		// TODO Auto-generated method stub
+		return userMapper.detailByUserNo(userNo);
+	}
+
+	@Override
+	public int NotPwdUpdate(UserDTO user) {
+		// TODO Auto-generated method stub
+		return userMapper.NotPwdUpdate(user);
+	}
+
+	@Override
+	public int update(UserDTO user) {
+		// TODO Auto-generated method stub
+		return userMapper.update(user);
+	}
+
+	@Override
+	public int updateUserRole(UserDTO user) {
+		// TODO Auto-generated method stub
+		return userMapper.updateUserRole(user);
+	}
+
 }

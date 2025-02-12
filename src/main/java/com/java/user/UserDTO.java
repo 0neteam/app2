@@ -35,6 +35,7 @@ public class UserDTO implements Serializable {  // Serializable 인터페이스 
 
     private String roleName;
     private String deptName;
+    private String selectRole;
     
     private String zipcode;
     private String adr;

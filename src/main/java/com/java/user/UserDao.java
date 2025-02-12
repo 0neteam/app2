@@ -18,7 +18,15 @@ public interface UserDao {
 	
 	public int save(UserDTO user);
 	
+	public int NotPwdUpdate(UserDTO user);
+	
+	public int update(UserDTO user);
+	
+	public int updateUserRole(UserDTO user);
+	
 	public int saveUserRole(UserRole userRole);
 	
 	public int delete(String UserNo);
+	
+	public UserDTO detailByUserNo(String userNo);
 }
