@@ -7,8 +7,8 @@ $(() => {
 			'검색어를 입력하세요', 
 			'숫자를 입력하세요', 
 			'업체명을 입력하세요', 
-			'ex)yyyymmdd', 
-			'ex)yyyymmdd', 
+			'ex)yyyy-mm-dd', 
+			'ex)yyyy-mm-dd', 
 			'상태값을 입력하세요'];
         $("input[name='search']").attr("placeholder", categorys[index]);
     });
@@ -19,13 +19,14 @@ $(() => {
         var bizNum = $(this).attr("data-bizNum");
         var bizName = $(this).attr("data-bizName");
         var deliDate = $(this).attr("data-deliDate");
-		var totalPrice = 0;
         var adr = $(this).attr("data-adr");
 		
         var quoNo = $(this).attr("data-quoNo");
         var _csrf = document.querySelector('input[name="_csrf"]').value;
         var params = {quoNo, _csrf};
 
+		var totalPrice = 0;
+		
         $.ajax({
             url: '/quo',
             method: 'POST',

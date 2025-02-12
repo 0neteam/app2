@@ -47,11 +47,5 @@ public interface QuoMapper {
 			+ "</script>"
 	})
 	public List<QuoModalDTO> quoModal(int no);
-//	+ "left join mfr_client as mc "
-//	+ "on mq.bizNo = mc.bizNo "
-//	+ "mc.bizNum, "
-//	+ "mc.bizName, "
-//	+ "mc.adr, "
-	
 
 }

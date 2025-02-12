@@ -26,8 +26,4 @@ public class QuoModalDTO {
 	private LocalDate deliDate;
 	private String dstn;
 
-//	private String bizNum;
-//	private String bizName;
-//	private String adr;
-
 }

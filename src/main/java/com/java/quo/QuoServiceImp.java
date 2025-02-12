@@ -65,23 +65,6 @@ public class QuoServiceImp implements QuoService{
 	public List<QuoModalDTO> quoModals(String quoNo) {
 		int no = Integer.parseInt(quoNo);
 		List<QuoModalDTO> quoModalDTOs = quoDao.quoModal(no);
-		
-//		LocalDate quoDate = quoDao.quoModal(no).getQuoDate();
-//		LocalDate delidateDate = quoDao.quoModal(no).getDeliDate();
-//		QuoModalDTO quoModalDTO = QuoModalDTO.builder()
-//											.quoNo(no)
-//											.quoDate(quoDate)
-//											.itemCode(quoDao.quoModal(no).getItemCode())
-//											.price(quoDao.quoModal(no).getPrice())
-//											.name(quoDao.quoModal(no).getName())
-//											.qty(quoDao.quoModal(no).getQty())
-//											.deliDate(delidateDate)
-//											.bizNum(quoDao.quoModal(no).getBizNum())
-//											.bizName(quoDao.quoModal(no).getBizName())
-//											.adr(quoDao.quoModal(no).getAdr())
-//											.dstn(quoDao.quoModal(no).getDstn())
-//											.build();
-		System.out.println("이거 왜안되는거람~~~~~~~~~~~~~~~~~~"+quoModalDTOs);
 		return quoModalDTOs;
 	}
 

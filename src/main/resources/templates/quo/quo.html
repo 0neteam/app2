@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default}">
+      
 <main layout:fragment="content" class="container my-2">
 	<script src="/js/quo/quo.js"></script>
 	<link rel="stylesheet" href="/css/quo/quo.css">
@@ -21,6 +22,7 @@
 							<option value="승인상태">승인상태</option>
 						</select>
 					</div>
+					
 					<div class="col-sm-9">
 						<div class="d-flex align-items-center">
 							<th:block >
@@ -30,44 +32,47 @@
 					</div>
 				</div>
 			</form>
-       </div>
+       	</div>
        
-       <div>
-       <form th:action="@{/}" method="post"></form>
-    	<table class="table table-bordered mt-4">
-        	<thead>
-           		<tr>
-                	<th>번호</th>
-                	<th>수주번호</th>
-                	<th>발주업체</th>
-                	<th>발주일자</th>
-                	<th>납기일자</th>
-                	<th>승인상태</th>
-            	</tr>
-        	</thead>
-        	<tbody>
-           		<tr th:each="i, iterStat : ${result}" 
-           			th:attr="data-quoNo=${i.quoNo}, 
-           					data-bizName=${i.bizName},
-           					data-bizNum=${i.bizNum},
-           					data-dstn=${i.dstn},
-           					data-adr=${i.adr},
-           					data-quoDate=${i.quoDate}, 
-           					data-deliDate=${i.deliDate}, 
-           					data-quoStatus=${i.quoStatus}"
-            		style="cursor: pointer;">
-               		
-               		<td th:text="${iterStat.index + 1}"></td>
-               		<td th:text="${i.quoNo}"></td>
-               		<td th:text="${i.bizName}"></td>
-               		<td th:text="${i.quoDate}"></td>
-               		<td th:text="${i.deliDate}"></td>
-               		<td th:text="${i.quoStatus}"></td>
-           		</tr>
-       		</tbody>
-   		</table>             
+       	<div>
+			<form th:action="@{/}" method="post"></form>
+			
+    		<table class="table table-bordered mt-4">
+        		<thead>
+           			<tr>
+	                	<th>번호</th>
+	                	<th>수주번호</th>
+	                	<th>발주업체</th>
+	                	<th>발주일자</th>
+	                	<th>납기일자</th>
+	                	<th>승인상태</th>
+            		</tr>
+        		</thead>
+        		
+	        	<tbody>
+	           		<tr th:each="i, iterStat : ${result}" 
+	           			th:attr="data-quoNo=${i.quoNo}, 
+	           					data-bizName=${i.bizName},
+	           					data-bizNum=${i.bizNum},
+	           					data-dstn=${i.dstn},
+	           					data-adr=${i.adr},
+	           					data-quoDate=${i.quoDate}, 
+	           					data-deliDate=${i.deliDate}, 
+	           					data-quoStatus=${i.quoStatus}"
+	            		style="cursor: pointer;">
+	               		
+	               		<td th:text="${iterStat.index + 1}"></td>
+	               		<td th:text="${i.quoNo}"></td>
+	               		<td th:text="${i.bizName}"></td>
+	               		<td th:text="${i.quoDate}"></td>
+	               		<td th:text="${i.deliDate}"></td>
+	               		<td th:text="${i.quoStatus}"></td>
+	           		</tr>
+	       		</tbody>
+   			</table>             
        </div>
 	</div>
+	
 	<div class="modal fade"	 id="supplierModal" tabindex="-1" aria-labelledby="supplierModalLabel" aria-hidden="true">
 	    <div class="modal-dialog">
 	        <div class="modal-content">
@@ -75,10 +80,10 @@
 	                <h5 class="modal-title" id="supplierModalLabel">수주 상세정보</h5>
 	                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 	            </div>
+	            
 	            <div class="modal-body ">
 	            <div class = "container-flex">
-	            	<table id="quoCustomer" class = "table-half">
-	            	</table>
+	            	<table id="quoCustomer" class = "table-half"></table>
 	            	<table id="quoSeller" class = "table-half">
 	            		<tbody>
 							<tr>
@@ -104,7 +109,9 @@
 							</tr>
 						</tbody>
 	            	</table>
-	            </div><br><br>
+	            </div>
+	            <br>
+	            <br>
 	            	<table id="quoDetailTable">
 					    <thead></thead>
 					    <tbody></tbody>
@@ -114,11 +121,9 @@
 	            <div class="modal-footer">
 	            	<a class="btn btn-secondary" href = "/transpSendEmail">운송업체 요청</a>
 	                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-	                
 	            </div>
 	        </div>
 	    </div>
 	</div>
-
 </main>
 </html>
