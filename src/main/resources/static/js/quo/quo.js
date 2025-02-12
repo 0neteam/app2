@@ -14,6 +14,14 @@ $(() => {
     });
 
     $("tbody tr").on("click", function() {
+        var quoDate = $(this).attr("data-quoDate");
+        var dstn = $(this).attr("data-dstn");
+        var bizNum = $(this).attr("data-bizNum");
+        var bizName = $(this).attr("data-bizName");
+        var deliDate = $(this).attr("data-deliDate");
+		var totalPrice = 0;
+        var adr = $(this).attr("data-adr");
+		
         var quoNo = $(this).attr("data-quoNo");
         var _csrf = document.querySelector('input[name="_csrf"]').value;
         var params = {quoNo, _csrf};
@@ -24,55 +32,33 @@ $(() => {
             data: params
         }).done(data => {
 			console.log(data);
-			let  quoCustomer = `<tbody>
+			let quoCustomer = `<tbody>
 								<tr>
 									<th rowspan = "5">공급받는자</th>
 									<th>사업자등록번호</th>
-									<td>${data.bizNum}</td>
+									<td>${bizNum}</td>
 								</tr>
 								<tr>
 									<th>상호</th>
-									<td>${data.bizName}</td>
+									<td>${bizName}</td>
 								</tr>
 								<tr>
 									<th>주소</th>
-									<td>${data.adr}</td>
+									<td>${adr}</td>
 								</tr></tbody>`;
-			let  quoSeller = `<tbody>
-								<tr>
-									<th rowspan = "5">공급자</th>
-									<th>사업자등록번호</th>
-									<td>220-81-62517</td>
-								</tr>
-								<tr>
-									<th>상호</th>
-									<td>제조제조제조업체</td>
-								</tr>
-								<tr>
-									<th>주소</th>
-									<td>신촌버티고타워7층</td>
-								</tr>
-								<tr>
-									<th>Tel.</th>
-									<td>02-323-3223</td>
-								</tr>
-								<tr>
-									<th>Fax.</th>
-									<td>02-323-3224</td>
-								</tr></tbody>`;
-
-            let quoDetailTable = `<thead>
-									<tr>
-			                            <th>물품 도착지</th>
-			                            <td colspan="4">${data.dstn}</td>
-									</tr>
+			let quoDetailTable = 
+									`<thead>
                        			 	<tr>
 			                            <th>견적번호</th>
-			                            <td>${data.quoNo}</td>
+			                            <td>${quoNo}</td>
 			                            <th>작성일자</th>
-			                            <td>${data.quoDate}</td>
+			                            <td>${quoDate}</td>
                     				</tr>
-								<thead>
+									<tr>
+			                            <th>물품 도착지</th>
+			                            <td colspan="4">${dstn}</td>
+									</tr>
+								</thead>
 								<tbody>
 									<tr>
 									    <th>품목코드</th>
@@ -80,48 +66,30 @@ $(() => {
 									    <th>발주수량</th>
 									    <th>단가</th>
 									    <th>합계</th>
-									</tr></thead>
-			                        <tr>
-			                            <td>${data.itemCode}</td>
-			                            <td>${data.name}</td>
-			                            <td>${data.qty}</td>
-			                            <td>${data.price}</td>
-			                            <td>${data.qty * data.price}</td>
-			                        </tr>
-								</tbody>
-								<tfoot>
-			                        <tr>
-										<th>납기일자</th>
-			                            <td>${data.deliDate}</td>
-										<th>총액</th>
-			                        </tr>
-								</tfoot>
-								`;
-            let tbody = `<tbody>
-						<tr>
-						    <th>품목코드</th>
-						    <th>품목명</th>
-						    <th>발주수량</th>
-						    <th>단가</th>
-						    <th>합계</th>
-						</tr></thead>
-                        <tr>
-                            <td>${data.itemCode}</td>
-                            <td>${data.name}</td>
-                            <td>${data.qty}</td>
-                            <td>${data.price}</td>
-                            <td>${data.qty * data.price}</td>
-                        </tr></tbody>`;
-			let tfoot = `<tfoot>
-                        <tr>
-							<th>납기일자</th>
-                            <td>${data.deliDate}</td>
-							<th>총액</th>
-                        </tr></tfoot>`;
+									</tr></thead>`;
+			$.each(data, function(index, item){	
+				
+				totalPrice += (item.qty*item.price);
+				quoDetailTable += `<tr>     
+										<td>${item.itemCode}</td>
+			                            <td>${item.name}</td>
+			                            <td>${item.qty}</td>
+			                            <td>${item.price}</td>
+			                            <td>${item.qty * item.price}</td>
+			                        </tr></tbody>`;
+				});
+			quoDetailTable += `<tfoot>
+		                        <tr>
+									<th>납기일자</th>
+		                            <td>${deliDate}</td>
+									<th>총액</th>
+		                            <td>${totalPrice}</td>
+		                        </tr>
+							</tfoot>`;
+			
+            
             $("#quoCustomer").html(quoCustomer);
-            $("#quoSeller").html(quoSeller);
             $("#quoDetailTable").html(quoDetailTable);
-           
             $("#supplierModal").modal("show");
         }).fail(error => {
             console.log(error);

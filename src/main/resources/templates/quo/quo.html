@@ -47,7 +47,14 @@
         	</thead>
         	<tbody>
            		<tr th:each="i, iterStat : ${result}" 
-           			th:attr="data-quoNo=${i.quoNo}, data-bizName=${i.bizName}, data-quoDate=${i.quoDate}, data-deliDate=${i.deliDate}, data-quoStatus=${i.quoStatus}"
+           			th:attr="data-quoNo=${i.quoNo}, 
+           					data-bizName=${i.bizName},
+           					data-bizNum=${i.bizNum},
+           					data-dstn=${i.dstn},
+           					data-adr=${i.adr},
+           					data-quoDate=${i.quoDate}, 
+           					data-deliDate=${i.deliDate}, 
+           					data-quoStatus=${i.quoStatus}"
             		style="cursor: pointer;">
                		
                		<td th:text="${iterStat.index + 1}"></td>
@@ -73,8 +80,31 @@
 	            	<table id="quoCustomer" class = "table-half">
 	            	</table>
 	            	<table id="quoSeller" class = "table-half">
+	            		<tbody>
+							<tr>
+								<th rowspan = "5">공급자</th>
+								<th>사업자등록번호</th>
+								<td>220-81-62517</td>
+							</tr>
+							<tr>
+								<th>상호</th>
+								<td>제조제조제조업체</td>
+							</tr>
+							<tr>
+								<th>주소</th>
+								<td>신촌버티고타워7층</td>
+							</tr>
+							<tr>
+								<th>Tel.</th>
+								<td>02-323-3223</td>
+							</tr>
+							<tr>
+								<th>Fax.</th>
+								<td>02-323-3224</td>
+							</tr>
+						</tbody>
 	            	</table>
-	            </div>
+	            </div><br><br>
 	            	<table id="quoDetailTable">
 					    <thead></thead>
 					    <tbody></tbody>

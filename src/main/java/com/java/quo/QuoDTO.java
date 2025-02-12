@@ -21,6 +21,9 @@ public class QuoDTO {
 	
 	private int quoNo;
 	private String bizName;
+	private String bizNum;
+	private String dstn;
+	private String adr;
 	private LocalDate quoDate;
 	private LocalDate deliDate;
 	private String quoStatus;
