@@ -1,21 +1,22 @@
 package com.java.transp;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 
 @Controller
 public class TranspController {
 	
 	private final TranspService transpService;
-	
-    public TranspController(TranspService transpService) {
+	public TranspController(TranspService transpService) {
         this.transpService = transpService;
     }
 
@@ -42,25 +43,22 @@ public class TranspController {
     public String InfoSave(HttpServletRequest req) {
     	return transpService.InfoSave(req);
     }
-
-    @GetMapping("/transpTest")
-    public String showTranspTestPage(Model model) {
-        return "transp/transpTest";  // 반환되는 뷰 이름을 설정
-    }
     
-    @PostMapping("/sendEmail")
-    public String sendEmail(Model model, HttpSession session) {
-        String to = "receiver@example.com";  // 실제 이메일 주소로 변경
-        String subject = "테스트 이메일";
-        String body = "이메일이 정상적으로 전송되었습니다.";
-
-        // 이메일 전송
-        transpService.sendEmail(to, subject, body);
-
-        // 세션에 메시지 저장
-        session.setAttribute("message", "이메일 전송 성공!");
-
-        return "transp/transp";  // 이메일 전송 후 같은 페이지로 포워딩
+    @GetMapping("/transpSendEmail")
+    public String sendEmail(@RequestParam(name = "carrier", required = false) String carrier, Model model) {
+        // bizNo가 129인 운송업체 이름만 가져옴
+        List<String> bizNames = transpService.getAllBizNames();
+        // 모델에 bizNames 추가
+        model.addAttribute("bizNames", bizNames);  
+        // 만약 운송업체를 선택하지 않으면 메시지 출력
+        if (carrier == null || carrier.isEmpty()) {
+            model.addAttribute("message", bizNames.isEmpty() ? "운송업체가 존재하지 않습니다." : "운송업체를 선택해주세요.");
+            return "transp/transpSendEmail";
+        }
+        // 이메일 전송 처리 결과 반환
+        String message = transpService.processEmailSending(129, carrier);
+        model.addAttribute("message", message);
+        return "transp/transpSendEmail";  
     }
     
 }

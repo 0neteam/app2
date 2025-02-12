@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security6"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+
+<head>
+</head>
+
+<body>
+    <main layout:fragment="content" class="container my-5">
+        <h2>이메일 전송</h2>
+        <hr>
+        
+        <!-- 발주 코드 출력 -->
+        <h4>(아래에는 방금본 견적서 코드를 넣어야해요)</h4>
+        <h3 th:text="'견적 코드: ' + ${quoNo}"></h3>
+        
+        <!-- 이메일 전송 폼 -->
+        <form th:action="@{/transpSendEmail}" method="get">
+            <div class="form-group">
+                <label for="carrier">운송업체 선택</label>
+                <select id="carrier" name="carrier" class="form-control" required>
+                    <option value="" disabled selected>운송업체를 선택하세요</option>
+                    <!-- 각 운송업체 이름을 option으로 출력 -->
+                    <option th:each="biz : ${bizNames}" th:value="${biz}" th:text="${biz}"></option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">전송</button>
+        </form>
+        
+        <hr>
+        <!-- 전송 결과 메시지 -->
+        <div th:if="${message}">
+            <p th:text="${message}"></p>
+        </div>
+    </main>
+</body>
+</html>
