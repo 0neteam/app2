@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<header th:fragment="header" class="bg-dark py-2">
+<header th:fragment="header" class="header-bg-custom py-2">
+
+<!-- header 애니메이션 추가 -->
+<link rel="stylesheet" href="/css/common/header.css">
+<script src="/js/common/header.js"></script>
+        
+    <!-- Google Fonts에서 스타일리시한 글씨체 추가 -->
+    
     <div class="container px-4 px-lg-5">
-<!-- 		<th:block th:if="${title == 'Home'}"> -->
-			<h1 class="text-center text-white display-4 fw-bolder">Let's Go Project1!!</h1>
-<!-- 		</th:block> -->
-<!-- 		<th:block th:if="${title != 'Home'}"> -->
-<!-- 			<p class="text-start text-white lead fw-normal mb-0">홈&nbsp;&gt;&nbsp;<span class="text-white-60" th:text="${title}"></span></p> -->
-<!-- 		</th:block> -->
+        <h1 class="text-center text-warning display-4 fw-bolder animated-text">Let's Go~! 제조사</h1>
     </div>
 </header>
 </html>

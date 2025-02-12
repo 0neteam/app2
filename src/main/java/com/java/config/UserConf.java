@@ -15,25 +15,25 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 public class UserConf {
 	
-	@Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-	@Bean
-	UserDetailsService userDetailsService() {
-		UserDetails admin = User.builder()
-			.username("admin")
-			.password(passwordEncoder().encode("admin"))
-			.roles("ADMIN")
-			.build();
-		UserDetails user = User.builder()
-				.username("user")
-				.password(passwordEncoder().encode("user"))
-				.roles("USER")
-				.build();
-
-		return new InMemoryUserDetailsManager(admin, user);
-	}
+//	@Bean
+//    PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
+//
+//	@Bean
+//	UserDetailsService userDetailsService() {
+//		UserDetails admin = User.builder()
+//			.username("admin")
+//			.password(passwordEncoder().encode("admin"))
+//			.roles("ADMIN")
+//			.build();
+//		UserDetails user = User.builder()
+//				.username("user")
+//				.password(passwordEncoder().encode("user"))
+//				.roles("USER")
+//				.build();
+//
+//		return new InMemoryUserDetailsManager(admin, user);
+//	}
 	
 }

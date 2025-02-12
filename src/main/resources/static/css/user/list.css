@@ -1,0 +1,65 @@
+.zipcode-btn {  
+    font-size: 0.8rem; /* 글씨 크기를 줄임 (기본 크기보다 80%) */
+    margin-top : 2px;
+}
+
+.duchk-btn {
+	
+}
+
+
+/* 기본 테이블 스타일 */
+.table th, .table td {
+    text-align: center;
+}
+
+/* 모바일 화면(핸드폰 크기)에서 '관리' 열의 너비를 조정 */
+/*
+@media (max-width: 767px) {
+    .del-btn {
+        width: 60px;  
+    }
+}
+*/
+
+/* Extra small (xs) */
+@media (max-width: 575px) {
+    .del-btn {
+        width: 50px;  /* '관리' 열의 너비를 10%로 설정 */
+    }
+}
+
+/* Small (sm) */
+@media (min-width: 576px) and (max-width: 767px) {
+    .del-btn {
+        width: 80%;  /* '관리' 열의 너비를 10%로 설정 */
+    }
+}
+
+/* Medium (md) */
+@media (min-width: 768px) and (max-width: 991px) {
+    .del-btn {
+        width: 80%;  /* '관리' 열의 너비를 10%로 설정 */
+    }
+}
+
+/* Large (lg) */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .del-btn {
+         width: 50%;  /* '관리' 열의 너비를 10%로 설정 */
+    }
+}
+
+/* Extra large (xl) */
+@media (min-width: 1200px) {
+    .del-btn {
+         width: 50%;  /* '관리' 열의 너비를 10%로 설정 */
+    }
+}
+
+/* Extra extra large (xxl) */
+@media (min-width: 1400px) {
+    .del-btn {
+        width: 50%;  /* '관리' 열의 너비를 10%로 설정 */
+    }
+}

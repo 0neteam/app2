@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security6"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">      
+
+<main layout:fragment="content" class="container my-2">
+
+<link rel="stylesheet" href="/css/user/create.css">
+<link rel="stylesheet" href="/css/user/list.css">		
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="/js/user/create.js"></script>
+<script src="/js/user/list.js"></script>
+	        
+    <div class="container mt-5">
+        <h2 class="mb-4">사원정보</h2>
+        
+        <!-- 직원 추가 및 검색 기능 -->
+        <div class="d-flex mb-3 justify-content-between">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">직원 추가</button>
+
+            <!-- 검색 영역 -->
+            <div class="d-flex align-items-center">
+                <!-- 검색 항목 선택 -->
+                <select id="searchOption" class="form-select me-2" style="width: 130px;">
+                    <option value="">항목선택</option>
+                    <option value="userNo">사번</option>
+                    <option value="name">사원명</option>
+                    <option value="dept">부서명</option>
+                </select>
+
+                <!-- 동적으로 표시되는 검색 입력 필드 -->
+                <input type="text" id="searchKeyword" class="form-control me-2" placeholder="검색어" style="width: 200px;">
+
+                <!-- 검색 버튼 -->
+                <button type="button" class="btn btn-primary" onclick="searchEmployee()">검색</button>
+            </div>
+        </div>
+
+        <!-- 기존 테이블 -->
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th style="width: 5%; min-width: 50px;">번호</th>
+                    <th style="width: 10%;">사번</th>
+                    <th style="width: 15%;">사원명</th>
+                    <th style="width: 15%;">부서명</th>
+                    <th style="width: 7%;">관리</th>
+                </tr>
+            </thead>
+            <tbody>
+			    <!-- 'users'는 Controller에서 전달된 데이터입니다. -->
+			    <tr th:each="r, iterStat : ${rs}" style="cursor: pointer;" th:onclick="'window.location.href=\'/user/detail?userNo=' + ${r.userNo} + '\''">
+			        <td th:text="${iterStat.index + 1}"></td> <!-- 인덱스를 1부터 시작하도록 설정 -->
+			        <td th:text="${r.userNo}"></td>
+			        <td th:text="${r.name}"></td>
+			        <td th:text="${r.deptName}"></td>
+			        <td>
+			            <button class="del-btn btn btn-danger btn-sm" th:data-user-no="${r.userNo}" onclick="deleteEmployee(this)">삭제</button>
+			        </td>
+			    </tr>
+			</tbody>
+
+        </table>
+    </div>
+
+    <!-- 직원 추가 모달 -->
+    <div class="modal fade" id="addEmployeeModal" tabindex="-1" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <!-- modal-lg로 모달 크기를 설정 -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addEmployeeModalLabel">직원 추가</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/signUp}" method="post" id="signupForm2">
+                        <div class="row mb-3 form-group">
+                            <label for="email_id" class="col-sm-2 col-form-label">회원 이메일</label>
+                            
+                            	<input type="hidden" id="email" name="email" class="form-control" >
+                    			<input type="hidden" id="email_duple_chk">
+                    			
+                            <div class="col-sm-10">
+                                <div class="d-flex align-items-center">
+                                    <input type="text" id="email_id" class="form-control" oninput="allowOnlyLetters(event)" style="width: 40%;" placeholder="이메일아이디" required>
+                                    &nbsp;
+                                    <span>@</span>
+                                    &nbsp;
+                                    <input type="text" id="email_domain" class="form-control" oninput="allowOnlyLetters(event)" value="naver.com"  placeholder="이메일도메인" style="width: 35%;" required readonly>
+                                    &nbsp;
+                                    <select class="form-select" id="emailDomain" onchange="select_email_domain()" style="width: 25%; height: calc(2.25rem + 2px);">
+                                        <option value="naver">네이버</option>
+                                        <option value="gmail">G메일</option>
+                                        <option value="daum">다음</option>
+                                        <option value="custom">직접 입력</option>
+                                    </select>
+                                    &nbsp;
+                                    <button type="button" id="check_email_btn" class="duchk-btn btn btn-primary" style="min-width: 110px;" onclick="checkDuplicateEmail()">중복 확인</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3 form-group">
+                            <label class="col-sm-2 col-form-label">회원 이름</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="name" id="username" class="form-control" placeholder="홍길동" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3 form-group">
+                            <label class="col-sm-2 col-form-label">비밀번호</label>
+                            <div class="col-sm-10">
+                                <input type="password" name=pwd id="password" class="form-control" placeholder="비밀번호를 입력하세요" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3 form-group">
+                            <label class="col-sm-2 col-form-label">비밀번호 확인</label>
+                            <div class="col-sm-10">
+                                <input type="password" id="password_confirm" class="form-control" placeholder="비밀번호를 다시 입력하세요" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3 form-group">
+                            <label class="col-sm-2 col-form-label">핸드폰번호</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="phone" id="phone" class="form-control" placeholder="010-0000-0000" required>
+                            </div>
+                        </div>                
+                        <div class="row mb-3 form-group">
+                            <label class="col-sm-2 col-form-label">우편번호</label>
+                            <div class="col-sm-8">
+                                <input type="text" name="zipcode" id="zipcode" class="form-control" placeholder="자동 입력되는칸" required readonly>
+                            </div>
+                            <div class="col-sm-2">
+                                <button type="button" class="zipcode-btn btn btn-secondary" onclick="openPostcode()" style="min-width: 110px;">우편번호 검색</button>
+                            </div>
+                        </div>
+                        <div class="row mb-3 form-group">
+                            <label class="col-sm-2 col-form-label">주소</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="adr" id="address" class="form-control" placeholder="자동 입력되는칸" required readonly>
+                            </div>
+                        </div>
+                        <div class="row mb-3 form-group">
+                            <label class="col-sm-2 col-form-label">상세주소</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="detail_adr" id="address_detail" class="form-control" placeholder="상세주소를 입력하세요" required>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">가입</button>
+                            <button type="button" class="btn btn-secondary" onclick="window.location.href='/user/list';">취소</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</html>
