@@ -20,9 +20,14 @@ public class QuoModalDTO {
 	private int quoNo;
 	private LocalDate quoDate;
 	private int itemCode;
+	private int price;
 	private String name;
 	private int qty;
-	private int price;
 	private LocalDate deliDate;
+	private String dstn;
+
+//	private String bizNum;
+//	private String bizName;
+//	private String adr;
 
 }

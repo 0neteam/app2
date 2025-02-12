@@ -5,6 +5,6 @@ import java.util.List;
 public interface QuoDao {
 	
 	public List<QuoDTO> list(QuoDTO quoDTO);
-	public QuoModalDTO quoModal(int no);
+	public List<QuoModalDTO> quoModal(int no);
 
 }

@@ -4,6 +4,8 @@
       layout:decorate="~{layouts/default}">
 <main layout:fragment="content" class="container my-2">
 	<script src="/js/quo/quo.js"></script>
+	<link rel="stylesheet" href="/css/quo/quo.css">
+	
 	<div class="container section-container p-4 border rounded shadow-sm">
     	<div class="text-center">
         	<h3>수주 관리</h3>
@@ -23,16 +25,15 @@
 						<div class="d-flex align-items-center">
 							<th:block >
 							<input type="text" class="form-control" name="search" placeholder="검색어를 입력하세요" required/>
-							
 							<button class="btn btn-success ms-2" type="submit" style="width: 100px;">검색</button>
 						</div>
 					</div>
 				</div>
 			</form>
        </div>
+       
        <div>
        <form th:action="@{/}" method="post"></form>
-        <!-- 테이블 표현 파트 -->
     	<table class="table table-bordered mt-4">
         	<thead>
            		<tr>
@@ -67,41 +68,23 @@
 	                <h5 class="modal-title" id="supplierModalLabel">수주 상세정보</h5>
 	                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 	            </div>
-	            <div class="modal-body">
-	            	<table border="1">
-					    <thead>
-					        <tr>
-					            <th colspan="2">견적번호</th>
-					            <th colspan="2"></th>
-					            <th colspan="2">작성일자</th>
-					            <th></th>
-					        </tr>
-					        <tr>
-					            <th>번호</th>
-					            <th>품목코드</th>
-					            <th>품목명</th>
-					            <th>발주수량</th>
-					            <th>단가</th>
-					            <th>합계</th>
-					            <th>비고</th>
-					        </tr>
-					    </thead>
-					    <tbody>
-					        <!-- 여기에 JavaScript 또는 백엔드에서 동적으로 <tr>을 추가하세요 -->
-					    </tbody>
-					    <tfoot>
-					        <tr>
-					            <th>납기</th>
-					            <th></th>
-					            <th colspan="2">총액</th>
-					            <th></th>
-					            <th colspan="2"></th>
-					        </tr>
-					    </tfoot>
+	            <div class="modal-body ">
+	            <div class = "container-flex">
+	            	<table id="quoCustomer" class = "table-half">
+	            	</table>
+	            	<table id="quoSeller" class = "table-half">
+	            	</table>
+	            </div>
+	            	<table id="quoDetailTable">
+					    <thead></thead>
+					    <tbody></tbody>
+					    <tfoot></tfoot>
 					</table>
 	            </div>
 	            <div class="modal-footer">
+	            	<a class="btn btn-secondary" href = "/transpSendEmail">운송업체 요청</a>
 	                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+	                
 	            </div>
 	        </div>
 	    </div>

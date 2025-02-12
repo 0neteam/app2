@@ -1,10 +1,12 @@
 package com.java.quo;
 
+import java.util.List;
+
 import org.springframework.ui.Model;
 
 public interface QuoService {
 	
 	public String list(Model model, QuoSearchDTO quoSearchDTO);
-	public QuoModalDTO quoModal(String quoNo);
+	public List<QuoModalDTO> quoModals(String quoNo);
 
 }

@@ -1,7 +1,7 @@
 package com.java.quo;
 
+import java.util.List;
 import java.util.Map;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,8 +27,8 @@ public class QuoController {
 
 	@ResponseBody
 	@PostMapping("/quo")
-	public QuoModalDTO quo(@RequestParam(name="quoNo") String quoNo) {		
-		return quoService.quoModal(quoNo);
+	public List<QuoModalDTO> quoDetail(@RequestParam(name="quoNo") String quoNo) {		
+		return quoService.quoModals(quoNo);
 	}
 
 }

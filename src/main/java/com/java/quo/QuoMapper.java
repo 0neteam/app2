@@ -8,7 +8,11 @@ import org.apache.ibatis.annotations.Select;
 public interface QuoMapper {
 	
 	@Select({"<script>"
-			+"SELECT mq.quoNo, mq.quoDate, mq.quoStatus, mq.deliDate, mc.bizName "
+			+"SELECT mq.quoNo, "
+			+ "mq.quoDate, "
+			+ "mq.quoStatus, "
+			+ "mq.deliDate, "
+			+ "mc.bizName "
 			+"  FROM mfr_quo AS mq "
 			+" INNER JOIN mfr_client AS mc "
 			+"    ON mq.bizNo = mc.bizNo "
@@ -23,15 +27,28 @@ public interface QuoMapper {
 	public List<QuoDTO> list(QuoDTO quoDTO);
 	
 	@Select({"<script>"
-			+ "select mq.quoNO, mq.quoDate, ms.itemCode, ms.price, ms.name, mq.qty, mq.quoDate, mq.deliDate "
+			+ "select mq.quoNO, "
+			+ "mq.quoDate, "
+			+ "mqi.itemCode, "
+			+ "ms.price, "
+			+ "ms.name, "
+			+ "mqi.qty, "
+			+ "mq.deliDate, "
+			+ "mq.dstn "
 			+ "from mfr_quo as mq "
-			+ " left join mfr_stock as ms "
-			+ "on mq.itemCode = ms.itemCode "
+			+ "left join mfr_quoitem as mqi "
+			+ "on mq.quoNo = mqi.quoNo "
+			+ "left join mfr_stock as ms "
+			+ "on mqi.itemCode = ms.itemCode "
 			+ "where mq.quoNo = #{no} "
 			+ "</script>"
-		
 	})
-	public QuoModalDTO quoModal(int no);
+	public List<QuoModalDTO> quoModal(int no);
+//	+ "left join mfr_client as mc "
+//	+ "on mq.bizNo = mc.bizNo "
+//	+ "mc.bizNum, "
+//	+ "mc.bizName, "
+//	+ "mc.adr, "
 	
 
 }

@@ -17,7 +17,7 @@ public class QuoDaoImp implements QuoDao{
 	}
 
 	@Override
-	public QuoModalDTO quoModal(int no) {
+	public List<QuoModalDTO> quoModal(int no) {
 		return quoMapper.quoModal(no);
 	}
 	
