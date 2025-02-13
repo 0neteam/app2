@@ -17,8 +17,6 @@
         
         <!-- 직원 추가 및 검색 기능 -->
         <div class="d-flex mb-3 justify-content-between">
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">직원 추가</button>
-
             <!-- 검색 영역 -->
             <div class="d-flex align-items-center">
                 <!-- 검색 항목 선택 -->
@@ -35,6 +33,8 @@
                 <!-- 검색 버튼 -->
                 <button type="button" class="btn btn-primary" onclick="searchEmployee()">검색</button>
             </div>
+            
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEmployeeModal" sec:authorize="hasRole('ROLE_ADMIN')">직원 추가</button>
         </div>
 
         <!-- 기존 테이블 -->
@@ -45,7 +45,7 @@
                     <th style="width: 10%;">사번</th>
                     <th style="width: 15%;">사원명</th>
                     <th style="width: 15%;">부서명</th>
-                    <th style="width: 7%;">관리</th>
+                    <th style="width: 7%;" sec:authorize="hasRole('ROLE_ADMIN')">관리</th>
                 </tr>
             </thead>
             <tbody>
@@ -55,8 +55,9 @@
 			        <td th:text="${r.userNo}"></td>
 			        <td th:text="${r.name}"></td>
 			        <td th:text="${r.deptName}"></td>
-			        <td>
-			            <button class="del-btn btn btn-danger btn-sm" th:data-user-no="${r.userNo}" onclick="deleteEmployee(this)">삭제</button>
+			        
+			        <td sec:authorize="hasRole('ROLE_ADMIN')">
+			            <button class="del-btn btn btn-danger btn-sm" th:data-user-no="${r.userNo}" onclick="deleteEmployee(this)" >삭제</button>
 			        </td>
 			    </tr>
 			</tbody>

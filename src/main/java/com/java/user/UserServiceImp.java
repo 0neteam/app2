@@ -38,7 +38,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
 		
 		UserDTO user = userDAO.findByUser(email);
 		if(user != null) {
-			RoleDTO role = userDAO.findByRole(user.getUserNo());
+			List<RoleDTO> role = userDAO.findByRole(user.getUserNo());
 			
 			if(role != null) {
 				return new MyUserDTO(user, role);
