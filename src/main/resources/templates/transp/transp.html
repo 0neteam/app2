@@ -5,26 +5,18 @@
       layout:decorate="~{layouts/default}">
 
 <head>
-    <style>
-        #transportTable {
-            display: none;
-        }
-    </style>
-    <script>
-        function loadTransportStatus() {
-            const transportTable = document.getElementById('transportTable');
-            transportTable.style.display = transportTable.style.display === 'none' ? 'table' : 'none';
-        }
-    </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 
+<body>
 <main layout:fragment="content" class="container my-4">
-    <div>
-        <input type="button" id="transportStatusBtn" class="btn btn-light" value="운송 진행 현황" onclick="loadTransportStatus()">
-    </div>
-    <table id="transportTable" class="table table-bordered mt-3">
+    <h2>운송 현황</h2>
+    
+    <table class="table table-bordered mt-3">
         <thead>
             <tr>
+                <th>번호</th>
+                <th>운송 번호</th>
                 <th>발주 번호</th>
                 <th>출발지</th>
                 <th>목적지</th>
@@ -32,6 +24,60 @@
                 <th>운송 상태</th>
             </tr>
         </thead>
+        <tbody>
+            <tr th:each="transport, iterStat : ${transplist}">
+                <td th:text="${iterStat.index + 1}"></td>
+                <td th:text="${transport.transpNo}"></td>
+                <td th:text="${transport.orderNo}"></td>
+                <td th:text="${transport.departure}"></td>
+                <td th:text="${transport.dstn}"></td>
+                <td>
+                    <span th:text="${transport.driverName}"></span>
+                    <a th:href="@{/transpInfo/{id}(id=${transport.transpMailNo})}" 
+                       class="btn btn-primary">
+                        정보 확인
+                    </a>
+                </td>                
+                <td th:text="${transport.transpStatus != null ? transport.transpStatus : '미정'}"></td>
+            </tr>
+        </tbody>
     </table>
+
+    <!-- 🚀 Thymeleaf 모달 -->
+    <div th:if="${driverInfo}" class="modal fade show" style="display: block; background: rgba(0, 0, 0, 0.5);" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">운송기사 상세 정보</h5>
+                    <a href="/transp" class="btn-close"></a>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>이름</th>
+                            <td th:text="${driverInfo.driverName}"></td>
+                        </tr>
+                        <tr>
+                            <th>전화번호</th>
+                            <td th:text="${driverInfo.driverPhone}"></td>
+                        </tr>
+<!--                         <tr>
+                            <th>사용 여부</th>
+                            <td th:text="${driverInfo.userYN}"></td>
+                        </tr> -->
+                        <tr>
+                            <th>등록 날짜</th>
+                            <td th:text="${driverInfo.regDate}"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <a href="/transp" class="btn btn-secondary">닫기</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </main>
+</body>
 </html>
