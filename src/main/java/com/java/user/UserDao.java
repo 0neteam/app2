@@ -14,7 +14,7 @@ public interface UserDao {
 	
 	public UserDTO findByUser(String email);
 	
-	public RoleDTO findByRole(int no);
+	public List<RoleDTO> findByRole(int no);
 	
 	public int save(UserDTO user);
 	

@@ -39,7 +39,7 @@ public class UserDaoImp implements UserDao {
 	}
 
 	@Override
-	public RoleDTO findByRole(int no) {
+	public List<RoleDTO> findByRole(int no) {
 		// TODO Auto-generated method stub
 		return userMapper.findByRole(no);
 	}

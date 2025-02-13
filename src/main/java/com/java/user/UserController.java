@@ -39,7 +39,7 @@ public class UserController {
 	
 	
 	// 사원 상세정보
-	@PreAuthorize("isAuthenticated()")  // 로그인한 사용자만 접근 가능하도록 설정
+	@PreAuthorize("hasRole('ROLE_ADMIN')")  // ADMIN 권한만 접속 가능하도록 설정
 	@GetMapping("/user/detail")
 	public String userDetail(Model model, HttpServletRequest req) {		
 				
@@ -112,7 +112,8 @@ public class UserController {
 	@GetMapping("/user/list")
 	public String list(@RequestParam(value = "searchOption", required = false) String searchOption,
             @RequestParam(value = "searchKeyword", required = false) String searchKeyword,
-            Model model) {
+            Model model, Authentication auth) {
+		System.out.println(auth.getPrincipal());
 		
 		// searchOption이 null일 경우 기본값 설정 (예: "userNo")
         if (searchOption == null) {

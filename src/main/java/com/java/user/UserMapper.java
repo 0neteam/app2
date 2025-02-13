@@ -103,8 +103,8 @@ public interface UserMapper {
 	@Select("SELECT * FROM `mfr_user` WHERE `useYN` = 'Y' AND email = #{email}")
 	public UserDTO findByUser(String email); // 이메일 검색
 	
-	@Select("SELECT * FROM `mfr_role` WHERE `roleNo` = (SELECT `roleNo` FROM `mfr_user_role` AS a WHERE a.`userNo` = #{no})")
-	public RoleDTO findByRole(int no); // 규칙검색
+	@Select("SELECT * FROM `mfr_role` WHERE `roleNo` in (SELECT `roleNo` FROM `mfr_user_role` AS a WHERE a.`userNo` = #{no})")
+	public List<RoleDTO> findByRole(int no); // 규칙검색
 	
 	@SelectKey(statementType = StatementType.PREPARED, statement = "select last_insert_id() as no", keyProperty = "userNo", before = false, resultType = int.class)
 	@Insert("INSERT INTO `mfr_user` (`name`, `deptNo`, `pwd`, `email`, `phone`, `zipcode`, `adr`, `detail_adr`) VALUE (#{name}, #{deptNo}, #{pwd}, #{email}, #{phone}, #{zipcode}, #{adr}, #{detail_adr})")

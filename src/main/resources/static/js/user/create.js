@@ -40,7 +40,7 @@ function openPostcode() {
             console.log(data.jibunAddress); // 지번 주소
 
             $("#zipcode").val(data.zonecode);
-            $("#address").val(data.roadAddress);
+            $("#adr").val(data.roadAddress);
         }
     }).open();
 }
@@ -150,8 +150,8 @@ function handleSubmit(event) {
     }
 
     // 주소 입력 체크
-    const address = document.getElementById('address').value;
-    if (!address) {
+    const adr = document.getElementById('adr').value;
+    if (!adr) {
         alert("우편번호 검색을 통해 우편번호와 주소를 입력해주세요.");
         isValid = false;
     }
