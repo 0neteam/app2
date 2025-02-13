@@ -38,7 +38,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
 		
 		UserDTO user = userDAO.findByUser(email);
 		if(user != null) {
-			RoleDTO role = userDAO.findByRole(user.getUserNo());
+			List<RoleDTO> role = userDAO.findByRole(user.getUserNo());
 			
 			if(role != null) {
 				return new MyUserDTO(user, role);
@@ -51,34 +51,28 @@ public class UserServiceImp implements UserService, UserDetailsService {
 	@Override
 	public String list(Model model, String searchOption, String searchKeyword) {	
 		
-		List<UserDTO> userDTO = null;
+		List<UserDTO> userDTO = null;		
 		
 		if (searchOption == null || searchKeyword == null || searchKeyword.isEmpty()) {
-			userDTO = userDAO.findALL();  // 전달 받은 값이 없으면 전체 목록 조회		
-			System.out.println("///////////////////////findALL////////////////////");
+			userDTO = userDAO.findALL();  // 전달 받은 값이 없으면 전체 목록 조회			
         }
 
         // 검색옵션에 따라 Mapper로 쿼리 실행
         switch (searchOption) {
             case "userNo":
-            	userDTO = userDAO.findByUserNo(searchKeyword);  // 사번으로 조회            
-            	System.out.println("///////////////////////findByUserNo////////////////////");
+            	userDTO = userDAO.findByUserNo(searchKeyword);  // 사번으로 조회            	
             	break;
             case "name":
-            	userDTO = userDAO.findByName(searchKeyword);    // 사원명으로 조회        
-            	System.out.println("///////////////////////findByName////////////////////");
+            	userDTO = userDAO.findByName(searchKeyword);    // 사원명으로 조회            	
             	break;
             case "dept":
-            	userDTO = userDAO.findByDept(searchKeyword);    // 부서명으로 조회    
-            	System.out.println("///////////////////////findByDept////////////////////");
+            	userDTO = userDAO.findByDept(searchKeyword);    // 부서명으로 조회            	
             	break;
             default:
             	userDTO = userDAO.findALL();  // 전부 해당 안될시 기본값 전체 조회
-            	System.out.println("///////////////////////전부 해당 안될시 기본값 전체 조회////////////////////");
             	
         }
-        System.out.println("///////////////////////userDTO////////////////////");
-        System.out.println("userDTO : " + userDTO);
+               
 		model.addAttribute("rs", userDTO);
 		
 		return "user/list";
@@ -105,6 +99,45 @@ public class UserServiceImp implements UserService, UserDetailsService {
 		return "redirect:/signUp";
 	}
 	
+	@Override
+	public String update(UserDTO user) {		
+		
+		System.out.println("//////////////////////user.getPwd()/////////////////////////////");
+		System.out.println("(user.getPwd() : " + user.getPwd());
+		System.out.println("////////////////////////////////////////////////////////////////");
+		if(user.getPwd() == null || user.getPwd().isEmpty()) { // 비밀번호 입력이 없으면 (기존 비밀번호 그대로 유지)
+			
+			System.out.println("/////////////Integer.parseInt(user.getSelectRole()) //////////////////");
+			System.out.println("Integer.parseInt(user.getSelectRole()) : " + Integer.parseInt(user.getSelectRole()));
+						
+			int status = userDAO.NotPwdUpdate(user);
+			
+			if(status == 1) {
+				status =  userDAO.updateUserRole(user);  //유저 권한 업데이트
+				
+				System.out.println("///////////// NotPwdUpdate result OK //////////////////////////// ");
+				return "OK";
+			} else {
+				
+				System.out.println("///////////// NotPwdUpdate result FAIL //////////////////////////// ");
+				return "FAIL";
+			}
+			
+		} else {  // 비밀번호 입력이 있는경우 (신규 비밀번호로 변경)
+			
+			user.setPwd(passwordEncoder.encode(user.getPwd())); // 패스워드 시큐리티web 암호화		
+			
+			int status = userDAO.update(user);  //유저 권한 업데이트
+			if(status == 1) {
+				System.out.println("///////////// update result OK //////////////////////////// ");
+				return "OK";
+			} else {
+				System.out.println("///////////// update result FAIL //////////////////////////// ");
+				return "FAIL";
+			}
+		}
+	}
+	
 	// 이메일 중복 체크
 	public UserDTO email_du_chk(String email) {		
 		return userDAO.findByUser(email);		
@@ -121,5 +154,35 @@ public class UserServiceImp implements UserService, UserDetailsService {
 		}
 		return false;
 	}
+
+	@Override
+	public String detailByUserNo(Model model, HttpServletRequest req) {
+		// TODO Auto-generated method stub
+		
+		String userNo = req.getParameter("userNo");
+		
+		UserDTO userDTO = userDAO.detailByUserNo(userNo);
+		model.addAttribute("rs", userDTO);
+		
+		return "/user/detail";
+	}
+
+	@Override
+	public String editByUserNo(Model model, HttpServletRequest req) {
+		// TODO Auto-generated method stub
+		String userNo = req.getParameter("userNo");
+		
+		UserDTO userDTO = userDAO.detailByUserNo(userNo);
+		model.addAttribute("rs", userDTO);
+		
+		System.out.println("///////////////userDTO///////////////");
+		System.out.println("userDTO : " + userDTO);
+		
+		return "/user/edit";
+	}
+
+	
+
+	
 	
 }

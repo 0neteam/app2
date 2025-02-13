@@ -1,4 +1,4 @@
-package com.java.prod;
+package com.java.inventory;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,11 +7,13 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 
-public class prodController {
+public class stockController {
 	
-	@GetMapping("/inventory")
+	@GetMapping("/stock")
 	public String prod() {
-		return "prod/inventory";
+		return "stock/stock";
 	}
+	
+	
 	
 }

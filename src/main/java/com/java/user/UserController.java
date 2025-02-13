@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,22 +38,26 @@ public class UserController {
 	}
 	
 	
-	
-	// 개발중
+	// 사원 상세정보
+	@PreAuthorize("hasRole('ROLE_ADMIN')")  // ADMIN 권한만 접속 가능하도록 설정
 	@GetMapping("/user/detail")
-	public String userDetail() {
+	public String userDetail(Model model, HttpServletRequest req) {		
+				
+		return userService.detailByUserNo(model, req);
+	}
 		
-		return "/user/detail";
+	
+	// edit 사원 정보 불러오기
+	@PreAuthorize("isAuthenticated()")  // 로그인한 사용자만 접근 가능하도록 설정	
+	@GetMapping("/user/edit")
+	public String userEdit(Model model, HttpServletRequest req) {
+		
+		return userService.editByUserNo(model, req);
 	}
 	
-	// 개발중
-	@GetMapping("/user/edit")
-	public String userEdit() {
-		
-		return "/user/edit";
-	}	
 	
-	// 개발중
+	
+	// 사원 삭제
 	@ResponseBody
 	@PostMapping("/user/delete")
 	public Map<String, String> userDel(@RequestParam Map<String, String> request) {
@@ -71,6 +76,31 @@ public class UserController {
 	}	
 	
 	
+	// update 사원 정보 업데이트
+	@PreAuthorize("isAuthenticated()")  // 로그인한 사용자만 접근 가능하도록 설정	
+	@PostMapping("/user/update")
+	@ResponseBody
+	public ResponseEntity<Map<String, String>> userUpdate(@ModelAttribute UserDTO user) {
+		
+		System.out.println("/////////////Controller user/update userDTO/////////////////////////");
+		System.out.println("userDTO : " + user);
+		System.out.println("//////////////////////////////////////////////////////////");
+		
+		Map<String, String> response = new HashMap<>();
+		
+		String status = userService.update(user);
+		
+		response.put("status", status);
+		response.put("userNo", Integer.toString(user.getUserNo()));
+		
+	    //response.put("redirectUrl", "/user/edit?userNo=" + user.getUserNo());
+	    
+	    
+		return ResponseEntity.ok(response);
+	}
+
+	
+	
 	// 직원추가가입
 	@PostMapping("/signUp")
 	public String signUp(@ModelAttribute UserDTO user) {
@@ -82,7 +112,8 @@ public class UserController {
 	@GetMapping("/user/list")
 	public String list(@RequestParam(value = "searchOption", required = false) String searchOption,
             @RequestParam(value = "searchKeyword", required = false) String searchKeyword,
-            Model model) {
+            Model model, Authentication auth) {
+		System.out.println(auth.getPrincipal());
 		
 		// searchOption이 null일 경우 기본값 설정 (예: "userNo")
         if (searchOption == null) {

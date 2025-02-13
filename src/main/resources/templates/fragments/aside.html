@@ -16,28 +16,45 @@
 		</div>
 		<!-- END - 인사 관리 메뉴 항목 -->
 		
-		<a class="list-group-item list-group-item-action" href="#!">거래처 관리</a>
+		
+		<!-- START - 거래처 관리 메뉴 항목 -->
+		<a class="list-group-item list-group-item-action" href="#!" data-bs-toggle="collapse" data-bs-target="#biz-submenu" aria-expanded="false" aria-controls="biz-submenu">거래처 관리</a>
+				
+		<div class="collapse" id="biz-submenu">            
+		    <a class="list-group-item list-group-item-action ps-4" href="/biz/list">거래처 관리 화면</a>
+		</div>
+		<div class="collapse" id="biz-submenu">            
+		    <a class="list-group-item list-group-item-action ps-4" href="/biz/create">창고 거래처 등록</a>
+		</div>
+		<div class="collapse" id="biz-submenu">            
+		    <a class="list-group-item list-group-item-action ps-4" href="/biz/detail">창고 거래처 상세정보</a>
+		</div>
+		<!-- END - 거래처 관리 메뉴 항목 -->
 		
 		
+		<!-- START - 품목 관리 메뉴 항목 -->
 		<a class="list-group-item list-group-item-action" href="#!" data-bs-toggle="collapse" data-bs-target="#inventory-submenu" aria-expanded="false" aria-controls="inventory-submenu">품목관리</a>
 		<div class="collapse" id="inventory-submenu">
 		<a class="list-group-item list-group-item-action ps-4" href="inventory">재고현황</a>
 		</div>
+		<!-- END - 품목 관리 메뉴 항목 -->
 		
 		
-		<a class="list-group-item list-group-item-action" href="#!">발주 관리</a>	
-
+		<!-- START - 수주 관리 메뉴 항목 -->
         <a class="list-group-item list-group-item-action" href="#!" data-bs-toggle="collapse" data-bs-target="#quo-submenu" aria-expanded="false" aria-controls="quo-submenu">수주 관리</a>
         <div class="collapse" id="quo-submenu">            
             <a class="list-group-item list-group-item-action ps-4" href="/quo">수주정보</a>
         </div>
+		<!-- END - 수주 관리 메뉴 항목 -->
 		
+		
+		<!-- START - 운송 관리 메뉴 항목 -->
 		<a class="list-group-item list-group-item-action" href="#!" data-bs-toggle="collapse" data-bs-target="#transp-submenu" aria-expanded="false" aria-controls="hr-submenu">운송 관리</a>
         <div class="collapse" id="transp-submenu">            
             <a class="list-group-item list-group-item-action ps-4" href="/transp">운송 현황</a>
-        </div>
-
-		<a class="list-group-item list-group-item-action" href="#!">입출고 관리</a>
+        </div>																					   
+		<!-- END - 운송 관리 메뉴 항목 -->
+		
 	</div>
 </aside>
 </html>

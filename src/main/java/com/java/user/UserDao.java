@@ -14,11 +14,19 @@ public interface UserDao {
 	
 	public UserDTO findByUser(String email);
 	
-	public RoleDTO findByRole(int no);
+	public List<RoleDTO> findByRole(int no);
 	
 	public int save(UserDTO user);
+	
+	public int NotPwdUpdate(UserDTO user);
+	
+	public int update(UserDTO user);
+	
+	public int updateUserRole(UserDTO user);
 	
 	public int saveUserRole(UserRole userRole);
 	
 	public int delete(String UserNo);
+	
+	public UserDTO detailByUserNo(String userNo);
 }

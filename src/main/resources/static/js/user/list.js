@@ -26,36 +26,29 @@ function deleteEmployee(button) {
     // 삭제 전에 확인 메시지 표시
     const isConfirmed = window.confirm('정말로 이 직원을 삭제하시겠습니까?');
 	
-	const _csrf = document.querySelector('input[name="_csrf"]').value;
-		//console.log("_csrf: ", _csrf); // 이메일 값 확인
-
 	// 사용자가 확인을 누르면 삭제 진행
-    if (isConfirmed) {
-		// ajax 요청
-	    $.ajax({
-			url: '/user/delete',  // 이메일 중복 확인 API 엔드포인트
+	if (isConfirmed) {
+		var _csrf = document.querySelector('input[name="_csrf"]').value;
+		var params = { userNo, _csrf }
+		console.log(params);
+	
+		$.ajax({
+			url: '/user/delete',
 			method: 'POST',
-			contentType: 'application/x-www-form-urlencoded',  // URL 인코딩 방식으로 전송
-		    data: { 
-		        userNo: userNo,  // 이메일 값
-		        _csrf: _csrf   // CSRF 토큰 값
-		    },							
-			success: function(res) {
-				if (res.status === "OK") {					
-					alert("삭제 완료");
-					location.reload();
-				} else {					
-					alert("삭제 오류");
-				}
-
-			},
-			error: function(xhr, status, error) {
-				console.log("Error: " + error);
+			data: params
+		}).done(data => {
+			if (data.status === "OK") {					
+				alert("삭제 완료");
+				location.reload();
+			} else {					
+				alert("삭제 오류");
 			}
+		}).fail(error => {
+			console.log(error);
 		});
-    } else {
-        console.log('직원 삭제가 취소되었습니다.');
-    }
+	}
+	
+	
 }
 
 document.addEventListener('DOMContentLoaded', function() {

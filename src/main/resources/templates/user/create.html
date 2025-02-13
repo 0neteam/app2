@@ -3,16 +3,15 @@
 	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security6"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default}">      
-
          
 <main layout:fragment="content" class="container my-2">
-<link rel="stylesheet" href="/css/user/create.css">
-<script src="/js/layouts/default.js"></script>		
+
+<link rel="stylesheet" href="/css/user/create.css">		
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="/js/user/create.js"></script>
 
 	<div class="container mt-5">
-        <h2 class="mb-4">[제조사] 직원 가입</h2>
+        <h2 class="mb-4">[창고] 직원 가입</h2>
         <div class="card p-4">
            <form th:action="@{/signUp}" method="post" id="signupForm">
                 <div class="row mb-3 form-group">
@@ -45,7 +44,7 @@
                             
                             
                             <!-- Duplicate check button -->
-                            <button type="button" id="check_email_btn" class="btn btn-primary" style="min-width: 187px;" onclick="checkDuplicateEmail()">중복 확인</button>
+                            <button type="button" id="check_email_btn" class="btn btn-primary" style="min-width: 187px;" onclick="checkDuplicateEmail2()">중복 확인</button>
                         </div>
                     </div>
                 </div>
@@ -85,13 +84,13 @@
                 <div class="row mb-3 form-group">
                     <label class="col-sm-2 col-form-label">주소</label>
                     <div class="col-sm-10">
-                        <input type="text" name="adr" id="address" class="form-control" placeholder="자동 입력되는칸" required readonly>
+                        <input type="text" name="adr" id="adr" class="form-control" placeholder="자동 입력되는칸" required readonly>
                     </div>
                 </div>
                 <div class="row mb-3 form-group">
                     <label class="col-sm-2 col-form-label">상세주소</label>
                     <div class="col-sm-10">
-                        <input type="text" name="detail_adr" id="address_detail" class="form-control" placeholder="상세주소를 입력하세요" required>
+                        <input type="text" name="detail_adr" id="detail_adr" class="form-control" placeholder="상세주소를 입력하세요" required>
                     </div>
                 </div>
                 <div class="text-center">
