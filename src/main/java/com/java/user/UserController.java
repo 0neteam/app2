@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.java.common.UniFunc;
 import com.java.user.UserDTO;
 import com.java.user.UserService;
 
@@ -30,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 	
 	private final UserService userService;
+	private final UniFunc authUser;
 
 	@GetMapping("/signUp")
 	public String userCreate() {
@@ -39,10 +41,9 @@ public class UserController {
 	
 	
 	// 사원 상세정보
-	@PreAuthorize("hasRole('ROLE_ADMIN')")  // ADMIN 권한만 접속 가능하도록 설정
+	//@PreAuthorize("hasRole('ROLE_ADMIN')")  // ADMIN 권한만 접속 가능하도록 설정
 	@GetMapping("/user/detail")
 	public String userDetail(Model model, HttpServletRequest req) {		
-				
 		return userService.detailByUserNo(model, req);
 	}
 		
@@ -81,7 +82,7 @@ public class UserController {
 	@PostMapping("/user/update")
 	@ResponseBody
 	public ResponseEntity<Map<String, String>> userUpdate(@ModelAttribute UserDTO user) {
-		
+				
 		System.out.println("/////////////Controller user/update userDTO/////////////////////////");
 		System.out.println("userDTO : " + user);
 		System.out.println("//////////////////////////////////////////////////////////");

@@ -113,7 +113,7 @@ public interface UserMapper {
 	@Update("UPDATE mfr_user SET pwd=#{pwd}, phone=#{phone}, zipcode=#{zipcode}, adr=#{adr}, detail_adr=#{detail_adr} WHERE userNo=#{userNo}")
 	public int update(UserDTO userDTO);  // 사원정보 수정
 	
-	@Update("UPDATE mfr_user SET phone=#{phone}, zipcode=#{zipcode}, adr=#{adr}, detail_adr=#{detail_adr} WHERE userNo=#{userNo}")
+	@Update("UPDATE mfr_user SET phone=#{phone}, zipcode=#{zipcode}, adr=#{adr}, AuthUserNo=#{AuthUserNo} detail_adr=#{detail_adr} WHERE userNo=#{userNo}")
 	public int NotPwdUpdate(UserDTO user); // 패스워드를 제외한 나머지 업데이트
 	
 	@Update("UPDATE mfr_user_role SET roleNo=#{selectRole} WHERE userNo=#{userNo}")
