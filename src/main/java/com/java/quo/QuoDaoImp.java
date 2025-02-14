@@ -22,9 +22,8 @@ public class QuoDaoImp implements QuoDao{
 	}
 
 	@Override
-	public List<QuoModalDTO> quoChk(int orderNo, int bizNo) {
-		return quoMapper.quoChk(orderNo, bizNo);
+	public List<QuoModalDTO> quoChk(QuoModalDTO quoModalDTO) {
+		return quoMapper.quoChk(quoModalDTO);
 	}
-	
 
 }

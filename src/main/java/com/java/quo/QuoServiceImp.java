@@ -4,6 +4,10 @@ import java.time.LocalDate;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+
+import com.java.common.JwtToken;
+import com.java.common.KeyCrypt;
+
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -11,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 public class QuoServiceImp implements QuoService{
 	
 	private final QuoDao quoDao;
+	private final JwtToken jwtToken;
 
 	@Override
 	public String list(Model model, QuoSearchDTO quoSearchDTO) {
@@ -70,10 +75,16 @@ public class QuoServiceImp implements QuoService{
 
 	@Override
 	public String quoChk(String key, int orderNo, Model model) {
-		List<QuoModalDTO> quomodalDtos = quoDao.quoChk(orderNo);
-		model.addAttribute("result", quomodalDtos);
-		return "quo/quoChk";
+		try {
+			int bizNo = Integer.parseInt( jwtToken.getBizNo(key) );
+			QuoModalDTO quoModalDTO = QuoModalDTO.builder().orderNo(orderNo).bizNo(bizNo).build();
+			model.addAttribute("result", quoDao.quoChk(quoModalDTO));
+			model.addAttribute("r", QuoDTO.builder().build());
+			return "quo/quoChk";
+		} catch (NumberFormatException e) {
+			model.addAttribute("error", "신뢰할수 없는 정보 입니다.");
+			return "error";
+		}
 	}
-
 
 }
