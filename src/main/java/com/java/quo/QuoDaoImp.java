@@ -20,6 +20,11 @@ public class QuoDaoImp implements QuoDao{
 	public List<QuoModalDTO> quoModal(int no) {
 		return quoMapper.quoModal(no);
 	}
+
+	@Override
+	public List<QuoModalDTO> quoChk(int orderNo, int bizNo) {
+		return quoMapper.quoChk(orderNo, bizNo);
+	}
 	
 
 }

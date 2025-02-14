@@ -50,7 +50,7 @@ $(() => {
 			let quoDetailTable = 
 									`<thead>
                        			 	<tr>
-			                            <th>견적번호</th>
+			                            <th>수주번호</th>
 			                            <td>${quoNo}</td>
 			                            <th>작성일자</th>
 			                            <td>${quoDate}</td>

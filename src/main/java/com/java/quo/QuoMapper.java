@@ -31,6 +31,7 @@ public interface QuoMapper {
 	
 	@Select({"<script>"
 			+ "select mq.quoNO, "
+			+ "mq.bizNo, "
 			+ "mq.quoDate, "
 			+ "mqi.itemCode, "
 			+ "ms.price, "
@@ -47,5 +48,26 @@ public interface QuoMapper {
 			+ "</script>"
 	})
 	public List<QuoModalDTO> quoModal(int no);
+	
+	@Select({"<script>"
+			+ "select mq.quoNO, "
+			+ "mq.bizNo, "
+			+ "mq.quoDate, "
+			+ "mqi.itemCode, "
+			+ "ms.price, "
+			+ "ms.name, "
+			+ "mqi.qty, "
+			+ "mq.deliDate, "
+			+ "mq.dstn "
+			+ "from mfr_quo as mq "
+			+ "left join mfr_quoitem as mqi "
+			+ "on mq.quoNo = mqi.quoNo "
+			+ "left join mfr_stock as ms "
+			+ "on mqi.itemCode = ms.itemCode "
+			+ "where mq.orderNo = #{orderNo} "
+			+ "and mq.bizNo = #{bizNo} "
+			+ "</script>"
+	})
+	public List<QuoModalDTO> quoChk(int orderNo, int bizNo);
 
 }
