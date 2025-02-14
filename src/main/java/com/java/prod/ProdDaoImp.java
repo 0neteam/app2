@@ -2,6 +2,8 @@ package com.java.prod;
 
 
 import org.springframework.stereotype.Repository;
+import org.springframework.ui.Model;
+
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -11,7 +13,7 @@ import java.util.List;
 public class ProdDaoImp implements ProdDao {
 
     private final ProdMapper prodMapper;  // ProdMapper 의존성 주입
-
+	
     // 모든 품목 조회    
     @Override
     public List<ProdDTO> getAllProds() {
@@ -21,34 +23,54 @@ public class ProdDaoImp implements ProdDao {
 
     // 품목 추가
     @Override
-    public void addProd(ProdDTO prodDTO) {
+	public int addProd(ProdDTO prodDTO, Model model) {
         // MyBatis 매퍼의 addProd 메서드를 호출하여 품목을 DB에 추가
-    	prodMapper.addProd(prodDTO);
+    	return prodMapper.addProd(prodDTO);
     }
 
     // 품목 수정
-    @Override
-    public void updateProd(ProdDTO prodDTO) {
-        
-      prodMapper.updateProd(prodDTO);
-    }
+	public int updateProd(ProdDTO prodDTO) {
+		// TODO Auto-generated method stub
+		return prodMapper.updateProd(prodDTO);
+	}	
+    
+    
     //삭제
 	@Override
-	public void deleteProd(int itemCode) {
+	public int deleteProd(int itemCode) {
 		// TODO Auto-generated method stub
-		prodMapper.deleteProd(itemCode);
+		return prodMapper.deleteProd(itemCode);
+	}
+
+	// 품목코드 조회
+	@Override
+	public List<ProdDTO> findItemCodeProds(String itemCode) {
+		// TODO Auto-generated method stub
+		return prodMapper.findItemCodeProds(itemCode);
+	}
+
+	// 품목이름 조회
+	@Override
+	public List<ProdDTO> findNameProds(String name) {
+		// TODO Auto-generated method stub
+		return prodMapper.findNameProds(name);
 	}
 
 	@Override
-	public ProdDTO getProdByItemCode(int itemCode) {
+	public int findListProds(int bizNo) {
 		// TODO Auto-generated method stub
-		return null;
+		return prodMapper.findListProds(bizNo);
 	}
+
+	
+
+	
+}
+
 
 
 
 	
-	}
 
 	
 
