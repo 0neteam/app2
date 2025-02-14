@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http//www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security6"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/default}">
+
+<main layout:fragment="content" class="container mt-5" style="min-height: 50Vh;">
+    <script src="/js/biz/list.js"></script>
+    <div class="row  w-100">
+        <form class="d-flex" method="get" th:action="@{/biz/list}">
+            <div class="col-md-2">
+                <a href="/biz/create" class="btn btn-primary">거래처 등록</a>
+            </div>
+            <div class="col-md-2">
+                <select class="form-select" name="searchOption">
+                    <option value="0">전체</option>
+                    <option value="1">거래처명</option>
+                    <option value="2">번호</option>
+                    <option value="3">업태</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <input class="form-control me-1" name="keyword" type="search" aria-label="Search">
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-outline-success" type="submit">검색</button>
+            </div>
+        </form>
+    </div>
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th style="width: 5%; min-width: 50px;">번호</th>
+                <th style="width: 10%;">거래처명</th>
+                <th style="width: 15%;">업태</th>
+                <!-- <th style="width: 7%;">데이터Sync</th> -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="r, iterStat : ${bizList}">
+                <td th:text="${r.bizNo}"></td>
+                <td th:text="${r.bizName}"></td>
+                <td th:text="${r.bizType}"></td>
+                <!-- <td>
+                    <button class="btn btn-primary btn-sm bizBtn">품목 동기화</button>
+                </td> -->
+            </tr>
+        </tbody>
+    </table>
+</main>
+</html>
