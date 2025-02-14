@@ -4,370 +4,125 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default}">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재고현황</title>
-    <!-- 부트스트랩 CSS 추가 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" >
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-	<link rel="stylesheet" href="/static/style.css">
-    <style>
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
+<main layout:fragment="content" class="container my-2">
+    <link rel="stylesheet" href="/css/prod/prod.css">        
+    <script src="/js/prod/prod.js"></script>
 
-        .modal-content {
-            background-color: white;
-            padding: 20px;
-            margin: 10% auto;
-            width: 300px;
-            text-align: left;
-            border-radius: 8px;
-            position: relative;
-        }
+    <div class="container">
+        <!-- 메인 콘텐츠 -->
+        <div class="main-content">
+            <h2>재고현황</h2>
 
-        .close {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 25px;
-            cursor: pointer;
-        }
+            <!-- 검색과 버튼들 -->
+            <div class="search-bar">
+                <select id="search-type" name="search-type">
+                    <option value="all">전체</option>
+                    <option value="code">품목코드</option>
+                    <option value="name">품목명</option>
+                </select>
+                <input type="text" id="search-input" name="search-input" placeholder="검색...">
+                <button id="search-btn" name="search-btn" class="btn btn-primary">검색</button>
+                <button id="add-btn" name="add-btn" class="btn btn-success">추가</button>
+            </div>
 
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
+            <!-- 재고 목록 테이블 -->
+            <table class="table">
+			    <thead>
+			        <tr>
+			            <th>품목 코드</th>
+			            <th>품목명</th>
+			            <th>재고 수량</th>
+			            <th>판매가</th>
+			            <th>날짜</th>
+			            <th>상태</th>
+			        </tr>
+			    </thead>
+			    <tbody>
+			        <tr th:each="prod : ${prodList}">
+			            <td th:text="${prod.itemCode}" class="prod-itemCode" th:data-item-code="${prod.itemCode}"></td>
+			            <td>
+			                <!-- 품목명 수정 input -->
+			                <span th:text="${prod.name}" class="prod-name"></span>
+			                <input type="text" th:value="${prod.name}" class="prod-name-input" style="display:none;">
+			            </td>
+			            <td>
+			                <!-- 재고 수량 수정 input -->
+			                <span th:text="${prod.qty}" class="prod-qty"></span>
+			                <input type="number" th:value="${prod.qty}" class="prod-qty-input" style="display:none;">
+			            </td>
+			            <td>
+			                <!-- 판매가 수정 input -->
+			                <span th:text="${prod.price}" class="prod-price"></span>
+			                <input type="text" th:value="${prod.price}" class="prod-price-input" style="display:none;" >
+			            </td>
+			            <td th:text="${prod.regDate}"></td>
+			            <td>
+			                <!-- 수정 버튼 -->
+			                <button class="btn btn-primary btn-sm edit-btn" th:data-item-code="${prod.itemCode}">
+			                    <i class="fas fa-edit"></i> 수정
+			                </button>
+			                <!-- 저장 버튼 (수정 완료 후 저장) -->
+			                <button class="btn btn-success btn-sm save-btn" style="display:none;" th:data-item-code="${prod.itemCode}">
+			                    <i class="fas fa-save"></i> 저장
+			                </button>
+			                <!-- 삭제 버튼 -->
+			                <button class="btn btn-danger btn-sm delete-btn" th:data-item-code="${prod.itemCode}">
+			                    <i class="fas fa-trash-alt"></i> 삭제
+			                </button>
+			            </td>
+			        </tr>
+			    </tbody>
+			</table>
 
-        .container {
-            display: flex;
-        }
-
-        .sidebar {
-            width: 200px;
-            background-color: #333;
-            color: white;
-            padding: 20px;
-            height: 100vh;
-        }
-
-        .sidebar ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .sidebar ul li {
-            padding: 10px 0;
-        }
-
-        .sidebar ul li a {
-            color: white;
-            text-decoration: none;
-            font-size: 16px;
-        }
-
-        .main-content {
-            flex-grow: 1;
-            padding: 20px;
-        }
-
-        .search-bar {
-            margin-bottom: 20px;
-        }
-
-        .search-bar select,
-        .search-bar input,
-        .search-bar button {
-            padding: 10px;
-            margin-right: 10px;
-        }
-
-        .search-bar button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-        }
-
-        .search-bar input {
-            width: 200px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        table th, table td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: center;
-        }
-
-        table th {
-            background-color: #f2f2f2;
-        }
-
-        table tbody tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        .modal-content label,
-        .modal-content input,
-        .modal-content button {
-            width: 100%;
-            margin-bottom: 5px;
-            padding: 4px;
-            box-sizing: border-box;
-        }
-
-        .modal-content input {
-            font-size: 14px;
-        }
-
-        .modal-content button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        .modal-content button:focus {
-            outline: none;
-        }
-
-        .modal-content .close {
-            font-size: 30px;
-            color: #aaa;
-        }
-
-        .modal-content .close:hover {
-            color: #000;
-        }
-    </style>
-</head>
-
-<body>
-    <main layout:fragment="content" class="container my-2">
-        <div class="container">
-            <!-- 메인 콘텐츠 -->
-            <div class="main-content">
-                <h2>재고현황</h2>
-
-                <!-- 검색과 버튼들 -->
-                <div class="search-bar">
-                    <select id="search-type" name="search-type">
-                        <option value="all">전체</option>
-                        <option value="code">품목코드</option>
-                        <option value="name">품목명</option>
-                    </select>
-                    <input type="text" id="search-input" name="search-input" placeholder="검색...">
-                    <button id="search-btn" name="search-btn" class="btn btn-primary">검색</button>
-                    <button id="add-btn" name="add-btn" class="btn btn-success">추가</button>
+            <!-- 모달 -->
+            <div id="modal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>새 품목 추가</h2>
+                    <form th:action="@{/prod/add}" method="POST">
+                        <label for="item-name">품목명:</label>
+                        <input type="text" id="item-name" name="name">
+                        
+                        <label for="item-qty">재고 수량:</label>
+                        <input type="number" id="item-qty" name="qty">
+                        
+                        <label for="item-price">판매가:</label>
+                        <input type="number" id="item-price" name="price">    
+                        
+                        <button type="submit" class="btn btn-primary">저장</button>
+                    </form>
+                    <a href="/prod">품목 목록으로 돌아가기</a>
                 </div>
-
-                <!-- 재고 목록 테이블 -->
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>품목 코드</th>
-                            <th>품목명</th>
-                            <th>재고 수량</th>
-                            <th>판매가</th>
-                            <th>날짜</th> <!-- 비고 대신 날짜로 변경 -->
-                            <th>상태</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-					    <tr th:each="prod : ${prodList}">
-					        <td th:text="${prod.itemCode}"></td>
-					        <td th:text="${prod.name}"></td>
-					        <td th:text="${prod.qty}"></td>
-					        <td th:text="${prod.price}"></td>
-					        <td th:text="${prod.regDate}"></td>
-					        <td>
-					            <button class="btn btn-warning edit-btn" th:data-item-code="${prod.itemCode}">수정</button>
-					            <button class="btn btn-danger delete-btn" th:data-item-code="${prod.itemCode}">삭제</button>
-					        </td>
-					    </tr>
-					</tbody>
-                </table>
             </div>
+
         </div>
-
-        <!-- 모달 -->
-        <div id="modal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>새 품목 추가</h2>
-
-    <form action="/prod" method="POST">
-  	  <input type="hidden" name="_csrf" value="${_csrf.token}" /> <!-- CSRF 토큰 추가 (Spring Security) -->
-    
-   	 <label for="item-code">품목 코드:</label>
-   	 <input type="text" id="item-code" name="itemCode">
-
-   	 <label for="item-name">품목명:</label>
-   	 <input type="text" id="item-name" name="itemName">
-
-   	 <label for="item-quantity">재고 수량:</label>
-   	 <input type="number" id="item-quantity" name="itemQuantity">
-
-   	 <label for="item-price">판매가:</label>
-   	 <input type="number" id="item-price" name="itemPrice">
-
-    <label for="item-date">날짜:</label>
-    <input type="date" id="item-date" name="itemDate">
-
-    <button type="submit" class="btn btn-primary">저장</button>
-	</form>
-	<a href="/prod">품목 목록으로 돌아가기</a>
-            </div>
-        </div>
+    </div>
 
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const addBtn = document.getElementById("add-btn");
-        const modal = document.getElementById("modal");
-        const closeBtn = document.querySelector(".close");
-        const saveBtn = document.querySelector(".modal-content button[type='submit']"); // 추가된 부분
-
-        // addBtn이 null이 아닐 경우에만 addEventListener 추가
-        if (addBtn) {
-            addBtn.addEventListener("click", function () {
-                if (modal) {
-                    modal.style.display = "block";
-                }
-            });
-        }
-
-        // closeBtn이 null이 아닐 경우에만 addEventListener 추가
-        if (closeBtn) {
-            closeBtn.addEventListener("click", function () {
-                if (modal) {
-                    modal.style.display = "none";
-                }
-            });
-        }
-
-        // 모달의 입력 필드
-        const itemCodeInput = document.getElementById("item-code");
-        const itemNameInput = document.getElementById("item-name");
-        const itemQuantityInput = document.getElementById("item-quantity");
-        const itemPriceInput = document.getElementById("item-price");
-        const itemDateInput = document.getElementById("item-date"); // 날짜 입력 필드 추가
-
-        // 재고 목록 테이블
-        const stockTableBody = document.querySelector("table tbody");
-
-        let currentRow = null; // 현재 수정 중인 행을 추적
-
         // 모달 열기
-        addBtn.addEventListener("click", function () {
+        const modal = document.getElementById("modal");
+        const addBtn = document.getElementById("add-btn");
+        const closeBtn = document.querySelector(".close");
+
+        // "추가" 버튼 클릭 시 모달 열기
+        addBtn.onclick = function() {
             modal.style.display = "block";
-            saveBtn.textContent = "저장"; // 저장 버튼 텍스트 설정
-        });
+        }
 
-        // 모달 닫기
-        closeBtn.addEventListener("click", function () {
+        // "X" 버튼 클릭 시 모달 닫기
+        closeBtn.onclick = function() {
             modal.style.display = "none";
-        });
+        }
 
-        // 모달 외부 클릭 시 닫기
-        window.addEventListener("click", function (event) {
+        // 모달 외부 클릭 시 모달 닫기
+        window.onclick = function(event) {
             if (event.target === modal) {
                 modal.style.display = "none";
             }
-        });
-
-        // "저장" 버튼 클릭 시 실행
-        saveBtn.addEventListener("click", function () {
-            const itemCode = itemCodeInput.value;
-            const itemName = itemNameInput.value;
-            const itemQuantity = itemQuantityInput.value;
-            const itemPrice = itemPriceInput.value;
-            const itemDate = itemDateInput.value; // 날짜 입력 값
-
-            if (saveBtn.textContent === "저장") {
-                // 새 품목 추가
-                const newRow = document.createElement("tr");
-                newRow.innerHTML = `
-                    <td>${itemCode}</td>
-                    <td>${itemName}</td>
-                    <td>${itemQuantity}</td>
-                    <td>${itemPrice}</td>
-                    <td>${itemDate}</td> <!-- 날짜 추가 -->
-                    <td>
-                        <button class="btn btn-primary edit-btn">수정</button>
-                        <button class="btn btn-danger delete-btn">삭제</button>
-                    </td>
-                `;
-                stockTableBody.appendChild(newRow);
-            } else {
-                // 수정된 내용으로 기존 행 업데이트
-                currentRow.querySelector("td:nth-child(1)").textContent = itemCode;
-                currentRow.querySelector("td:nth-child(2)").textContent = itemName;
-                currentRow.querySelector("td:nth-child(3)").textContent = itemQuantity;
-                currentRow.querySelector("td:nth-child(4)").textContent = itemPrice;
-                currentRow.querySelector("td:nth-child(5)").textContent = itemDate; // 날짜 업데이트
-            }
-
-            // 모달 닫기
-            modal.style.display = "none";
-
-            // 입력 필드 초기화
-            itemCodeInput.value = "";
-            itemNameInput.value = "";
-            itemQuantityInput.value = "";
-            itemPriceInput.value = "";
-            itemDateInput.value = ""; // 날짜 입력 초기화
-            saveBtn.textContent = "저장";  // 저장 버튼 텍스트 초기화
-        });
-
-        // 수정 및 삭제 버튼 이벤트 처리
-        stockTableBody.addEventListener("click", function (event) {
-            if (event.target.classList.contains("delete-btn")) {
-                // 삭제 버튼 클릭 시 해당 행 삭제
-                event.target.closest("tr").remove();
-            }
-            if (event.target.classList.contains("edit-btn")) {
-                // 수정 버튼 클릭 시 수정 처리
-                currentRow = event.target.closest("tr");
-                const itemCode = currentRow.querySelector("td:nth-child(1)").textContent;
-                const itemName = currentRow.querySelector("td:nth-child(2)").textContent;
-                const itemQuantity = currentRow.querySelector("td:nth-child(3)").textContent;
-                const itemPrice = currentRow.querySelector("td:nth-child(4)").textContent;
-                const itemDate = currentRow.querySelector("td:nth-child(5)").textContent;
-
-                // 모달에 현재 데이터를 채워넣기
-                itemCodeInput.value = itemCode;
-                itemNameInput.value = itemName;
-                itemQuantityInput.value = itemQuantity;
-                itemPriceInput.value = itemPrice;
-                itemDateInput.value = itemDate; // 날짜 설정
-
-                // 모달 열기
-                modal.style.display = "block";
-
-                // 저장 버튼을 수정 모드로 변경
-                saveBtn.textContent = "수정"; // 버튼 텍스트를 "수정"으로 변경
-            }
-        });
-    });
-
-   
+        }
     </script>
 
 </main>
-</body>  
+
+</body>
 </html>
