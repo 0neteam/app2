@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http//www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security6"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/default}">
+
+<main layout:fragment="content">
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="/js/biz/detail.js"></script>
+    <div class="container text-center card p-4">
+        <style>
+            .form-group {
+                border-bottom: 1px solid #ccc;
+                padding-bottom: 10px;
+                margin-bottom: 15px;
+            }
+        </style>
+        <form id="biz" th:action="@{/biz/update}" method="post">
+            <input type="hidden" name="bizNo" th:value="${bizResult.bizNo}" />
+            <div class="row form-group">
+                <div class="col-sm-12">
+                    <h1 id="bizTitle">거래처 상세 정보</h1>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-2">상호</div>
+                <div class="col-sm-4">
+                    <input type="text" th:value="${bizResult.bizName}" class="form-control" readonly>
+                </div>
+                <div class="col-sm-2">사업자등록번호</div>
+                <div class="col-sm-4">
+                    <input type="text" th:value="${bizResult.bizNo}" class="form-control" readonly>
+                </div>
+            </div>
+            <div class="row mb-3 form-group">
+                <label class="col-sm-2 col-form-label">우편번호</label>
+                <div class="col-sm-8">
+                    <input type="text" name="zipCode" id="zipCode" class="form-control" placeholder="자동 입력되는칸" required readonly th:value="${bizResult.zipCode}">
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-secondary" id="searchZipcode" style="min-width: 160px;" disabled>우편번호 검색</button>
+                </div>
+            </div>
+            <div class="row mb-3 form-group">
+                <label class="col-sm-2 col-form-label">상호주소</label>
+                <div class="col-sm-10">
+                    <input type="text" name="adr" id="adr" class="form-control" placeholder="자동 입력되는칸" required readonly th:value="${bizResult.adr}">
+                </div>
+            </div>
+            <div class="row mb-3 form-group">
+                <label class="col-sm-2 col-form-label">상세주소</label>
+                <div class="col-sm-10">
+                    <input type="text" name="adrDetail" id="adrDetail" class="form-control" placeholder="상세주소를 입력하세요" required readonly th:value="${bizResult.adrDetail}">
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-2">업태/종목</div>
+                <div class="col-sm-4">
+                    <input type="text" th:value="${bizResult.bizType}" class="form-control" readonly>
+                </div>
+            </div>
+            <th:block th:if="${bizResult.apiKeys.size() > 0}">
+                <div class="row form-group">
+                    <div class="col-sm-2">발주 URL</div>
+                    <div class="col-sm-4">
+                        <input type="text" name="url1" id="url1" th:value="${bizResult.apiKeys[0].url}" class="form-control" required readonly>
+                    </div>
+                    <div class="col-sm-2">품목 URL</div>
+                    <div class="col-sm-4">
+                        <input type="text" name="url2" id="url2" th:value="${bizResult.apiKeys[1].url}" class="form-control" required readonly>
+                    </div>
+                </div>
+            </th:block>
+            <div class="row form-group">
+                <div class="col-sm-2">대표자</div>
+                <div class="col-sm-4">
+                    <input type="text" name="ceo" id="ceo" th:value="${bizResult.ceo}" class="form-control" required readonly>
+                </div>
+                <div class="col-sm-2">전화번호</div>
+                <div class="col-sm-4">
+                    <input type="text" name="bizTel" id="bizTel" th:value="${bizResult.bizTel}" class="form-control" required readonly>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-2">이메일</div>
+                <div class="col-sm-10">
+                    <input type="email" name="email" id="email" th:value="${bizResult.email}" class="form-control" required readonly>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-2">팩스</div>
+                <div class="col-sm-10">
+                    <input type="text" name="bizFax" id="bizFax" th:value="${bizResult.bizFax}" class="form-control" required readonly>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-12">
+                    <button type="button" class="btn btn-primary" id="bizEdit">수정</button>
+                    <button type="button" class="btn btn-primary d-none" id="bizSave">저장</button>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalDeleteConfirm" sec:authorize="hasRole('ROLE_ADMIN')">삭제</button>
+                    <a href="/biz/list" type="button" class="btn btn-secondary">취소</a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- (MODAL) 삭제 확인 모달 -->
+    <div class="modal" id="modalDeleteConfirm">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1>삭제 하시겠습니까?</h1>
+                </div>
+                <div class="modal-body text-center">
+                    <button type="button" class="btn btn-primary" id="bizDelete">확인</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">취소</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- (MODAL) 수정 확인 모달 -->
+    <div class="modal" id="modalCorrectionConfirm">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1>수정 하시겠습니까?</h1>
+                </div>
+                <div class="modal-body text-center">
+                    <button type="button" class="btn btn-primary" id="bizUpdate">확인</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">취소</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+</html>
