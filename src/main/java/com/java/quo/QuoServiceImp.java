@@ -68,4 +68,12 @@ public class QuoServiceImp implements QuoService{
 		return quoModalDTOs;
 	}
 
+	@Override
+	public String quoChk(String key, int orderNo, Model model) {
+		List<QuoModalDTO> quomodalDtos = quoDao.quoChk(orderNo);
+		model.addAttribute("result", quomodalDtos);
+		return "quo/quoChk";
+	}
+
+
 }
