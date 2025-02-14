@@ -20,12 +20,19 @@ import lombok.ToString;
 public class QuoDTO {
 	
 	private int quoNo;
+	private int orderNo;
+	private int bizNo;
+	private LocalDate quoDate;
+	private String quoStatus;
+	private String useYN;
+	private String departure;
+	private String dstn;
+	private LocalDate deliDate;
+	private LocalDate orderDate;
+	
 	private String bizName;
 	private String bizNum;
-	private String dstn;
 	private String adr;
-	private LocalDate quoDate;
-	private LocalDate deliDate;
-	private String quoStatus;
 	private String category;
+
 }

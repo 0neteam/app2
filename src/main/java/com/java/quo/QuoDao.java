@@ -6,6 +6,6 @@ public interface QuoDao {
 	
 	public List<QuoDTO> list(QuoDTO quoDTO);
 	public List<QuoModalDTO> quoModal(int no);
-	public List<QuoModalDTO> quoChk(String key, int orderNo);
+	public List<QuoModalDTO> quoChk(QuoModalDTO quoModalDTO);
 
 }

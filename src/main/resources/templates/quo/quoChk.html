@@ -3,12 +3,89 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default}">
 <main layout:fragment="content" class="container my-2">
+	<link rel="stylesheet" href="/css/quo/quo.css">
 	<div class="container section-container p-4 border rounded shadow-sm">
 	<div class="text-center">
 	<h3>견적서 상세조회</h3>
-	<form th:action="@{/quoChk}" method="get">
-	화면 확인
-	</form>
+	<div id="supplierModal">
+		<div class="container-flex">
+			<table id="quoCustomer" class = "table-half">
+				<tbody>
+					<tr>
+						<th rowspan = "5">공급받는자</th>
+						<th>사업자등록번호</th>
+						<td th:text="${r.bizNum}"></td>
+					</tr>
+					<tr>
+						<th>상호</th>
+						<td th:text="${r.bizName}"></td>
+					</tr>
+					<tr>
+						<th>주소</th>
+						<td th:text="${r.adr}"></td>
+					</tr>
+				</tbody>
+			</table>
+			<table id="quoSeller" class = "table-half">
+				<tbody>
+					<tr>
+						<th rowspan = "5">공급자</th>
+						<th>사업자등록번호</th>
+						<td>220-81-62517</td>
+					</tr>
+					<tr>
+						<th>상호</th>
+						<td>제조제조제조업체</td>
+					</tr>
+					<tr>
+						<th>주소</th>
+						<td>신촌버티고타워7층</td>
+					</tr>
+					<tr>
+						<th>Tel.</th>
+						<td>02-323-3223</td>
+					</tr>
+					<tr>
+						<th>Fax.</th>
+						<td>02-323-3224</td>
+					</tr>
+				</tbody>
+			</table>
+			<hr />
+		</div>
+			<table id="quoDetailTable">
+				<thead>
+            		<tr>
+                       <th>수주번호</th>
+                       <td th:text="${r.quoNo}"></td>
+                       <th>작성일자</th>
+                       <td th:text="${r.quoDate}"></td>
+             		</tr>
+					<tr>
+                        <th>물품 도착지</th>
+                        <td th:text="${r.dstn}" colspan="4"></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+					    <th>품목코드</th>
+					    <th>품목명</th>
+					    <th>발주수량</th>
+					    <th>단가</th>
+					    <th>합계</th>
+					</tr>
+					<tr th:each="i, iterStat : ${result}">
+					    <td th:text="${iterStat.index + 1}"></td> 
+						<td th:text="${i.itemCode}"></td>
+                        <td th:text="${i.name}"></td>
+                        <td th:text="${i.qty}"></td>
+                        <td th:text="${i.price}"></td>
+                        <td th:text="${i.qty} * ${i.price}"></td>
+                    </tr>
+                 </tbody>
+			</table>
+	</div>
+	<p th:text="${result}"></p>
 	</div>
 	</div>
 </main>

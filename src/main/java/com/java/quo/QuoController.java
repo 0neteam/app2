@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.java.common.JwtToken;
+import com.java.common.KeyCrypt;
+
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -31,14 +34,24 @@ public class QuoController {
 	public List<QuoModalDTO> quoDetail(@RequestParam(name="quoNo") String quoNo) {		
 		return quoService.quoModals(quoNo);
 	}
-	
-	@GetMapping("/quoChk/{key}/{orderNo}")
+	// /quoChk/3/pK2hGWjw1+U40NqqEZQmaQt7SSdmRKHn7WvhEYrlzQTUX2qBgDZ6ifVeTNmi1uy6mbgBf8P3ugRXoQVNbyFoCcGd89H2XOysMgRgca35HjDODUuBw+RxzZp1zXjhS1fbdc8ai4tKD+lpUQS7EqjrTkOhDSVP6Eho77cH+Aa+6AesWYRbuFfI12ozEHV5dgbUfu/i0AK33frft2F1fvADRlYrLJRYKF2A/SAUi1XtEjwQs8t2FmdjtaH14R24rSCXIz5eWSxuikANW0lnN0SeOW3Hi4ylfjCcNJNzn/S+HKN6QlAmNkUGm1zMZtwcKbk01ZSAawxLZ9N3npMtx2r1uw==
+	@GetMapping("/quoChk/{orderNo}/{key}")
 	public String quoChk(
-			@PathVariable("key") String key, 
 			@PathVariable("orderNo") Integer orderNo,
+			@PathVariable("key") String key, 
 			Model model) {
+			System.out.println(orderNo);
+			System.out.println(key);
 		return quoService.quoChk(key, orderNo, model);
 	}
-	
+
+	// 거래처 등록시 생성 되는 KEY 테스트용
+	private final JwtToken jwtToken;
+
+	@ResponseBody
+	@GetMapping("/quoKey/{bizNo}")
+	public String quoKey(@PathVariable("bizNo") String bizNo) {
+		return jwtToken.setToken(bizNo);
+	}
 
 }

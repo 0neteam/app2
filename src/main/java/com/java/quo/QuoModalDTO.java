@@ -19,6 +19,7 @@ import lombok.ToString;
 public class QuoModalDTO {
 	private int quoNo;
 	private int bizNo;
+	private int orderNo;
 	private LocalDate quoDate;
 	private int itemCode;
 	private int price;
