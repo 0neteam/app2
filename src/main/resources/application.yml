@@ -9,6 +9,19 @@ spring:
     name: app2
   profiles:
     active: dev
+# 메일 설정
+  mail:
+    host: ${EMAIL_HOST}
+    port: ${EMAIL_PORT}
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: ${EMAIL_SMTP_AUTH}
+          timeout: ${EMAIL_SMTP_TIMEOUT}
+          starttls: 
+            enable: ${EMAIL_SMTP_ENABLE}
 # ENV 설정
   config:
     import: optional:file:.env[.properties]
@@ -45,3 +58,4 @@ logging:
       springframework:
         web: DEBUG
       thymeleaf: DEBUG
+

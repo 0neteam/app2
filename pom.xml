@@ -128,6 +128,40 @@
 <!--		    <version>6.4.1.RELEASE</version>-->
 		  </dependency>
 		
+		    <!-- Spring Boot Mail Starter (메일 전송) -->
+    	<dependency>
+        	<groupId>org.springframework.boot</groupId>
+        	<artifactId>spring-boot-starter-mail</artifactId>
+    	</dependency>
+    	
+    	
+
+<!--    	 JavaMail API (메일 관련 기능) 
+    	<dependency>
+        	<groupId>javax.mail</groupId>
+        	<artifactId>javax.mail-api</artifactId>
+        	<version>1.6.2</version>
+    	</dependency>-->
+
+		<!-- JWT -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>0.12.6</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>0.12.6</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>0.12.6</version>
+			<scope>runtime</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>

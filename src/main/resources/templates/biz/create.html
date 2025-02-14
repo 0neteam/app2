@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http//www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security6"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/default}">
+
+<main layout:fragment="content" class="container text-center card p-4">
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="/js/biz/create.js"></script>
+    <style>
+        .form-group {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+    </style>
+        <form th:action="@{/create}" id="createBiz" method="post">
+            <div class="row form-group">
+                <div class="col-sm-12">
+                    <h1>거래처 정보</h1>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-9"></div>
+                <div class="col-sm-3">
+                    <button type="button" class="btn btn-light" id="searchBizNum">사업자등록번호 검색</button>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-2">상호</div>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" name="bizName" id="bizName" required />
+                </div>
+                <div class="col-sm-2">사업자등록번호</div>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" name="bizNum" id="bizNum" required />
+                </div>
+            </div>
+            <div class="row mb-3 form-group">
+                <label class="col-sm-2 col-form-label">우편번호</label>
+                <div class="col-sm-8">
+                    <input type="text" name="zipCode" id="zipCode" class="form-control" placeholder="자동 입력되는칸" required readonly >
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-secondary" id="searchZipcode" style="min-width: 160px;">우편번호 검색</button>
+                </div>
+            </div>
+            <div class="row mb-3 form-group">
+                <label class="col-sm-2 col-form-label">상호주소</label>
+                <div class="col-sm-10">
+                    <input type="text" name="adr" id="adr" class="form-control" placeholder="자동 입력되는칸" required readonly >
+                </div>
+            </div>
+            <div class="row mb-3 form-group">
+                <label class="col-sm-2 col-form-label">상세주소</label>
+                <div class="col-sm-10">
+                    <input type="text" name="adrDetail" id="adrDetail" class="form-control" placeholder="상세주소를 입력하세요" required >
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-2">업태/종목</div>
+                <div class="col-sm-4">
+                    <select name="bizType" id="bizType" class="form-control">
+                        <option value="운수">운수</option>
+                        <option value="제조">제조</option>
+                        <option value="도소매">도소매</option>
+                        </select>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-2">발주url</div>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" name="orderUrl" id="orderUrl" required />
+                </div>
+                <div class="col-sm-2">품목url</div>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" name="productUrl" id="productUrl" required />
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-2">발주key</div>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" name="orderKey" id="orderKey" required />
+                </div>
+                <div class="col-sm-2">품목key</div>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" name="productKey" id="productKey" required />
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-2">대표자</div>
+                <div class="col-sm-4">
+                    <input type="text" name="ceo" id="ceo" class="form-control" required />
+                </div>
+                <div class="col-sm-2">전화번호</div>
+                <div class="col-sm-4">
+                    <input type="text" name="bizTel" id="bizTel" class="form-control" />
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-2">팩스</div>
+                <div class="col-sm-10">
+                    <input type="text" name="bizFax" id="bizFax" class="form-control" required />
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-2">이메일</div>
+                <div class="col-sm-10">
+                    <input type="email" name="email" id="email" class="form-control" required />
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-12">
+                    <button type="submit" class="btn btn-primary" >등록</button>
+                    <a class="btn btn-secondary" href="/biz/list">취소</a>
+                </div>
+            </div>
+        </form>
+
+    <!-- (MODAL) 등록 확인 모달 -->
+    <div class="modal" id="modalCorrectionConfirm">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1>등록 하시겠습니까?</h1>
+                </div>
+                <div class="modal-body text-center">
+                    <button type="button" class="btn btn-primary" id="bizCreate">확인</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">취소</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </main>
+
+</html>
