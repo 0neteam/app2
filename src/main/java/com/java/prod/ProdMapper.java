@@ -25,7 +25,7 @@ public interface ProdMapper {
     public List<ProdDTO> findItemCodeProds(String itemCode);
     
     // 품목 이름을 조회하는 SQL 쿼리 메서드
-    @Select("SELECT * FROM mfr_stock WHERE useYN = 'Y' AND name = #{name} ")  // 품목이름으로 검색 조회시
+    @Select("SELECT * FROM mfr_stock WHERE useYN = 'Y' AND name LIKE CONCAT('%', #{name}, '%')")  // 품목이름으로 검색 조회시
     public List<ProdDTO> findNameProds(String name);
     
     // 품목 추가 SQL
