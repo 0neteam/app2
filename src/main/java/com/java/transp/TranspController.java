@@ -2,23 +2,47 @@ package com.java.transp;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 
-
+@RequiredArgsConstructor
 @Controller
 public class TranspController {
 	
 	private final TranspService transpService;
-	public TranspController(TranspService transpService) {
-        this.transpService = transpService;
+
+	@GetMapping("/transp")
+	public String transpList(Model model, HttpServletRequest req) {
+		return transpService.transpList(model, req);
+	}
+ 
+    @GetMapping("/transp/search")
+    public String transpSearch(
+            @RequestParam(value = "category", required = false) String category,
+            @RequestParam(value = "search", required = false) String search,
+            Model model,
+            HttpServletRequest req) {
+
+        return transpService.transpSearch(model, req);
     }
+    
+    @GetMapping("/transp/modal")
+    public String transpModal(@RequestParam("transpNo") String transpNo, Model model) {
+        List<TranspModalDTO> transpDetail = transpService.transpModals(transpNo);
+        model.addAttribute("transpDetail", transpDetail);
+        return "transp/transp";
+    }
+
+
 
     @GetMapping("/transpEmail/{bizNo:[0-9]+}")
     public String TranspEmail(@PathVariable(name = "bizNo") Integer bizNo, Model model) {
@@ -26,19 +50,14 @@ public class TranspController {
         return "transp/transpEmail";
     };
     
-    @GetMapping("/transp")
-    public String list(Model model, HttpServletRequest req) {
-        return transpService.list(model, req);
-    };
-    
     @GetMapping("/transpInfo/{transpMailNo}")
     public String getTranspInfo(@PathVariable("transpMailNo") Integer transpMailNo, Model model, HttpServletRequest req) {
-    	transpService.list(model, req);
+    	transpService.transpList(model, req);
         TranspInfoDTO driverInfo = transpService.getTranspInfo(transpMailNo);
         model.addAttribute("driverInfo", driverInfo);
         return "transp/transp";
     }
-    
+  
     @PostMapping("/InfoSave")
     public String InfoSave(HttpServletRequest req) {
     	return transpService.InfoSave(req);
