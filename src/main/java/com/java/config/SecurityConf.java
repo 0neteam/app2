@@ -70,9 +70,8 @@ public class SecurityConf {
             req.requestMatchers("/user/loginUpdateAuthCodeCheck").permitAll();
             req.requestMatchers("/user/loginpwdupdate").permitAll();
             req.requestMatchers("/webjars/**").permitAll(); // 정적 리소스(webjars) 접근 허용
-           
-            //req.requestMatchers("/**").permitAll(); //인증때문에 안되는 부분이 있을시 해제하여 확인
-            
+            req.requestMatchers("/quo/order/**").permitAll();
+                       
             req.anyRequest().authenticated(); // 그 외 모든 요청은 인증 필요
                         
         });

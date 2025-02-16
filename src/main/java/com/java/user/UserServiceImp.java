@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
+import com.java.common.UniFunc;
 import com.java.user.MyUserDTO;
 import com.java.user.RoleDTO;
 import com.java.user.UserDTO;
@@ -32,6 +33,8 @@ public class UserServiceImp implements UserService, UserDetailsService {
 	private final UserDao userDAO;
 	
 	private final PasswordEncoder passwordEncoder;
+	
+	private final UniFunc uniFunc;
 	
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -72,6 +75,10 @@ public class UserServiceImp implements UserService, UserDetailsService {
             	userDTO = userDAO.findALL();  // 전부 해당 안될시 기본값 전체 조회
             	
         }
+        
+        System.out.println("test : " + uniFunc.getUserNo());
+        
+        model.addAttribute("loginedUserNo", uniFunc.getUserNo());
                
 		model.addAttribute("rs", userDTO);
 		

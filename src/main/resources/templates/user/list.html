@@ -50,7 +50,7 @@
             </thead>
             <tbody>
 			    <!-- 'users'는 Controller에서 전달된 데이터입니다. -->
-			    <tr th:each="r, iterStat : ${rs}" style="cursor: pointer;" th:onclick="'window.location.href=\'/user/detail?userNo=' + ${r.userNo} + '\''">
+			    <tr th:each="r, iterStat : ${rs}" style="cursor: pointer;" th:if="${r.userNo == loginedUserNo}" th:onclick="'window.location.href=\'/user/detail?userNo=' + ${r.userNo} + '\''">
 			        <td th:text="${iterStat.index + 1}"></td> <!-- 인덱스를 1부터 시작하도록 설정 -->
 			        <td th:text="${r.userNo}"></td>
 			        <td th:text="${r.name}"></td>
