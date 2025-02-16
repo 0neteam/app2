@@ -35,8 +35,8 @@ public class TestController {
         return "admin";
     }
     
-    @GetMapping("/signIn")
-	public String signIn() {return "signIn";}
+//    @GetMapping("/signIn")
+//	public String signIn() {return "signIn";}
 	
 //	@GetMapping("/signUp")
 //	public String signUp() {return "signUp";}

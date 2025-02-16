@@ -29,4 +29,8 @@ public interface UserDao {
 	public int delete(String UserNo);
 	
 	public UserDTO detailByUserNo(String userNo);
+	
+//	public int authCodeUpdate(UserDTO userDTO);
+	
+	public int pwdupdate(UserDTO userDTO);
 }

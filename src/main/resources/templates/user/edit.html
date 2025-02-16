@@ -15,12 +15,15 @@
     <div class="card p-4">
         <form th:action="@{/user/update}" method="post" id="signupForm3">
         
-        	<input type="hidden" name="userNo" th:value="${rs.userNo}" />
+        	<input type="hidden" name="userNo" th:value="${rs.userNo}" />   
+        	<input type="hidden" name="bizNo" th:value="${rs.bizNo}" />        	
+            <input type="hidden" id="email_codeserverupdate_chk">
+            <input type="hidden" id="email_codeauth_chk">
         
             <div class="row mb-3 form-group">
                 <label class="col-sm-2 col-form-label">회원 아이디</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="email" th:value="${rs.email}" required readonly>
+                    <input type="text" class="form-control" name="email" id="email" th:value="${rs.email}" required readonly>
                 </div>
             </div>
             <div class="row mb-3 form-group">
@@ -28,7 +31,8 @@
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="name" th:value="${rs.name}" required readonly>
                 </div>
-            </div>                
+            </div>           
+                
             <div class="row mb-3 form-group">
                 <label class="col-sm-2 col-form-label">새 비밀번호</label>
                 <div class="col-sm-10">
@@ -41,6 +45,26 @@
                     <input type="password" id="password_confirm" class="form-control" placeholder="새로 입력한 비밀번호를 다시 입력하세요" >
                 </div>
             </div>
+            
+            <div id="mailauthSection" class="row mb-3 form-group" style="display:none;">
+			    <div class="d-flex align-items-center">        
+			        <button type="button" id="check_email_btn" class="btn btn-primary me-3" style="min-width: 160px;" onclick="checkAuthEmail()">메일본인인증</button>
+			        <label class="col-form-label me-2" id="authMsg">비밀번호 변경시 메일 인증을 통해 본인확인을 완료해주세요.</label>
+			    </div>
+			</div>
+			
+			<!-- 인증번호 입력란과 확인 버튼을 위한 영역 -->
+            <div id="authSection" class="row mb-3 form-group" style="display:none;">
+                <div class="col-sm-10 d-flex me-3">
+                    <input type="text" id="authCode" class="form-control me-3" oninput="allowOnlyLettersAuthCode(event)" placeholder="메일 인증코드" style="width: 20%;">
+                   
+                    <button type="button" id="check_auth_btn" class="btn btn-primary" onclick="checkAuthCode()">확인</button>
+                    
+                    <!-- Countdown Timer -->
+                       <span id="countdown" class="ms-3"></span>
+                </div>
+            </div>	
+            
             <div class="row mb-3 form-group">
                 <label class="col-sm-2 col-form-label">핸드폰번호</label>
                 <div class="col-sm-10">
@@ -75,9 +99,21 @@
                         <option value="1" th:selected="${rs.roleName == 'ADMIN'}">관리자</option>
 						<option value="2" th:selected="${rs.roleName == 'DEV'}">개발자</option>
 						<option value="3" th:selected="${rs.roleName == 'USER'}">일반 사용자</option>
+						<option value="4" th:selected="${rs.roleName == 'BIZ'}">거래처</option>
                     </select>
-                </div>
+                </div>                
             </div>
+            
+            <!-- 거래처 선택 영역이 동적으로 표시될 위치 -->
+			<div class="row mb-3 form-group" id="businessSelectContainer" style="display: none;">
+			    <div class="d-flex align-items-center w-100">
+			        <label class="col-sm-2 col-form-label mb-0">거래처 선택</label>
+			        <div class="col-sm-10 role-container">
+			            <!-- 거래처 이름 select 박스가 이곳에 동적으로 삽입됩니다. -->
+			        </div>
+			    </div>
+			</div>
+
             <div class="text-center">
                 <button type="submit" class="btn btn-primary">저장</button>
                 <a href="/user/list" class="btn btn-secondary">취소</a>

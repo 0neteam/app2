@@ -24,6 +24,7 @@ public class UserDTO implements Serializable {  // Serializable 인터페이스 
 
     private int userNo;
     private int deptNo;
+    private int bizNo;
     private String name;
     private String pwd;
     private String email;
@@ -41,5 +42,7 @@ public class UserDTO implements Serializable {  // Serializable 인터페이스 
     private String adr;
     private String detail_adr;
     
-    private int regUser;
+    private String authCode;
+    
+    private int bizSelect;
 }

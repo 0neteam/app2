@@ -21,4 +21,8 @@ public interface UserService {
 	
 	public String editByUserNo(Model model, HttpServletRequest req);
 	
+//	public int authCodeUpdate(UserDTO userDTO);
+	
+	public int pwdupdate(UserDTO userDTO);
+	
 }

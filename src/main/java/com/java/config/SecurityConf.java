@@ -13,7 +13,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import jakarta.servlet.http.HttpSession;
 
 @Configuration // 설정 클래스를 나타내는 어노테이션
-@EnableWebSecurity(debug = true) // Spring Security를 활성화하고 디버그 모드를 켬
+@EnableWebSecurity //(debug = true) // Spring Security를 활성화하고 디버그 모드를 켬
 @EnableMethodSecurity // 메서드 수준의 보안 설정을 활성화
 public class SecurityConf {
 
@@ -50,15 +50,28 @@ public class SecurityConf {
             
             form.permitAll(); // 로그인 페이지는 모든 사용자 접근 가능
         });
-            
+        
+        
+        // csrf ignore 설정
+        http.cors(cors -> cors.disable());
+        http.csrf(csrf -> {
+            csrf.ignoringRequestMatchers("/quo/order/**"); // 창고-> 제소사 발주요청시 
+        });
+    
+        
         http.authorizeHttpRequests(req -> {
             req.requestMatchers("/", "/signUp").permitAll(); // 메인 페이지 및 회원가입 페이지는 인증 없이 접근 가능
+            req.requestMatchers("/biz/create").permitAll();  
             req.requestMatchers("/css/**").permitAll();
-            req.requestMatchers("/js/**").permitAll(); 
-            req.requestMatchers("/user/create/checkemail").permitAll();
+            req.requestMatchers("/js/**").permitAll();             
+            req.requestMatchers("/user/create/checkemail").permitAll();   
+            req.requestMatchers("/user/findpw").permitAll();
+            req.requestMatchers("/user/loginUpdateAuthCode").permitAll();
+            req.requestMatchers("/user/loginUpdateAuthCodeCheck").permitAll();
+            req.requestMatchers("/user/loginpwdupdate").permitAll();
             req.requestMatchers("/webjars/**").permitAll(); // 정적 리소스(webjars) 접근 허용
            
-            req.requestMatchers("/**").permitAll(); //인증때문에 안되는 부분이 있을시 해제하여 확인
+            //req.requestMatchers("/**").permitAll(); //인증때문에 안되는 부분이 있을시 해제하여 확인
             
             req.anyRequest().authenticated(); // 그 외 모든 요청은 인증 필요
                         

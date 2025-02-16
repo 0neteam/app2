@@ -181,6 +181,21 @@ public class UserServiceImp implements UserService, UserDetailsService {
 		return "/user/edit";
 	}
 
+//	@Override
+//	public int authCodeUpdate(UserDTO userDTO) {
+//		// TODO Auto-generated method stub
+//		return userDAO.authCodeUpdate(userDTO);
+//	}
+
+	@Override
+	public int pwdupdate(UserDTO userDTO) {
+		// TODO Auto-generated method stub
+		
+		userDTO.setPwd(passwordEncoder.encode(userDTO.getPwd())); // 패스워드 시큐리티web 암호화		
+		
+		return userDAO.pwdupdate(userDTO);
+	}
+
 	
 
 	

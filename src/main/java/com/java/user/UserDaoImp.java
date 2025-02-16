@@ -92,4 +92,16 @@ public class UserDaoImp implements UserDao {
 		return userMapper.updateUserRole(user);
 	}
 
+//	@Override
+//	public int authCodeUpdate(UserDTO userDTO) {
+//		// TODO Auto-generated method stub
+//		return userMapper.authCodeUpdate(userDTO);
+//	}
+
+	@Override
+	public int pwdupdate(UserDTO userDTO) {
+		// TODO Auto-generated method stub
+		return userMapper.pwdupdate(userDTO);
+	}
+
 }

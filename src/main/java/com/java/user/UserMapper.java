@@ -110,11 +110,15 @@ public interface UserMapper {
 	@Insert("INSERT INTO `mfr_user` (`name`, `deptNo`, `pwd`, `email`, `phone`, `zipcode`, `adr`, `detail_adr`) VALUE (#{name}, #{deptNo}, #{pwd}, #{email}, #{phone}, #{zipcode}, #{adr}, #{detail_adr})")
 	public int save(UserDTO user);  // 사원추가 저장
 	
-	@Update("UPDATE mfr_user SET pwd=#{pwd}, phone=#{phone}, zipcode=#{zipcode}, adr=#{adr}, detail_adr=#{detail_adr} WHERE userNo=#{userNo}")
+	@Update("UPDATE mfr_user SET pwd=#{pwd}, phone=#{phone}, zipcode=#{zipcode}, adr=#{adr}, detail_adr=#{detail_adr}, bizNo=CASE WHEN #{bizSelect} = 0 THEN NULL ELSE #{bizSelect} END WHERE userNo=#{userNo}")
 	public int update(UserDTO userDTO);  // 사원정보 수정
 	
-	@Update("UPDATE mfr_user SET phone=#{phone}, zipcode=#{zipcode}, adr=#{adr}, AuthUserNo=#{AuthUserNo} detail_adr=#{detail_adr} WHERE userNo=#{userNo}")
+	@Update("UPDATE mfr_user SET phone=#{phone}, zipcode=#{zipcode}, adr=#{adr}, detail_adr=#{detail_adr}, bizNo=CASE WHEN #{bizSelect} = 0 THEN NULL ELSE #{bizSelect} END WHERE userNo=#{userNo}")
 	public int NotPwdUpdate(UserDTO user); // 패스워드를 제외한 나머지 업데이트
+	
+	@Update("UPDATE mfr_user SET pwd=#{pwd} WHERE email = #{email}")
+	public int pwdupdate(UserDTO userDTO);  // 사원정보 비밀번호만 수정
+	
 	
 	@Update("UPDATE mfr_user_role SET roleNo=#{selectRole} WHERE userNo=#{userNo}")
 	public int updateUserRole(UserDTO user); // 사원 권한 업데이트
