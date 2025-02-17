@@ -53,9 +53,9 @@ public interface BizMapper {
 
     @SelectKey(statementType = StatementType.PREPARED, statement = "select last_insert_id() as bizNo", keyProperty = "bizNo", before = false, resultType = int.class)
     @Insert("INSERT INTO mfr_client "
-            +"  (bizNum, bizName, bizTel, bizFax, email, ceo, bizType, zipCode, adr, adrDetail) "
+            +"  (bizNum, bizName, bizTel, bizFax, email, pwd, ceo, bizType, zipCode, adr, adrDetail) "
             +"  VALUE "
-            +"  (#{bizNum}, #{bizName}, #{bizTel}, #{bizFax}, #{email}, #{ceo}, #{bizType}, #{zipCode}, #{adr}, #{adrDetail})")
+            +"  (#{bizNum}, #{bizName}, #{bizTel}, #{bizFax}, #{email}, #{pwd}, #{ceo}, #{bizType}, #{zipCode}, #{adr}, #{adrDetail})")
     int createBiz(BizDTO bizDTO);
 
     @Insert("INSERT INTO mfr_api_key "

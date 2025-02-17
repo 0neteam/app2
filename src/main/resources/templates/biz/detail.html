@@ -71,6 +71,14 @@
                     </div>
                 </div>
             </th:block>
+            <th:block th:unless="${bizResult.apiKeys.size() > 0}">
+                <div class="row form-group">
+                    <div class="col-sm-12">
+                        <button type="button" class="btn btn-primary" id="addApiKey">발주/품목 URL생성</button>
+                    </div>
+                </div>
+            </th:block>
+
             <div class="row form-group">
                 <div class="col-sm-2">대표자</div>
                 <div class="col-sm-4">
