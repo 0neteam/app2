@@ -9,21 +9,21 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter
 @Setter
+@Getter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TranspDTO {
 
+public class TranspModalDTO {
 	private int transpNo;
 	private int orderNo;
 	private String departure;
 	private String dstn;
 	private String driverName;
+	private String driverPhone;
 	private String transpStatus;
 	private int transpMailNo;
-	private String driverPhone;
 	private LocalDate transpDate;
 }

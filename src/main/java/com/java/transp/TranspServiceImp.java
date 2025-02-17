@@ -10,7 +10,9 @@ import org.springframework.ui.Model;
 
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Service
 public class TranspServiceImp implements TranspService {
 
@@ -20,18 +22,30 @@ public class TranspServiceImp implements TranspService {
     @Value("${spring.mail.username}")
     private String emailFrom;
 
-	public TranspServiceImp(TranspDao transpDao, JavaMailSender mailSender) {
-		this.transpDao = transpDao;
-		this.mailSender = mailSender;
+	@Override
+	public String transpList(Model model, HttpServletRequest req) {
+		List<TranspDTO> transpList = transpDao.transpList();
+		model.addAttribute("transpList", transpList);
+		return "transp/transp";
 	}
 
 	@Override
-	public String list(Model model, HttpServletRequest req) {
-		List<TranspDTO> transplist = transpDao.transList();
-		model.addAttribute("transplist", transplist);
+	public String transpSearch(Model model, HttpServletRequest req) {
+		String category = req.getParameter("category");
+		String search = req.getParameter("search");
+		List<TranspDTO> transpList = transpDao.transpSearch(category, search);
+		model.addAttribute("transpList", transpList);
 		return "transp/transp";
 	}
-	
+
+	@Override
+	public List<TranspModalDTO> transpModals(String transpNo) {
+		int no = Integer.parseInt(transpNo);
+		List<TranspModalDTO> transpModalDTOs = transpDao.transpModal(no);
+	    return transpModalDTOs;
+	}
+
+
 	@Override
 	public String InfoSave(HttpServletRequest req) {
 		int bizNo = Integer.parseInt(req.getParameter("bizNo"));
@@ -45,14 +59,17 @@ public class TranspServiceImp implements TranspService {
 			return "redirect:/";
 		}
 	}
-
+	
 	@Override
 	public TranspInfoDTO getTranspInfo(int transpMailNo) {
 	    return transpDao.findDriverInfo(transpMailNo);
 	}
-
-    // 이메일 전송 로직을 서비스 계층에 추가
-
+	
+	@Override
+    public List<String> getAllBizNames() {
+	    return transpDao.getAllBizNames();
+    }
+	
 	@Override
     public Boolean sendEmailToClient(int bizNo) {
         // bizNo로 이메일을 가져옵니다.
@@ -89,28 +106,6 @@ public class TranspServiceImp implements TranspService {
         return false;
     }
 
-
-	@Override
-	public String bizNoEmail(int bizNo) {
-		return transpDao.bizNoEmail(bizNo);
-	}
-
-	@Override
-    public List<String> getAllBizNames() {
-	    return transpDao.getAllBizNames();
-    }
-
-    // ✅ bizName으로 bizNo 조회
-	@Override
-    public int getBizNoByBizName(String bizName) {
-        return transpDao.getBizNoByBizName(bizName);
-    }
-
-	@Override
-	public TranspQuoDTO getMfrQuoByBizNo(int bizNo) {
-		return transpDao.getMfrQuoByBizNo(bizNo);
-	}
-
     @Override
     public String processEmailSending(int bizNo, String carrier) {
         // 예시 로직: 이메일 전송 작업을 처리하고 결과 메시지 반환
@@ -128,5 +123,5 @@ public class TranspServiceImp implements TranspService {
             return "이메일 전송 실패";
         }
     }
-
+	
 }
