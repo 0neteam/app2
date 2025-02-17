@@ -8,11 +8,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import com.java.common.MailDTO;
+import com.java.common.UniFunc;
+
 @RequiredArgsConstructor
 @Service
 public class BizServiceImp implements BizService {
 
     private final BizDao bizDao;
+    private final UniFunc uniFunc;
 
 	@Override
 	public String list(Model model, Map<String, String> paramMap) {
@@ -64,7 +68,28 @@ public class BizServiceImp implements BizService {
 		BizDTO bizDTO = BizDTO.setClientDTO(paramMap);
 		if(bizDTO != null) {
 			if(bizDao.create(bizDTO)) {
-				return BizResDTO.builder().status(true).build();
+				System.out.println("____________________" + bizDTO);
+				// 이메일 발송
+				String body = "";
+				String key = "요청 URL 목록 및 거래처 API-KEY\n";
+				for(BizApiKeyDTO bizApiKeyDTO : bizDTO.getApiKeys()) {
+					if("order".equals( bizApiKeyDTO.getType()) ) {
+						body += "발주 URL : " + bizApiKeyDTO.getUrl() + "\n";
+					}
+					if("list".equals( bizApiKeyDTO.getType()) ) {
+						body += "품목 URL : " + bizApiKeyDTO.getUrl() + "\n";
+					}
+					key = bizApiKeyDTO.getKey();
+				}
+				body += "\n\nAPI-KEY : " + key;
+				MailDTO mailDTO = MailDTO.builder()
+					.emailFrom("mfr.0neteam.co.kr@gamil.com")
+					.emailTo(bizDTO.getEmail())
+					.emailSubject("가입을 축하드립니다.")
+					.emailBody(body)
+					.emailHtmlEnable(false)
+					.build();
+				if(uniFunc.sendMail(mailDTO)) return BizResDTO.builder().status(true).build();
 			}
 		}
 			

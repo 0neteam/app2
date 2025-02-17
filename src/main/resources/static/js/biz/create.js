@@ -69,6 +69,13 @@ $( () => {
             alert("우편번호 검색을 통해 우편번호와 주소를 입력해주세요.");
             return;
         }
+
+        // 비밀번호 입력 체크
+        if($("#pwd").val() !== $("#password_confirm").val()) {
+            alert("비밀번호가 일치하지 않습니다.");
+            return;
+        }
+
         $("#modalCorrectionConfirm").modal("show");
     });
 
