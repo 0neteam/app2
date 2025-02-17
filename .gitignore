@@ -33,4 +33,7 @@ build/
 ### VS Code ###
 .vscode/
 .env
-access-keys/*
+access-keys/
+.github
+.metadata
+bin/
