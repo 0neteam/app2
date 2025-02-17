@@ -1,5 +1,6 @@
 package com.java.biz;
 
+import com.java.common.JwtToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -10,6 +11,7 @@ import java.util.List;
 public class BizDaoImp implements BizDao {
 
     private final BizMapper bizMapper;
+    private final JwtToken jwtToken;
 
     @Override
     public List<BizDTO> findList(BizReqDTO bizReqDTO) {
@@ -46,6 +48,18 @@ public class BizDaoImp implements BizDao {
         if(state == 1) {
             for(BizApiKeyDTO bizApiKeyDTO : bizDTO.getApiKeys()) {
                 bizApiKeyDTO.setBizNo(bizDTO.getBizNo());
+
+
+                String key = Integer.toString(bizApiKeyDTO.getBizNo());
+                key= jwtToken.setToken(key);
+                System.out.println("자르기전"+key);
+                key = key.substring(7);
+                System.out.println("자른이후"+key);
+                String url = "/quo/order/"+key; //url 생성
+                bizApiKeyDTO.setKey(key);
+                bizApiKeyDTO.setUrl(url);
+
+
                 state += bizMapper.createApi(bizApiKeyDTO);
             }
             if(state == 3) return true;
