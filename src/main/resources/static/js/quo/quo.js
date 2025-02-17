@@ -20,10 +20,11 @@ $(() => {
         var bizName = $(this).attr("data-bizName");
         var deliDate = $(this).attr("data-deliDate");
         var adr = $(this).attr("data-adr");
-		
         var quoNo = $(this).attr("data-quoNo");
+		
+        var orderNo = $(this).attr("data-orderNo");
         var _csrf = document.querySelector('input[name="_csrf"]').value;
-        var params = {quoNo, _csrf};
+        var params = {orderNo, _csrf};
 
 		var totalPrice = 0;
 		
@@ -52,6 +53,8 @@ $(() => {
                        			 	<tr>
 			                            <th>수주번호</th>
 			                            <td>${quoNo}</td>
+			                            <th>발주번호</th>
+			                            <td>${orderNo}</td>
 			                            <th>작성일자</th>
 			                            <td>${quoDate}</td>
                     				</tr>
@@ -91,6 +94,7 @@ $(() => {
             
             $("#quoCustomer").html(quoCustomer);
             $("#quoDetailTable").html(quoDetailTable);
+			$("#delBtn").attr("href", "/quo/del?quoNo="+quoNo);
             $("#supplierModal").modal("show");
         }).fail(error => {
             console.log(error);

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.java.common.JwtToken;
 import com.java.common.KeyCrypt;
@@ -21,7 +22,8 @@ public class QuoServiceImp implements QuoService{
 	public String list(Model model, QuoSearchDTO quoSearchDTO) {
 		if(quoSearchDTO == null || quoSearchDTO.getCategory() == null) {
 			List<QuoDTO> quoDTOs = quoDao.list(QuoDTO.builder().build());
-			model.addAttribute("result", quoDTOs);
+			model.addAttribute("result", quoDTOs)
+			;
 			return "quo/quo";
 		}
 
@@ -67,8 +69,8 @@ public class QuoServiceImp implements QuoService{
 	}
 
 	@Override
-	public List<QuoModalDTO> quoModals(String quoNo) {
-		int no = Integer.parseInt(quoNo);
+	public List<QuoModalDTO> quoModals(String orderNo) {
+		int no = Integer.parseInt(orderNo);
 		List<QuoModalDTO> quoModalDTOs = quoDao.quoModal(no);
 		return quoModalDTOs;
 	}
@@ -87,4 +89,81 @@ public class QuoServiceImp implements QuoService{
 		}
 	}
 
+	/******
+	 * 
+	 * 
+	 * 
+	 *******/
+
+	@Override
+	public QuoResOrderDTO setQuo(String key, Integer status, QuoReqOrderDTO quoReqOrderDTO) {
+		QuoResOrderDTO quoResOrderDTO = QuoResOrderDTO.builder().status(true).build();
+		try {
+			int bizNo = Integer.parseInt( jwtToken.getBizNo(key) );
+
+			if(status == 1) { // 발주 대기 단계
+				QuoOrderDTO quoOrderDTO = quoReqOrderDTO.getQuoOrderDTO();
+				List<QuoOrderItemDTO> QuoOrderItems = quoReqOrderDTO.getQuoOrderItem();
+
+				// Quo 넣기
+				quoOrderDTO.setBizNo(bizNo);
+				if( quoDao.setQuo(quoOrderDTO) == 1 ) {
+
+					if(QuoOrderItems != null) {
+						boolean itemChk = true;
+
+						// QuoItem 넣기 (반복문)
+						for(QuoOrderItemDTO quoOrderItemDTO : QuoOrderItems) {
+							quoOrderItemDTO.setQuoNo(quoOrderDTO.getQuoNo());
+							if(quoDao.setQuoItem(quoOrderItemDTO) == 0) {
+								itemChk = false;
+								break;
+							}
+						}
+
+						if(itemChk) {
+							String quoStatus = "견적검토";
+							if(quoDao.qtyChk(quoOrderDTO.getQuoNo()) > 0) {
+								quoStatus = "견적취소";
+								List<QuoQtyDiffDTO> quoQtyDiffDTO = quoDao.getQtyDiff(quoOrderDTO.getQuoNo());
+								quoResOrderDTO.setStatus(false);
+								quoResOrderDTO.setData(quoQtyDiffDTO);
+								quoResOrderDTO.setMsg("수량이 부족한걸 어찌 할까?");
+							}
+							quoDao.quoStatusChk(QuoDTO.builder().quoNo(quoOrderDTO.getQuoNo()).quoStatus(quoStatus).build());
+						}
+					}
+
+				}
+			} 
+			if(status == 2) { // 발주 취소 단계
+				int orderNo = quoReqOrderDTO.getOrderNo();
+				QuoDTO quoDTO = QuoDTO.builder().orderNo(orderNo).bizNo(bizNo).build();
+				int quoNo =  quoDao.getQuoNo(quoDTO);
+				if(quoNo > 0) {
+					quoDao.quoStatusChk(QuoDTO.builder().quoNo(quoNo).quoStatus("발주취소").build());
+				}
+			}
+			if(status == 3) { // 발주 확정 단계
+				int orderNo = quoReqOrderDTO.getOrderNo();
+				QuoDTO quoDTO = QuoDTO.builder().orderNo(orderNo).bizNo(bizNo).build();
+				int quoNo =  quoDao.getQuoNo(quoDTO);
+				if(quoNo > 0) {
+					quoDao.quoStatusChk(QuoDTO.builder().quoNo(quoNo).quoStatus("발주확정").build());
+					quoDao.stockUpdate(quoNo);
+				}
+			}
+			
+		} catch (NumberFormatException e) {
+			quoResOrderDTO.setStatus(false);
+			quoResOrderDTO.setMsg("유효한 사용자 정보가 없습니다.");
+		}
+		return quoResOrderDTO;
+	}
+
+	@Override
+	public String del(int quoNo) {
+		int status = quoDao.del(quoNo);
+		return "redirect:/quo";
+	}
 }
