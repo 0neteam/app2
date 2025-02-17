@@ -4,6 +4,7 @@ import com.java.common.JwtToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -46,20 +47,14 @@ public class BizDaoImp implements BizDao {
     public boolean create(BizDTO bizDTO) {
         int state = bizMapper.createBiz(bizDTO);
         if(state == 1) {
-            for(BizApiKeyDTO bizApiKeyDTO : bizDTO.getApiKeys()) {
-                bizApiKeyDTO.setBizNo(bizDTO.getBizNo());
-
-
-                String key = Integer.toString(bizApiKeyDTO.getBizNo());
-                key= jwtToken.setToken(key);
-                System.out.println("자르기전"+key);
-                key = key.substring(7);
-                System.out.println("자른이후"+key);
-                String url = "/quo/order/"+key; //url 생성
-                bizApiKeyDTO.setKey(key);
-                bizApiKeyDTO.setUrl(url);
-
-
+            String key = jwtToken.setToken(bizDTO.getBizNo() + "");
+            key = key.split(" ")[1];
+            List<BizApiKeyDTO> apiKeys = new ArrayList<BizApiKeyDTO>();
+            apiKeys.add(BizApiKeyDTO.builder().bizNo(bizDTO.getBizNo()).type("order").url("/quo/order/{key}").key(key).build());
+            apiKeys.add(BizApiKeyDTO.builder().bizNo(bizDTO.getBizNo()).type("list").url("/list/{key}").key(key).build());
+            bizDTO.setApiKeys(apiKeys);
+            
+            for(BizApiKeyDTO bizApiKeyDTO : apiKeys) {
                 state += bizMapper.createApi(bizApiKeyDTO);
             }
             if(state == 3) return true;

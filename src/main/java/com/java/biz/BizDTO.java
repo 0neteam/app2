@@ -25,6 +25,7 @@ public class BizDTO {
     private String bizTel;
     private String bizFax;
     private String email;
+    private String pwd;
     private String ceo;
     private String bizType;
     private String zipCode;
@@ -67,6 +68,9 @@ public class BizDTO {
                 if("email".equals(key)) {
                     bizDTO.setEmail(paramMap.get(key));
                 }
+                if("pwd".equals(key)) {
+                    bizDTO.setPwd(paramMap.get(key));
+                }
 
                 
                 if("url1".equals(key)) {
@@ -83,9 +87,9 @@ public class BizDTO {
 
     public static BizDTO setClientDTO(Map<String, String> paramMap) {
         BizDTO bizDTO = BizDTO.builder().build();
-        List<BizApiKeyDTO> apiKeys = new ArrayList<BizApiKeyDTO>();
+        // List<BizApiKeyDTO> apiKeys = new ArrayList<BizApiKeyDTO>();
         if(paramMap != null) {
-            String orderUrl = null, productUrl = null, orderKey = null, productKey = null;
+            // String orderUrl = null, productUrl = null, orderKey = null, productKey = null;
             for(String key : paramMap.keySet()) {
                 // Client info
                 if("bizNum".equals(key)) {
@@ -102,6 +106,9 @@ public class BizDTO {
                 }
                 if("email".equals(key)) {
                     bizDTO.setEmail(paramMap.get(key));
+                }
+                if("pwd".equals(key)) {
+                    bizDTO.setPwd(paramMap.get(key));
                 }
                 if("ceo".equals(key)) {
                     bizDTO.setCeo(paramMap.get(key));
@@ -120,24 +127,24 @@ public class BizDTO {
                 }
 
                 // API & KEY
-                if("orderUrl".equals(key)) {
-                    orderUrl = paramMap.get(key);
-                }
-                if("productUrl".equals(key)) {
-                    productUrl = paramMap.get(key);
-                }
-                if("orderKey".equals(key)) {
-                    orderKey = paramMap.get(key);
-                }
-                if("productKey".equals(key)) {
-                    productKey = paramMap.get(key);
-                }
+                // if("orderUrl".equals(key)) {
+                //     orderUrl = paramMap.get(key);
+                // }
+                // if("productUrl".equals(key)) {
+                //     productUrl = paramMap.get(key);
+                // }
+                // if("orderKey".equals(key)) {
+                //     orderKey = paramMap.get(key);
+                // }
+                // if("productKey".equals(key)) {
+                //     productKey = paramMap.get(key);
+                // }
             }
 
-            apiKeys.add(BizApiKeyDTO.builder().bizNo(bizDTO.getBizNo()).type("order").url(orderUrl).key(orderKey).build());
-            apiKeys.add(BizApiKeyDTO.builder().bizNo(bizDTO.getBizNo()).type("list").url(productUrl).key(productKey).build());
+            // apiKeys.add(BizApiKeyDTO.builder().bizNo(bizDTO.getBizNo()).type("order").url(orderUrl).key(orderKey).build());
+            // apiKeys.add(BizApiKeyDTO.builder().bizNo(bizDTO.getBizNo()).type("list").url(productUrl).key(productKey).build());
         }
-        bizDTO.setApiKeys(apiKeys);
+        // bizDTO.setApiKeys(apiKeys);
         return bizDTO;
     }
 }
