@@ -4,12 +4,11 @@ $(() => {
         // SELECT 기능
         var index = $("#category option").index( $("#category option:selected") );
         const categorys = [
-			'검색어를 입력하세요', 
+			'상태값을 입력하세요', 
 			'숫자를 입력하세요', 
 			'업체명을 입력하세요', 
 			'ex)yyyy-mm-dd', 
-			'ex)yyyy-mm-dd', 
-			'상태값을 입력하세요'];
+			'ex)yyyy-mm-dd'];
         $("input[name='search']").attr("placeholder", categorys[index]);
     });
 
@@ -24,7 +23,7 @@ $(() => {
 		
         var orderNo = $(this).attr("data-orderNo");
         var _csrf = document.querySelector('input[name="_csrf"]').value;
-        var params = {orderNo, _csrf};
+        var params = {quoNo, _csrf};
 
 		var totalPrice = 0;
 		
