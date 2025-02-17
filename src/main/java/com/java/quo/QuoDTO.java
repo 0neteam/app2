@@ -34,5 +34,6 @@ public class QuoDTO {
 	private String bizNum;
 	private String adr;
 	private String category;
+	private String search;
 
 }

@@ -26,12 +26,12 @@ public interface QuoMapper {
 			+" FROM mfr_quo AS mq "
 			+" left JOIN mfr_client AS mc "
 			+" ON mq.bizNo = mc.bizNo "
-			+ "where mq.useYN = 'Y' "
-			+"<if test='category == \"수주번호\"'>and mq.quoNo = #{quoNo}</if> "
-			+"<if test='category == \"발주업체\"'>and mc.bizName = #{bizName}</if> "
-			+"<if test='category == \"발주일자\"'>and mq.quoDate = #{quoDate}</if> "
-			+"<if test='category == \"납기일자\"'>and mq.deliDate = #{deliDate}</if> "
-			+"<if test='category == \"승인상태\"'>and mq.quoStatus = #{quoStatus}</if> "
+			+"where mq.useYN = 'Y' "
+			+"<if test='category == \"수주번호\"'>and mq.quoNo like concat('%', #{search}, '%')</if> "
+			+"<if test='category == \"발주업체\"'>and mc.bizName like concat('%', #{search}, '%')</if> "
+			+"<if test='category == \"발주일자\"'>and DATE_FORMAT(mq.quoDate, '%Y%m%d') like concat(#{search}, '%')</if> "
+			+"<if test='category == \"납기일자\"'>and DATE_FORMAT(mq.deliDate, '%Y%m%d') like concat(#{search}, '%')</if> "
+			+"<if test='category == \"승인상태\"'>and mq.quoStatus like concat('%', #{search}, '%')</if> "
 			+ "</script>"
 			})
 	public List<QuoDTO> list(QuoDTO quoDTO);
