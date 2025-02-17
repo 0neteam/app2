@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.java.common.JwtToken;
-import com.java.common.KeyCrypt;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -27,9 +25,6 @@ public class QuoController {
 	
 	@GetMapping("/quo")
 	public String list(Model model, @RequestParam(required = false) Map<String,	String> paramMap) {
-		if(!"".equals(paramMap.get("category")) && "".equals(paramMap.get("search"))) {
-			return "redirect:/quo";
-		}
 		return quoService.list(model, QuoSearchDTO.setDTO(paramMap));
 	};
 	
