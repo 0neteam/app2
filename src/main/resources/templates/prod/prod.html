@@ -16,7 +16,6 @@
             <!-- 검색과 버튼들 -->
             <div class="search-bar">
                 <select id="search-type" name="search-type">
-                    <option value="all">전체</option>
                     <option value="code">품목코드</option>
                     <option value="name">품목명</option>
                 </select>
@@ -57,21 +56,21 @@
 			            </td>
 			            <td th:text="${prod.regDate}"></td>
 			            <td>
-			             
-						    <button class="btn btn-primary btn-sm edit-btn" th:data-item-code="${prod.itemCode}">
-						        <i class="fas fa-edit"></i> 수정
-						    </button>
-						    <button class="btn btn-secondary btn-sm cancel-btn" style="display:none;">
-						        <i class="fas fa-times"></i> 취소
-						    </button>
-						    <button class="btn btn-success btn-sm save-btn" style="display:none;" th:data-item-code="${prod.itemCode}">
-						        <i class="fas fa-save"></i> 저장
-						    </button>
-						    <button class="btn btn-danger btn-sm delete-btn" th:data-item-code="${prod.itemCode}">
-						        <i class="fas fa-trash-alt"></i> 삭제
-						    </button>
-
-
+			                <!-- 수정 버튼 -->
+			                <button class="btn btn-primary btn-sm edit-btn" th:data-item-code="${prod.itemCode}">
+			                    <i class="fas fa-edit"></i> 수정
+			                </button>
+			                <!-- 저장 버튼 (수정 완료 후 저장) -->
+			                <button class="btn btn-success btn-sm save-btn" style="display:none;" th:data-item-code="${prod.itemCode}">
+			                    <i class="fas fa-save"></i> 저장
+			                </button>
+			                <!-- 삭제 버튼 -->
+			                <button class="btn btn-danger btn-sm delete-btn" th:data-item-code="${prod.itemCode}">
+			                    <i class="fas fa-trash-alt"></i> 삭제
+			                </button>
+			                <button class="btn btn-secondary btn-sm cancel-btn" style="display:none;" th:data-item-code="${prod.itemCode}">
+			                	<i class="fas fa-trash-alt"></i> 취소
+			                </button>
 			            </td>
 			        </tr>
 			    </tbody>
@@ -97,7 +96,9 @@
                     <button class="btn btn-secondary" onclick="location.href='/prod'">취소</button>
                 </div>
             </div>
-            
+
+        </div>
+    </div>
 
     <script>
         // 모달 열기
