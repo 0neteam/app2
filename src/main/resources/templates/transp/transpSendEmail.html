@@ -14,7 +14,7 @@
         
         <!-- 발주 코드 출력 -->
         <h4>(아래에는 방금본 견적서 코드를 넣어야해요)</h4>
-        <h3 th:text="'견적 코드: ' + ${quoNo}"></h3>
+        <h3 th:text="'수주 코드: ' + ${quoNo}"></h3>
         
         <!-- 이메일 전송 폼 -->
         <form th:action="@{/transpSendEmail}" method="get">

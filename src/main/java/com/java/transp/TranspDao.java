@@ -12,4 +12,6 @@ public interface TranspDao {
 	public List<String> getAllBizNames();
 	public String bizNoEmail(int bizNo);
     public TranspQuoDTO getMfrQuoByBizNo(int bizNo);
+    public List<TranspQuoDTO> getTranspDetailsByQuoNo(int quoNo);
+
 }

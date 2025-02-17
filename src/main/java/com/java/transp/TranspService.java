@@ -14,6 +14,7 @@ public interface TranspService {
 	public String InfoSave(HttpServletRequest req);
 	public TranspInfoDTO getTranspInfo(int driverNo);
 	public List<String> getAllBizNames();
-	public String processEmailSending(int bizNo, String carrier);
+	public String processEmailSending(int bizNo, String carrier, Integer quoNo);
     public Boolean sendEmailToClient(int bizNo);
+    
 }

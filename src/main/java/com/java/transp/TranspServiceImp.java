@@ -25,6 +25,7 @@ public class TranspServiceImp implements TranspService {
 	@Override
 	public String transpList(Model model, HttpServletRequest req) {
 		List<TranspDTO> transpList = transpDao.transpList();
+		System.out.println(transpList);
 		model.addAttribute("transpList", transpList);
 		return "transp/transp";
 	}
@@ -71,52 +72,60 @@ public class TranspServiceImp implements TranspService {
     }
 	
 	@Override
-    public Boolean sendEmailToClient(int bizNo) {
-        // bizNo로 이메일을 가져옵니다.
-        String emailTo = transpDao.bizNoEmail(bizNo);  // bizNo를 이용해 이메일 조회
-        TranspQuoDTO quoDTO = transpDao.getMfrQuoByBizNo(bizNo);
-        
-        if (emailTo == null || emailTo.isEmpty()) {
-            return false;  // 이메일이 없으면 실패
-        }
+	public Boolean sendEmailToClient(int bizNo) {
+	    // bizNo로 이메일을 가져옵니다.
+	    String emailTo = transpDao.bizNoEmail(bizNo);  // bizNo를 이용해 이메일 조회
+	    TranspQuoDTO quoDTO = transpDao.getMfrQuoByBizNo(bizNo);  // 비즈니스 번호로 견적서 가져오기
+	    List<TranspQuoDTO> transpQuoDTOs = transpDao.getTranspDetailsByQuoNo(bizNo);
+	    
+	    if (emailTo == null || emailTo.isEmpty()) {
+	        return false;  // 이메일이 없으면 실패
+	    }
 
-        // 이메일 본문 (링크만 포함)
-        String emailContent = "<h2>운송 정보</h2>"
-        		+ "<p>발주 코드: " + quoDTO.getOrderNo() + "</p>"
-                + "<p>품목 코드: " + quoDTO.getItemCode() + "</p>"
-                + "<p>품목 수량: " + quoDTO.getQty() + "</p>"
-                + "<p>출발지: " + quoDTO.getDeparture() + "</p>"
-                + "<p>도착지: " + quoDTO.getDstn() + "</p>"
-                + "<p>운송자 정보를 입력하려면 아래 링크를 클릭하세요.</p>"
-                + "<p><a href='http://localhost:8080/transpEmail/" + bizNo + "'>운송자 정보 입력</a></p>";
+	    // 첫 번째 수주 정보를 사용
+	    TranspQuoDTO firstQuo = transpQuoDTOs.isEmpty() ? null : transpQuoDTOs.get(0);
+	    if (firstQuo == null) {
+	        return false;  // 수주 정보가 없으면 실패
+	    }
 
-        // 이메일 전송 로직
-        MimeMessage message = mailSender.createMimeMessage();
-        try {
-            MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            helper.setFrom("from-email@example.com"); // 보내는 이메일 주소 설정
-            helper.setTo(emailTo);  // 조회한 이메일 주소로 설정
-            helper.setSubject("운송자 정보 입력 링크");
-            helper.setText(emailContent, true);  // HTML 설정
-            mailSender.send(message);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
+	    // 이메일 본문 (링크만 포함)
+	    String emailContent = "<h2>운송 정보</h2>"
+	            + "<p>발주 코드: " + firstQuo.getOrderNo() + "</p>"
+	            + "<p>품목 코드: " + firstQuo.getQuoItemNo() + "</p>"
+	            + "<p>품목 수량: " + firstQuo.getQty() + "</p>"
+	            + "<p>출발지: " + firstQuo.getDeparture() + "</p>"
+	            + "<p>도착지: " + firstQuo.getDstn() + "</p>"
+	            + "<p>운송자 정보를 입력하려면 아래 링크를 클릭하세요.</p>"
+	            + "<p><a href='http://localhost:8080/transpEmail/" + bizNo + "'>운송자 정보 입력</a></p>";
 
+	    // 이메일 전송 로직
+	    MimeMessage message = mailSender.createMimeMessage();
+	    try {
+	        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+	        helper.setFrom(emailFrom); // 보내는 이메일 주소 설정
+	        helper.setTo(emailTo);  // 조회한 이메일 주소로 설정
+	        helper.setSubject("운송자 정보 입력 링크");
+	        helper.setText(emailContent, true);  // HTML 설정
+	        mailSender.send(message);
+	        return true;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return false;
+	}
+
+    
     @Override
-    public String processEmailSending(int bizNo, String carrier) {
-        // 예시 로직: 이메일 전송 작업을 처리하고 결과 메시지 반환
+    public String processEmailSending(int bizNo, String carrier, Integer quoNo) {
+        // 운송업체가 선택되지 않은 경우 메시지 반환
         if (carrier == null || carrier.isEmpty()) {
             return "운송업체를 선택해주세요.";
         }
 
-        // 실제 이메일 전송 로직 (비즈니스 로직 처리)
-        boolean emailSent = sendEmailToClient(bizNo);  // 이메일 전송 메소드 호출
+        // 실제 이메일 전송 처리
+        boolean emailSent = sendEmailToClient(bizNo);  // 이메일 전송 메서드 호출
 
-        // 이메일 전송 성공 여부에 따라 메시지 반환
+        // 이메일 전송 성공 여부에 따라 반환할 메시지 결정
         if (emailSent) {
             return "이메일 전송 성공";
         } else {
@@ -124,4 +133,6 @@ public class TranspServiceImp implements TranspService {
         }
     }
 	
+    
+    
 }

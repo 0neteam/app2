@@ -53,4 +53,9 @@ public class TranspDaoImp implements TranspDao {
     public TranspQuoDTO getMfrQuoByBizNo(int bizNo) {
         return transpMapper.getMfrQuoByBizNo(bizNo); // 쿼리 호출만 수행
     }
+
+	@Override
+	public List<TranspQuoDTO> getTranspDetailsByQuoNo(int quoNo) {
+		return transpMapper.getTranspDetailsByQuoNo(quoNo);
+	}
 }

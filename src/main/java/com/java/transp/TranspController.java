@@ -64,20 +64,32 @@ public class TranspController {
     }
     
     @GetMapping("/transpSendEmail")
-    public String sendEmail(@RequestParam(name = "carrier", required = false) String carrier, Model model) {
+    public String sendEmail(@RequestParam(name = "carrier", required = false) String carrier, 
+                            @RequestParam(name = "quoNo", required = false) Integer quoNo, 
+                            Model model) {
         // bizNo가 129인 운송업체 이름만 가져옴
         List<String> bizNames = transpService.getAllBizNames();
         // 모델에 bizNames 추가
         model.addAttribute("bizNames", bizNames);  
+
         // 만약 운송업체를 선택하지 않으면 메시지 출력
         if (carrier == null || carrier.isEmpty()) {
             model.addAttribute("message", bizNames.isEmpty() ? "운송업체가 존재하지 않습니다." : "운송업체를 선택해주세요.");
             return "transp/transpSendEmail";
         }
+
+        // 만약 quoNo가 null이면 오류 메시지 출력
+        if (quoNo == null) {
+            model.addAttribute("message", "수주번호가 필요합니다.");
+            return "transp/transpSendEmail";
+        }
+
         // 이메일 전송 처리 결과 반환
-        String message = transpService.processEmailSending(129, carrier);
+        String message = transpService.processEmailSending(129, carrier, quoNo);
         model.addAttribute("message", message);
         return "transp/transpSendEmail";  
     }
+
+    
     
 }

@@ -19,22 +19,21 @@
                 <div class="row align-items-center mb-3">
                     <div class="col-sm-3">
                         <select class="form-select" name="category" id="category">
-                            <option value="">category</option>
+ 							<option value="운송상태" th:selected="${param.category == '운송상태'}">운송 상태</option>
                             <option value="운송번호" th:selected="${param.category == '운송번호'}">운송 번호</option>
                             <option value="발주번호" th:selected="${param.category == '발주번호'}">발주 번호</option>
                             <option value="출발지" th:selected="${param.category == '출발지'}">출발지</option>
                             <option value="목적지" th:selected="${param.category == '목적지'}">목적지</option>
                             <option value="운송기사정보" th:selected="${param.category == '운송기사정보'}">운송기사 정보</option>
-                            <option value="운송상태" th:selected="${param.category == '운송상태'}">운송 상태</option>
                         </select>
                     </div>
                     
                     <div class="col-sm-9">
-                        <div class="d-flex align-items-center">
-                            <input type="text" class="form-control" name="search" placeholder="검색어를 입력하세요"
-                                   th:value="${param.search}" required />
-                            <button class="btn btn-success ms-2" type="submit" style="width: 100px;">검색</button>
-                        </div>
+						<div class="d-flex align-items-center">
+							<th:block >
+							<input type="text" class="form-control" name="search" placeholder="상태값을 입력하세요"/>
+							<button class="btn btn-success ms-2" type="submit" style="width: 100px;">검색</button>
+						</div>
                     </div>
                 </div>
             </form>
@@ -54,28 +53,27 @@
                     </tr>
                 </thead>
                 
-				<tbody>
-				    <tr th:each="i, iterStat : ${transpList}" 
-				        th:attr="data-transp-no=${i.transpNo}, 
-				                 data-order-no=${i.orderNo}, 
-				                 data-departure=${i.departure}, 
-				                 data-dstn=${i.dstn}, 
-				                 data-driver-name=${i.driverName}, 
-				                 data-driver-phone=${i.driverPhone}, 
-				                 data-transp-status=${i.transpStatus != null ? i.transpStatus : '미정'},
-				                 data-transp-mail-no=${i.transpMailNo}, 
-				                 data-transp-date=${i.transpDate}"
-				        onclick="showModal(this)"
-				        style="cursor: pointer;">
-				        <td th:text="${iterStat.index + 1}"></td>
-				        <td th:text="${i.transpNo}"></td>
-				        <td th:text="${i.orderNo}"></td>
-				        <td th:text="${i.departure}"></td>
-				        <td th:text="${i.dstn}"></td>
-				        <td th:text="${i.driverName}"></td>
-				        <td th:text="${i.transpStatus != null ? i.transpStatus : '미정'}"></td>
-				    </tr>
-				</tbody>
+<tbody>
+    <tr th:each="i, iterStat : ${transpList}" 
+        th:attr="data-transp-no=${i.transpNo}, 
+                 data-order-no=${i.orderNo}, 
+                 data-departure=${i.departure}, 
+                 data-dstn=${i.dstn}, 
+                 data-driver-name=${i.driverName}, 
+                 data-driver-phone=${i.driverPhone}, 
+                 data-transp-status=${i.transpStatus != null ? i.transpStatus : '미정'},
+                 data-transp-date=${i.transpDate}"
+        onclick="showModal(this)" style="cursor: pointer;">
+        <td th:text="${iterStat.index + 1}"></td>
+        <td th:text="${i.transpNo}"></td>
+        <td th:text="${i.orderNo}"></td>
+        <td th:text="${i.departure}"></td>
+        <td th:text="${i.dstn}"></td>
+        <td th:text="${i.driverName}"></td>
+        <td th:text="${i.transpStatus != null ? i.transpStatus : '미정'}"></td>
+    </tr>
+</tbody>
+
 
 
             </table>
@@ -121,10 +119,6 @@
 	                            <td id="modalTranspStatus"></td>
 	                        </tr>
 	                        <tr>
-	                            <th>운송 메일 번호</th>
-	                            <td id="modalTranspMailNo"></td>
-	                        </tr>
-	                        <tr>
 	                            <th>운송 날짜</th>
 	                            <td id="modalTranspDate"></td>
 	                        </tr>
@@ -138,22 +132,60 @@
 	        </div>
 	    </div>
 	</div>
-	<script>
-	function showModal(row) {
-	    document.getElementById("modalTranspNo").innerText = row.getAttribute("data-transp-no");
-	    document.getElementById("modalOrderNo").innerText = row.getAttribute("data-order-no");
-	    document.getElementById("modalDeparture").innerText = row.getAttribute("data-departure");
-	    document.getElementById("modalDstn").innerText = row.getAttribute("data-dstn");
-	    document.getElementById("modalDriverName").innerText = row.getAttribute("data-driver-name");
-	    document.getElementById("modalDriverPhone").innerText = row.getAttribute("data-driver-phone");
-	    document.getElementById("modalTranspStatus").innerText = row.getAttribute("data-transp-status");
-	    document.getElementById("modalTranspMailNo").innerText = row.getAttribute("data-transp-mail-no");
-	    document.getElementById("modalTranspDate").innerText = row.getAttribute("data-transp-date");
+<script>
+    function showModal(row) {
+        // Modal에 데이터를 채우는 코드
+        document.getElementById("modalTranspNo").innerText = row.getAttribute("data-transp-no");
+        document.getElementById("modalOrderNo").innerText = row.getAttribute("data-order-no");
+        document.getElementById("modalDeparture").innerText = row.getAttribute("data-departure");
+        document.getElementById("modalDstn").innerText = row.getAttribute("data-dstn");
+        document.getElementById("modalDriverName").innerText = row.getAttribute("data-driver-name");
+        document.getElementById("modalDriverPhone").innerText = row.getAttribute("data-driver-phone");
+        document.getElementById("modalTranspStatus").innerText = row.getAttribute("data-transp-status");
+        document.getElementById("modalTranspDate").innerText = row.getAttribute("data-transp-date");
 
-	    var modal = new bootstrap.Modal(document.getElementById('transpModal'));
-	    modal.show();
-	}
-	</script>
+        var modal = new bootstrap.Modal(document.getElementById('transpModal'));
+        modal.show();
+
+        // 운송 취소 버튼 클릭 시 호출되는 함수
+        document.getElementById("cancelTranspButton").onclick = function() {
+            cancelTransp(row.getAttribute("data-transp-no"));
+        }
+    }
+
+    // 운송 취소 처리 함수
+    function cancelTransp(transpNo) {
+        fetch('/transp/cancel/' + transpNo, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ transpNo: transpNo })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // 상태 업데이트 및 이메일 발송 성공 시 모달 닫기
+                alert('운송이 취소되었습니다. 이메일을 발송했습니다.');
+                var modal = bootstrap.Modal.getInstance(document.getElementById('transpModal'));
+                modal.hide();
+
+                // 테이블에서 해당 행 업데이트 (운송 상태 변경)
+                const row = document.querySelector('[data-transp-no="'+ transpNo +'"]');
+                if (row) {
+                    row.querySelector('[data-transp-status]').innerText = '운송 취소';
+                }
+            } else {
+                alert('운송 취소에 실패했습니다.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('운송 취소 처리 중 오류가 발생했습니다.');
+        });
+    }
+</script>
+
 
 </main>
 </html>
