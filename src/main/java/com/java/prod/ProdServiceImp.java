@@ -50,15 +50,23 @@ public class ProdServiceImp implements ProdService {
 
 	@Override
 	public List<ProdDTO> searchProd(ProdDTO prodDTO) {
-		// TODO Auto-generated method stub
 		
 		if(prodDTO.getSearchType().equals("code")) { // 품목코드 조회시
-			return prodDAO.findItemCodeProds(prodDTO.getSearchInput());
+			if (prodDTO.getSearchInput() == null || prodDTO.getSearchInput().trim().isEmpty()) {
+			return prodDAO.getAllProds();
+			} else {
+				return prodDAO.findItemCodeProds(prodDTO.getSearchInput());
+			}
+			
 		} 
 		
-		if(prodDTO.getSearchType().equals("name")) { // 품목명 조회시
-			return prodDAO.findNameProds(prodDTO.getSearchInput());			
-		} 
+		if(prodDTO.getSearchType().equals("name")) { // 품목명 조회시		
+			if (prodDTO.getSearchInput() == null) {
+				return prodDAO.getAllProds();
+			} else {
+				return prodDAO.findNameProds(prodDTO.getSearchInput());
+			}
+		}
 		
 		return null;
 	}

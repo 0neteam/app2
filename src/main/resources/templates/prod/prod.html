@@ -16,7 +16,6 @@
             <!-- 검색과 버튼들 -->
             <div class="search-bar">
                 <select id="search-type" name="search-type">
-                    <option value="all">전체</option>
                     <option value="code">품목코드</option>
                     <option value="name">품목명</option>
                 </select>
@@ -69,6 +68,9 @@
 			                <button class="btn btn-danger btn-sm delete-btn" th:data-item-code="${prod.itemCode}">
 			                    <i class="fas fa-trash-alt"></i> 삭제
 			                </button>
+			                <button class="btn btn-secondary btn-sm cancel-btn" style="display:none;" th:data-item-code="${prod.itemCode}">
+			                	<i class="fas fa-trash-alt"></i> 취소
+			                </button>
 			            </td>
 			        </tr>
 			    </tbody>
@@ -91,7 +93,7 @@
                         
                         <button type="submit" class="btn btn-primary">저장</button>
                     </form>
-                    <a href="/prod">품목 목록으로 돌아가기</a>
+                    <button class="btn btn-secondary" onclick="location.href='/prod'">취소</button>
                 </div>
             </div>
 
