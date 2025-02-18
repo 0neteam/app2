@@ -45,7 +45,7 @@ public class QuoController {
 	
 	@CrossOrigin(origins = "*")
 	@ResponseBody
-	@PostMapping("/quo/order/{status}")
+	@PostMapping("/api/order/{status}")
 	public QuoResOrderDTO setQuoDTO(
 			@PathVariable("status") Integer status,
 			@RequestHeader("Authorization") String key,

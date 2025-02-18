@@ -55,7 +55,7 @@ public class SecurityConf {
         // csrf ignore 설정
         http.cors(cors -> cors.disable());
         http.csrf(csrf -> {
-            csrf.ignoringRequestMatchers("/quo/order/**"); // 창고-> 제소사 발주요청시 
+            csrf.ignoringRequestMatchers("/api/**"); // 창고-> 제소사 요청시 
         });
     
         
@@ -70,7 +70,7 @@ public class SecurityConf {
             req.requestMatchers("/user/loginUpdateAuthCodeCheck").permitAll();
             req.requestMatchers("/user/loginpwdupdate").permitAll();
             req.requestMatchers("/webjars/**").permitAll(); // 정적 리소스(webjars) 접근 허용
-            req.requestMatchers("/quo/order/**").permitAll();
+            req.requestMatchers("/api/**").permitAll();
                        
             req.anyRequest().authenticated(); // 그 외 모든 요청은 인증 필요
                         

@@ -8,94 +8,72 @@ document.addEventListener("DOMContentLoaded", function () {
 	const itemQuantityInput = document.getElementById("item-qty");
 	    const itemPriceInput = document.getElementById("item-price");
 	 
+	const trToggleEvent = tr => {
+		tr.find(".btn_group button").each((i, e) => {
+			$(e).toggleClass("d-none");
+		} );
+		// 입력 활성화 이벤트
+		tr.find("td").each((i, e) => {
+		   if(i == 1 || i == 2 || i == 3) {
+			   $(e).find("span").toggleClass("d-none");
+			   $(e).find("input").toggleClass("d-none");
+		   }
+	   } );
+	}
+
 	 // 수정 버튼 클릭 시 이벤트 처리
 	 table.addEventListener("click", function (event) {
 	     if (event.target && event.target.matches(".edit-btn")) {
-	         const row = event.target.closest("tr");
-			
-			
-
-	         // 수정 버튼을 클릭했을 때, 각 열의 텍스트를 입력 필드로 교체
-	         const prodNameElement = row.querySelector('.prod-name');
-	         const prodNameInputElement = row.querySelector('.prod-name-input');
-	         const prodQtyElement = row.querySelector('.prod-qty');
-	         const prodQtyInputElement = row.querySelector('.prod-qty-input');
-	         const prodPriceElement = row.querySelector('.prod-price');
-	         const prodPriceInputElement = row.querySelector('.prod-price-input');
-	         const saveBtnElement = row.querySelector('.save-btn');
-			
-			console.log("prodNameElement : " + prodNameElement);
-			console.log("prodNameInputElement : " + prodNameInputElement);
-			console.log("prodQtyElement : " + prodQtyElement);
-			console.log("prodQtyInputElement : " + prodQtyInputElement);
-			console.log("prodPriceElement : " + prodPriceElement);
-			console.log("prodPriceInputElement : " + prodPriceInputElement);
-			console.log("saveBtnElement : " + saveBtnElement);
-			
-
-	         if (prodNameElement && prodNameInputElement && prodQtyElement && prodQtyInputElement && prodPriceElement && prodPriceInputElement && saveBtnElement) {
-	             // 입력 필드를 보이게 하고 텍스트 숨기기
-	             prodNameElement.style.display = 'none';
-	             prodNameInputElement.style.display = 'inline-block';
-	             prodQtyElement.style.display = 'none';
-	             prodQtyInputElement.style.display = 'inline-block';
-	             prodPriceElement.style.display = 'none';
-	             prodPriceInputElement.style.display = 'inline-block';
-	             saveBtnElement.style.display = 'inline-block';
-	         }
+	         const $tr = $( event.target.closest("tr") );
+			 trToggleEvent($tr);
+			 // 취소 이벤트
+	         $tr.find(".btn_group button.cancel-btn").off().on("click", () => {
+				trToggleEvent($tr);
+			 });
+			 
 	     }
 
 	     // 저장 버튼 클릭 시 이벤트 처리
 	     if (event.target && event.target.matches(".save-btn")) {
-	         const row = event.target.closest("tr");
+			 const isConfirmed = window.confirm('저장 하시겠습니까?');
 
-	         const itemCode = row.querySelector('.prod-itemCode').getAttribute('data-item-code');
-	         const name = row.querySelector('.prod-name-input').value;
-	         const qty = row.querySelector('.prod-qty-input').value;
-	         const price = row.querySelector('.prod-price-input').value;
+			 if(isConfirmed) {
+				const row = event.target.closest("tr");
 
-	         var _csrf = document.querySelector('input[name="_csrf"]').value;
-	         var params = { itemCode, name, qty, price, _csrf };
+				const itemCode = row.querySelector('.prod-itemCode').getAttribute('data-item-code');
+				const name = row.querySelector('.prod-name-input').value;
+				const qty = row.querySelector('.prod-qty-input').value;
+				const price = row.querySelector('.prod-price-input').value;
 
-	         $.ajax({
-	             url: '/prod/update',
-	             method: 'POST',
-	             data: params,
-	         }).done(data => {
-	             if (data.status === "OK") {
-	                 alert("수정 완료");
-	                 window.location.href = '/prod';
-	             } else {
-	                 alert("수정 오류");
-	             }
-	         }).fail(error => {
-	             console.log(error);
-	         });
+				var _csrf = document.querySelector('input[name="_csrf"]').value;
+				var params = { itemCode, name, qty, price, _csrf };
 
-	         // 수정된 내용을 화면에 반영
-	         row.querySelector('.prod-name').textContent = name;
-	         row.querySelector('.prod-qty').textContent = qty;
-	         row.querySelector('.prod-price').textContent = price;
-
-	         // 입력 필드를 숨기고 텍스트를 보이게 함
-	         row.querySelector('.prod-name').style.display = 'inline-block';
-	         row.querySelector('.prod-name-input').style.display = 'none';
-	         row.querySelector('.prod-qty').style.display = 'inline-block';
-	         row.querySelector('.prod-qty-input').style.display = 'none';
-	         row.querySelector('.prod-price').style.display = 'inline-block';
-	         row.querySelector('.prod-price-input').style.display = 'none';
-	         row.querySelector('.save-btn').style.display = 'none';
+				$.ajax({
+					url: '/prod/update',
+					method: 'POST',
+					data: params,
+				}).done(data => {
+					if (data.status === "OK") {
+						alert("수정 완료");
+						window.location.reload();
+					} else {
+						alert("수정 오류");
+					}
+				}).fail(error => {
+					console.log(error);
+				});
+			}
 	     }
 
 	     // 삭제 버튼 클릭 시 이벤트 처리
 	     if (event.target && event.target.matches(".delete-btn")) {
-	         const isConfirmed = window.confirm('정말로 삭제하시겠습니까?');
+	         const isConfirmed = window.confirm('삭제 하시겠습니까?');
 	         
-	         var itemCode = event.target.dataset.itemCode;
-	         var _csrf = document.querySelector('input[name="_csrf"]').value;
-	         var params = { itemCode, _csrf };
-
 	         if (isConfirmed) {
+				 var itemCode = event.target.dataset.itemCode;
+				 var _csrf = document.querySelector('input[name="_csrf"]').value;
+				 var params = { itemCode, _csrf };
+				 
 	             $.ajax({
 	                 url: '/prod/delete',
 	                 method: 'POST',
@@ -103,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	             }).done(data => {
 	                 if (data.status === "OK") {
 	                     alert("삭제 완료");
-	                     window.location.href = '/prod';
+	                     window.location.reload();
 	                 } else {
 	                     alert("삭제 오류");
 	                 }

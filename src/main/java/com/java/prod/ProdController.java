@@ -8,17 +8,22 @@ import java.util.Map;
 
 import com.java.common.JwtToken;
 import com.java.quo.QuoDao;
+import com.java.quo.QuoResOrderDTO;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+@Slf4j
 @RequiredArgsConstructor
 @Controller
 public class ProdController {
@@ -126,41 +131,37 @@ public class ProdController {
         return response;  // 수정 저장 후 ajax 요청으로 리턴
     }
 
-    
+    @CrossOrigin(origins = "*")
     @ResponseBody
-    @GetMapping("/api/list/{key}")
-    public List<ProdDTO> listProd(@PathVariable(name = "key") String key, Model model) {
-        List<ProdDTO> prodDTO = new ArrayList<>(); // 빈 리스트 초기화
+    @PostMapping("/api/list")
+    public QuoResOrderDTO listProd(@RequestHeader("Authorization") String key) {
+        QuoResOrderDTO resDTO = QuoResOrderDTO.builder().status(false).build();
 
         try {
-            // 요청 파라미터 key 출력 (디버깅용)
-            System.out.println("key: " + key);
-            
             int bizNo = Integer.parseInt(jwtToken.getBizNo(key));
-            System.out.println("bizNo: " + bizNo);
-            
             int status = prodService.findListProds(bizNo);
-            System.out.println("status: " + status);
-
             if (status == 1) { // 거래처 확인 성공
-                prodDTO = prodService.getListProds();
-                System.out.println("prodDTO: " + prodDTO);
-            } else {
-                // 거래처 확인 실패시 빈 리스트 반환
-                prodDTO = new ArrayList<>(); // 또는 Collections.emptyList();
-            }
-
+                List<Map<String, Object>> resultList = new ArrayList<>();
+                for(ProdDTO prodDTO : prodService.getListProds()) {
+                    Map<String, Object> resultMap = new HashMap<>();
+                    resultMap.put("itemCode", prodDTO.getItemCode());
+                    resultMap.put("name", prodDTO.getName());
+                    resultList.add(resultMap);
+                }
+                resDTO.setData(resultList);
+                resDTO.setStatus(true);
+            } 
         } catch (NumberFormatException e) {
             // 숫자 파싱 실패 시 예외 처리
-            System.out.println("NumberFormatException: " + e.getMessage());
-            prodDTO = new ArrayList<>(); // 빈 리스트 반환
+            log.info("NumberFormatException: {}", e.getMessage());
+            resDTO.setMsg("유효한 거래처 정보가 아닙니다.");
         } catch (Exception e) {
             // 그 외 다른 예외 처리
-            System.out.println("Exception: " + e.getMessage());
-            prodDTO = new ArrayList<>(); // 빈 리스트 반환
+            log.info("Exception: {}", e.getMessage());
+            resDTO.setMsg("적절한 요청이 아닙니다.");
         }
         
-        return prodDTO;        
+        return resDTO;        
     }
 
     
