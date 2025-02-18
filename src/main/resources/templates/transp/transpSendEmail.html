@@ -5,34 +5,64 @@
       layout:decorate="~{layouts/default}">
 
 <head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function submitForm(event) {
+            event.preventDefault();  // 기본 폼 제출 동작을 막음
+
+            // 폼 데이터 준비
+            var formData = {
+                quoNo: document.querySelector("input[name='quoNo']").value,
+                bizNo: document.querySelector("select[name='bizNo']").value
+            };
+
+            // AJAX 요청
+            $.ajax({
+                url: '/transpSendEmail',  // 서버로 요청 보낼 URL
+                method: 'GET',  // 폼 데이터를 GET 방식으로 전송
+                data: formData,  // 폼 데이터
+                success: function(response) {
+                    // 서버에서 응답이 오면 폼 숨기기, 결과 화면 보여주기
+                    document.getElementById("formContainer").style.display = "none";
+                    document.getElementById("resultContainer").style.display = "block";
+                    // 서버로부터 받은 메시지를 결과 화면에 표시
+                    document.getElementById("resultMessage").textContent = response.message;
+                },
+
+            });
+        }
+    </script>
 </head>
- 
+
 <body>
-    <main layout:fragment="content" class="container my-5">
-        <h2>이메일 전송</h2>
-        <hr>
-        
-        <!-- 발주 코드 출력 -->
-        <h4>(아래에는 방금본 견적서 코드를 넣어야해요)</h4>
-        <h3 th:text="'견적 코드: ' + ${quoNo}"></h3>
-        
-        <!-- 이메일 전송 폼 -->
-        <form th:action="@{/transpSendEmail}" method="get">
-            <div class="form-group">
-                <label for="carrier">운송업체 선택</label>
-                <select id="carrier" name="carrier" class="form-control" required>
-                    <option value="" disabled selected>운송업체를 선택하세요</option>
-                    <!-- 각 운송업체 이름을 option으로 출력 -->
-                    <option th:each="biz : ${bizNames}" th:value="${biz}" th:text="${biz}"></option>
-                </select>
+    <main layout:fragment="content" class="container my-2">
+        <div class="container section-container p-4 border rounded shadow-sm">
+            <h2>이메일 전송</h2>
+            <hr>
+
+            <!-- 발주 코드 출력 -->
+            <h3 th:text="'수주 코드: ' + ${quoNo}"></h3>
+
+            <!-- 이메일 전송 폼 -->
+            <div id="formContainer">
+                <form id="emailForm" onsubmit="submitForm(event)">
+                    <input type="hidden" name="quoNo" th:value="${quoNo}" />
+                    <div class="form-group">
+                        <label for="bizNo">운송업체 선택</label>
+                        <select id="bizNo" name="bizNo" class="form-control" required>
+                            <option value="" disabled selected>운송업체를 선택하세요</option>
+                            <option th:each="biz : ${bizNames}" th:value="${biz.bizNo}" th:text="${biz.bizName}"></option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">전송</button>
+                </form>
             </div>
-            <button type="submit" class="btn btn-primary mt-3">전송</button>
-        </form>
-        
-        <hr>
-        <!-- 전송 결과 메시지 -->
-        <div th:if="${message}">
-            <p th:text="${message}"></p>
+
+            <!-- 이메일 전송 후 결과 -->
+            <div id="resultContainer" style="display: none;">
+                <h3>이메일 전송이 완료되었습니다.</h3>
+                <p id="resultMessage"></p>
+            </div>
         </div>
     </main>
 </body>

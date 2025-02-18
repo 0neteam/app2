@@ -18,7 +18,9 @@ import lombok.ToString;
 public class TranspInfoDTO {
 
 	private int transpMailNo;
+	private int quoNo;
 	private int bizNo;
+	private int transpNo;
 	private String driverName;
 	private String driverPhone;
 	private char userYN;

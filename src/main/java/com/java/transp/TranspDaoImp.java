@@ -4,6 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.java.biz.BizDTO;
+import com.java.quo.QuoModalDTO;
+
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -40,7 +43,7 @@ public class TranspDaoImp implements TranspDao {
 	}
 	
     @Override
-    public List<String> getAllBizNames() {
+    public List<BizDTO> getAllBizNames() {
         return transpMapper.getAllBizNames();
     }
     
@@ -48,9 +51,26 @@ public class TranspDaoImp implements TranspDao {
 	public String bizNoEmail(int bizNo) {
 		return transpMapper.bizNoEmail(bizNo);
 	}
+
+	@Override
+	public int transpSave(TranspInfoDTO transpInfoDTO) {
+		return transpMapper.transpSave(transpInfoDTO);
+	}
 	
     @Override
-    public TranspQuoDTO getMfrQuoByBizNo(int bizNo) {
-        return transpMapper.getMfrQuoByBizNo(bizNo); // 쿼리 호출만 수행
+    public List<TranspQuoDTO> getMfrQuoByBizNo(int quoNo) {
+        return transpMapper.getMfrQuoByBizNo(quoNo); // 쿼리 호출만 수행
     }
+
+	@Override
+	public List<TranspQuoDTO> getTranspDetailsByQuoNo(int quoNo) {
+		return transpMapper.getTranspDetailsByQuoNo(quoNo);
+	}
+
+	@Override
+	public List<Integer> clientBizNo(int quoNo) {
+		return transpMapper.clientBizNo(quoNo);
+	}
+
+
 }
