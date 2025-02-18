@@ -185,9 +185,11 @@ public class UserServiceImp implements UserService, UserDetailsService {
 	public String detailByUserNo(Model model, HttpServletRequest req) {
 		// TODO Auto-generated method stub
 		
-		String userNo = req.getParameter("userNo");
+		//String userNo = req.getParameter("userNo");
 		
-		UserDTO userDTO = userDAO.detailByUserNo(userNo);
+		UserDTO userDTO = userDAO.detailByUserNo(uniFunc.getUserNo()+"");
+		if(userDTO == null) return "redirect:/";
+
 		model.addAttribute("rs", userDTO);
 		
 		return "user/detail";

@@ -36,7 +36,7 @@
 						내 정보
 					</a>
 					<ul class="dropdown-menu">
-						<li><a class="dropdown-item" href="#!">마이페이지</a></li>
+						<li><a class="dropdown-item" href="/user/detail" sec:authorize="!hasRole('ROLE_BIZ')">마이페이지</a></li>
 						<li><a class="dropdown-item" href="/logout">로그아웃</a></li>
 					</ul>
 				</li>

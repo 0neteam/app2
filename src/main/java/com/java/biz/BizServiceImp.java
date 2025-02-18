@@ -33,9 +33,7 @@ public class BizServiceImp implements BizService {
 			String keyword = paramMap.get("keyword");
 			bizReqDTO = BizReqDTO.builder().searchOption(searchOption).keyword(keyword).build();
 		}
-		System.out.println(bizReqDTO);
 		List<BizDTO> bizDtos = bizDao.findList(bizReqDTO);
-		System.out.println("++++++++++++++++++ " + bizDtos);
 		model.addAttribute("bizList", bizDtos);
 		return "biz/list";
 	}
