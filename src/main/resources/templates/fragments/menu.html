@@ -27,15 +27,8 @@
 						<li><a class="dropdown-item" href="/signUp">직원</a></li>
 					</ul>
 				</li>
-                <li class="nav-item dropdown" sec:authorize="!isAuthenticated()">
-					<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-						로그인
-					</a>
-					<ul class="dropdown-menu">
-						<li><a class="dropdown-item" href="/signIn">거래처</a></li>
-						<li><hr class="dropdown-divider"></li>
-						<li><a class="dropdown-item" href="/signIn">직원</a></li>
-					</ul>
+				<li class="nav-item" sec:authorize="!isAuthenticated()">
+					<a class="nav-link" href="/signIn">로그인</a>
 				</li>
 
 				<li class="nav-item dropdown" sec:authorize="isAuthenticated()">

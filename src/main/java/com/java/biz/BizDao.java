@@ -10,4 +10,9 @@ public interface BizDao {
     boolean delete(int bizNo);
     boolean create(BizDTO bizDTO);
 
+    public BizDTO findByEmail(String email);
+
+    public int checkemail(String email);
+    public int loginpwdupdate(BizDTO bizDTO);
+
 }

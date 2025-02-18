@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -45,6 +46,37 @@ public class BizController {
     @GetMapping("/create")
     public String create() {
         return "biz/create";
+    }
+
+    @GetMapping("/findPwd")
+    public String findPwd() {
+        return "biz/findPwd";
+    }
+
+    @ResponseBody
+    @PostMapping("/checkEmail")
+    public BizResDTO checkemail(@RequestParam("email") String email) {
+        return bizService.checkemail(email);
+    }
+
+    @ResponseBody
+    @PostMapping("/loginUpdateAuthCode")
+    public BizResDTO loginUpdateAuthCode(@RequestParam("email") String email) {
+        return bizService.loginUpdateAuthCode(email);
+    }
+
+    @ResponseBody
+    @PostMapping("/loginUpdateAuthCodeCheck")
+    public BizResDTO loginUpdateAuthCodeCheck(@RequestParam("authCode") String authCode) {
+        return bizService.loginUpdateAuthCodeCheck(authCode);
+    }
+
+    @ResponseBody
+    @PostMapping("/loginpwdupdate")
+    public BizResDTO loginpwdupdate(
+            @RequestParam("email") String email, 
+            @RequestParam("pwd") String pwd) {
+        return bizService.loginpwdupdate(email, pwd);
     }
 
 

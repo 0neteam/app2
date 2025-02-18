@@ -64,4 +64,13 @@ public interface BizMapper {
             +"  (#{bizNo}, #{type}, #{url}, #{key})")
     int createApi(BizApiKeyDTO bizApiKeyDTO);
 
+    @Select("SELECT * FROM `mfr_client` WHERE `useYN` = 'Y' AND email = #{email}")
+    public BizDTO findByEmail(String email);
+
+    @Select("SELECT count(*) as cnt FROM `mfr_client` WHERE `useYN` = 'Y' AND email = #{email}")
+    public int checkemail(String email);
+
+    @Update("update `mfr_client` set pwd = #{pwd} where email = #{email}")
+    public int loginpwdupdate(BizDTO bizDTO);
+
 }

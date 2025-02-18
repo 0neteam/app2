@@ -20,13 +20,13 @@ import lombok.ToString;
 public class BizDTO {
 
     private int bizNo;
-    private String bizNum;
     private String bizName;
     private String bizTel;
     private String bizFax;
     private String email;
     private String pwd;
     private String ceo;
+    private String bizNum;
     private String bizType;
     private String zipCode;
     private String adr;

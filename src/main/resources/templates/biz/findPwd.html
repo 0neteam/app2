@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http//www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security6"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">      
+         
+<main layout:fragment="content" class="container my-2">
+
+<link rel="stylesheet" href="/css/user/findpw.css">		
+<script src="/js/biz/findPwd.js"></script>
+
+	<div class="container mt-5">
+        <h2 class="mb-4">[거래처] 비밀번호 찾기</h2>
+        <div class="card p-4">
+           
+                <div class="row mb-3 form-group">
+                    <label for="email_id" class="col-sm-2 col-form-label">이메일</label>
+
+                    <div class="col-sm-10">
+                        <div class="d-flex align-items-center">
+                            <!-- Email input -->
+                            <input type="text" id="email_id" class="form-control allowOnlyLetters" style="width: 50%;" placeholder="이메일아이디" required>
+                            &nbsp;
+                            <!-- @ symbol -->
+                            <span>@</span>
+                            &nbsp;
+
+                            <!-- Custom domain input -->
+                            <input type="text" id="email_domain" class="form-control allowOnlyLetters" value="naver.com"  placeholder="이메일도메인" style="width: 40%;" required readonly>
+                            &nbsp;
+
+                            <!-- Domain select box -->
+                            <select class="form-select select_email_domain" id="emailDomain" style="width: 30%; height: calc(2.25rem + 2px);">
+                                <option value="naver">네이버</option>
+                                <option value="gmail">G메일</option>
+                                <option value="daum">다음</option>
+                                <option value="custom">직접 입력</option> <!-- 직접 입력 옵션 -->
+                            </select>
+                            &nbsp;
+                            
+                            
+                            <!-- Duplicate check button -->
+                            <button type="button" id="check_email_btn" class="btn btn-primary" style="min-width: 187px;">가입된 메일확인</button>
+                        </div>
+                    </div>
+                </div>                
+                
+                
+                <div class="row mb-3 form-group">
+				    <div class="d-flex align-items-center">        
+				        <button type="button" id="checkAuthEmail" class="btn btn-primary me-3" style="min-width: 187px;" disabled>메일본인인증</button>
+				        <label class="col-form-label me-2" id="authMsg">인증을 통해 본인확인을 완료해주세요.</label>
+				    </div>
+				</div>
+				
+				<!-- 인증번호 입력란과 확인 버튼을 위한 영역 -->
+	            <div id="authSection" class="row mb-3 form-group d-none">
+	                <div class="col-sm-10 d-flex me-3">
+	                    <input type="text" id="authCode" class="form-control me-3" placeholder="메일 인증코드" style="width: 20%;" />
+	                   
+	                    <button type="button" id="checkAuthCode" class="btn btn-primary">확인</button>
+	                    
+	                    <!-- Countdown Timer -->
+                        <span id="countdown" class="ms-3"></span>
+	                </div>
+	            </div>				
+  
+                <form th:action="@{/}" method="post" id="findPwdForm">
+                    <div class="row mb-3 form-group">
+                        <label class="col-sm-2 col-form-label">새 비밀번호</label>
+                        <div class="col-sm-10">
+                            <input type="password" name=pwd id="pwd" class="form-control" placeholder="새 비밀번호를 입력하세요" required readonly>
+                        </div>
+                    </div>
+                    <div class="row mb-3 form-group">
+                        <label class="col-sm-2 col-form-label">새 비밀번호 확인</label>
+                        <div class="col-sm-10">
+                            <input type="password" name="password_confirm" id="password_confirm" class="form-control" placeholder="비밀번호를 다시 입력하세요" required readonly>
+                        </div>
+                    </div>                            
+                    
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">완료</button>
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='/signIn';">취소</button>
+                    </div>
+                </form>
+        </div>
+    </div>
+</main>
+</html>

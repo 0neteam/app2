@@ -71,10 +71,11 @@ public class UniFunc {
 	}
 	
     // 템플릿을 이용한 이메일 내용 생성
-    public String generateEmailContent(String authCode, String tempatePath) {
+    public String generateEmailContent(String authCode, String name, String tempatePath) {
         // 이메일 템플릿에서 ${authCode} 부분을 실제 인증 코드로 치환
         String emailContent = loadEmailTemplate(tempatePath);
         emailContent = emailContent.replace("${authCode}", authCode);
+        emailContent = emailContent.replace("${name}", name);
         return emailContent;
     }
 	

@@ -50,8 +50,8 @@ public class BizDaoImp implements BizDao {
             String key = jwtToken.setToken(bizDTO.getBizNo() + "");
             key = key.split(" ")[1];
             List<BizApiKeyDTO> apiKeys = new ArrayList<BizApiKeyDTO>();
-            apiKeys.add(BizApiKeyDTO.builder().bizNo(bizDTO.getBizNo()).type("order").url("/quo/order/{key}").key(key).build());
-            apiKeys.add(BizApiKeyDTO.builder().bizNo(bizDTO.getBizNo()).type("list").url("/list/{key}").key(key).build());
+            apiKeys.add(BizApiKeyDTO.builder().bizNo(bizDTO.getBizNo()).type("order").url("/api/order/{status} [1:'신청', 2:'취소', 3:'확정']").key(key).build());
+            apiKeys.add(BizApiKeyDTO.builder().bizNo(bizDTO.getBizNo()).type("list").url("/api/list").key(key).build());
             bizDTO.setApiKeys(apiKeys);
             
             for(BizApiKeyDTO bizApiKeyDTO : apiKeys) {
@@ -60,6 +60,18 @@ public class BizDaoImp implements BizDao {
             if(state == 3) return true;
         }
         return false;
+    }
+
+    public BizDTO findByEmail(String email) {
+        return bizMapper.findByEmail(email);
+    }
+
+    public int checkemail(String email) {
+        return bizMapper.checkemail(email);
+    }
+
+    public int loginpwdupdate(BizDTO bizDTO) {
+        return bizMapper.loginpwdupdate(bizDTO);
     }
 
 }

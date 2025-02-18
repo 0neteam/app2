@@ -18,4 +18,9 @@ public interface BizService {
 
     BizResDTO create(Map<String, String> paramMap);
 
+    public BizResDTO checkemail(String email);
+    public BizResDTO loginUpdateAuthCode(String email);
+    public BizResDTO loginUpdateAuthCodeCheck(String authCode);
+    public BizResDTO loginpwdupdate(String email, String pwd);
+
 }

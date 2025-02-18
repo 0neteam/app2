@@ -2,6 +2,7 @@ package com.java.user;
 
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
+import com.java.biz.BizDTO;
+import com.java.biz.BizDao;
 import com.java.common.UniFunc;
 import com.java.user.MyUserDTO;
 import com.java.user.RoleDTO;
@@ -31,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 public class UserServiceImp implements UserService, UserDetailsService {
 
 	private final UserDao userDAO;
+	private final BizDao bizDao;
 	
 	private final PasswordEncoder passwordEncoder;
 	
@@ -38,16 +42,31 @@ public class UserServiceImp implements UserService, UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		
-		UserDTO user = userDAO.findByUser(email);
-		if(user != null) {
-			List<RoleDTO> role = userDAO.findByRole(user.getUserNo());
-			
-			if(role != null) {
-				return new MyUserDTO(user, role);
+		BizDTO bizDTO = bizDao.findByEmail(email);
+		UserDTO userDTO = userDAO.findByUser(email);
+		List<RoleDTO> roles = new ArrayList<>();
+		if(bizDTO != null) {
+			// 1등
+			userDTO = UserDTO.builder().userNo(bizDTO.getBizNo()).email(email).pwd(bizDTO.getPwd()).build();
+			roles.add(RoleDTO.builder().roleNo(5).name("BIZ").build());
+			if(roles != null) {
+				return new MyUserDTO(userDTO, roles);
 			}
 		}
-		
+		if(userDTO != null) {
+			// 2등
+			roles = userDAO.findByRole(userDTO.getUserNo());
+			if(roles != null) {
+				return new MyUserDTO(userDTO, roles);
+			}
+		}
+/* 
+		if(bizDTO != null || userDTO != null) {
+			if(roles != null) {
+				return new MyUserDTO(userDTO, roles);
+			}
+		}
+*/		
 		return null;
 	}
 	

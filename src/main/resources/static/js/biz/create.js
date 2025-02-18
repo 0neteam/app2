@@ -34,15 +34,21 @@ $( () => {
             contentType: "application/json; charset:UTF-8",
             accept: "application/json",
             success: function(result) {
-                console.log(result);
-                if(result.match_cnt === "1") {
+                //console.log(result);
+                if(result.match_cnt === 1) {
+                    $("#bizNum").prop("readonly", true);
+                }
+                alert(result.data[0]["tax_type"]);
+                /*
+                if(result.match_cnt === 1) {
                     //성공
                     console.log("success");
+                    alert(result.data[0]["tax_type"]);
                 } else {
                     //실패
                     console.log("fail");
-                    alert(result.data[0]["tax_type"]);
                 }
+                    */
             },
             error: function(result) {
                 console.log("error");

@@ -239,6 +239,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function handleSubmit(event) {
+    event.preventDefault();  // 기본 폼 제출을 막음
     let isValid = true; // 유효성 검사 여부
     console.log('폼 제출 시작'); // 디버깅을 위한 로그
 
@@ -280,11 +281,8 @@ function handleSubmit(event) {
     // 유효성 검사 실패시 폼 제출 방지
     if (!isValid) {
         console.log('폼 제출이 방지됨'); // 디버깅을 위한 로그
-        event.preventDefault(); // 폼 제출 방지
 	} else {
         // Ajax로 폼 제출
-        event.preventDefault();  // 기본 폼 제출을 막음
-
 		//var _csrf = document.querySelector('input[name="_csrf"]').value;
         var formData = new FormData(event.target);  // FormData 객체를 사용하여 폼 데이터 수집		
 		//formData.append('_csrf', _csrf);  // CSRF 토큰을 formData에 추가

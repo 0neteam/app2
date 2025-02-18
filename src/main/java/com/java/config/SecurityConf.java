@@ -61,15 +61,11 @@ public class SecurityConf {
         
         http.authorizeHttpRequests(req -> {
             req.requestMatchers("/", "/signUp").permitAll(); // 메인 페이지 및 회원가입 페이지는 인증 없이 접근 가능
-            req.requestMatchers("/biz/create").permitAll();  
-            req.requestMatchers("/css/**").permitAll();
-            req.requestMatchers("/js/**").permitAll();             
-            req.requestMatchers("/user/create/checkemail").permitAll();   
-            req.requestMatchers("/user/findpw").permitAll();
-            req.requestMatchers("/user/loginUpdateAuthCode").permitAll();
-            req.requestMatchers("/user/loginUpdateAuthCodeCheck").permitAll();
-            req.requestMatchers("/user/loginpwdupdate").permitAll();
+            req.requestMatchers("/css/**", "/js/**").permitAll();
             req.requestMatchers("/webjars/**").permitAll(); // 정적 리소스(webjars) 접근 허용
+            
+            req.requestMatchers("/user/create/checkemail", "/user/findpw", "/user/loginUpdateAuthCode", "/user/loginUpdateAuthCodeCheck", "/user/loginpwdupdate").permitAll();   
+            req.requestMatchers("/biz/create", "/biz/findPwd", "/biz/checkEmail", "/biz/loginUpdateAuthCode", "/biz/loginUpdateAuthCodeCheck", "/biz/loginpwdupdate").permitAll();  
             req.requestMatchers("/api/**").permitAll();
                        
             req.anyRequest().authenticated(); // 그 외 모든 요청은 인증 필요

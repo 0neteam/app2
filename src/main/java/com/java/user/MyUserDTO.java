@@ -12,21 +12,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class MyUserDTO implements UserDetails {
 
 	private UserDTO userDTO;
-	private List<RoleDTO> roleDTO;
+	private List<RoleDTO> roles;
 
-	public MyUserDTO(UserDTO user, List<RoleDTO> role) {
+	public MyUserDTO(UserDTO user, List<RoleDTO> roles) {
 		this.userDTO = user;
-		this.roleDTO = role;
+		this.roles = roles;
 	}
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Set<GrantedAuthority> grant = new HashSet<>();
 		// roleDTO 리스트를 돌면서 각 RoleDTO의 이름을 사용하여 SimpleGrantedAuthority 추가
-	    for (RoleDTO role : roleDTO) {
-	        grant.add(new SimpleGrantedAuthority("ROLE_".concat(role.getName())));
-	    }
-	    
+	    roles.forEach(role -> grant.add(new SimpleGrantedAuthority("ROLE_".concat(role.getName()))));
 		return grant;
 	}
 
