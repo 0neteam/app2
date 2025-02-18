@@ -23,7 +23,6 @@ public class TranspDTO {
 	private String dstn;
 	private String driverName;
 	private String transpStatus;
-	private int transpMailNo;
 	private String driverPhone;
 	private LocalDate transpDate;
 }

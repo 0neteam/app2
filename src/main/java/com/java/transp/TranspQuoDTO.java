@@ -15,9 +15,10 @@ import lombok.ToString;
 @Builder
 public class TranspQuoDTO {
 
-    private String orderNo;
-    private int quoItemNo;
-    private int itemCode;
+	private int quoNo;
+	private int orderNo;
+	private int itemCode;
+    private String name;
     private int qty;
     private String departure;
     private String dstn;

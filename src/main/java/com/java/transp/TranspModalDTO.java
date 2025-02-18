@@ -17,7 +17,7 @@ import lombok.ToString;
 @Builder
 
 public class TranspModalDTO {
-	private int transpNo;
+	private int quoNo;
 	private int orderNo;
 	private String departure;
 	private String dstn;

@@ -11,30 +11,85 @@
                 .replace(/[^0-9]/g, '')
                 .replace(/^(\d{3})(\d{4})(\d{4})$/, '$1-$2-$3');
         }
-    </script>
 
-    <style>
-    
-    </style>
+        function submitForm() {
+            // 서버로 폼을 제출하는 AJAX 요청
+            var formData = new FormData(document.getElementById("infoForm"));
+            
+            // AJAX 요청을 통해 폼 데이터를 전송
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/InfoSave", true);
+            xhr.setRequestHeader("Accept", "application/json"); // JSON 응답을 받을 수 있도록 설정
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // 폼 전송 후 UI 변경
+                    document.getElementById("formContainer").style.display = "none"; // 입력 폼 숨기기
+                    document.getElementById("quoteContainer").style.display = "block"; // 견적 정보 보이기
+                    // 응답 데이터를 처리하여 화면에 표시할 수 있습니다.
+                    var response = JSON.parse(xhr.responseText);
+                    // 예시로 응답 데이터를 출력할 수 있습니다.
+                    console.log(response);
+                }
+            };
+            xhr.send(formData); // 폼 데이터를 서버로 전송
+        }
+    </script>
 </head>
 
 <body>
-    <main layout:fragment="content" class="container my-5">
-        <h1>운송자 정보 입력</h1>
-        <hr>
-        <h2>운송자 정보를 입력해주세요.</h2>
-        <form action="/InfoSave" method="POST">
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-            <input type="hidden" name="bizNo" th:value="${bizNo}">
-            <label for="name">이름&nbsp&nbsp&nbsp:</label>
-            <input type="text" id="driverName" name="driverName" required /><br><br>
+    <main layout:fragment="content" class="container my-2">
+        <div class="container section-container p-4 border rounded shadow-sm">
 
-            <label for="phone">휴대폰:</label>
-            <input type="text" id="driverPhone" name="driverPhone" maxlength="13" oninput="autoHyphen(this)" required /><br><br>
+            <!-- 입력 폼 (초기 화면에 보임) -->
+            <div id="formContainer" style="display: block;"> 
+                <h2>운송자 정보를 입력해주세요.</h2>
+                <form id="infoForm" onsubmit="event.preventDefault(); submitForm();"> <!-- submit 시 form을 막고 submitForm 호출 -->
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                    <input type="hidden" name="quoNo" th:value="${quoNo}">
+                    <input type="hidden" name="bizNo" th:value="${bizNo}">
+                    <input type="hidden" name="transpNo" th:value="${transpNo}">
+                    
+                    <label for="name">이름&nbsp;&nbsp;&nbsp;:</label>
+                    <input type="text" id="driverName" name="driverName" required /><br><br>
 
-            <button type="submit">전송</button>
-            <hr>
-        </form>
+                    <label for="phone">휴대폰:</label>
+                    <input type="text" id="driverPhone" name="driverPhone" maxlength="13" oninput="autoHyphen(this)" required /><br><br>
+
+                    <button type="submit">전송</button>
+                    <hr>
+                </form>
+            </div>
+
+            <!-- 운송자 견적 정보 (초기에는 숨김) -->
+            <div id="quoteContainer" style="display: none;">
+                <div class="text-center">
+                    <h3>운송자 견적 정보</h3>
+                    <table class="table table-bordered mt-4">
+                        <thead>
+                            <tr>
+                                <th>발주 코드</th>
+                                <th>품목 코드</th>
+                                <th>품목 이름</th>
+                                <th>품목 수량</th>
+                                <th>출발지</th>
+                                <th>도착지</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="q : ${quo}">
+                                <td th:text="${q.orderNo}"></td>
+                                <td th:text="${q.itemCode}"></td>
+                                <td th:text="${q.name}"></td>
+                                <td th:text="${q.qty}"></td>
+                                <td th:text="${q.departure}"></td>
+                                <td th:text="${q.dstn}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
     </main>
 </body>
 

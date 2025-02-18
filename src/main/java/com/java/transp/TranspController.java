@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,11 +45,21 @@ public class TranspController {
 
 
 
-    @GetMapping("/transpEmail/{bizNo:[0-9]+}")
-    public String TranspEmail(@PathVariable(name = "bizNo") Integer bizNo, Model model) {
-    	model.addAttribute("bizNo", bizNo);
-        return "transp/transpEmail";
-    };
+    @GetMapping("/transpEmail/{quoNo:[0-9]+}/{bizNo:[0-9]+}/{transpNo:[0-9]+}")
+    public String TranspEmail(
+        @PathVariable(name = "quoNo") Integer quoNo, 
+        @PathVariable(name = "bizNo") Integer bizNo, 
+        @PathVariable(name = "transpNo") Integer transpNo, 
+        Model model) {
+        
+        model.addAttribute("quoNo", quoNo);
+        model.addAttribute("bizNo", bizNo);
+        model.addAttribute("transpNo", transpNo);
+        model.addAttribute("quo", transpService.getMfrQuoByBizNo(quoNo));  // 견적 정보 전달
+        
+        return "transp/transpEmail";  // 초기 화면은 폼과 함께 보여짐
+    }
+
     
     @GetMapping("/transpInfo/{transpMailNo}")
     public String getTranspInfo(@PathVariable("transpMailNo") Integer transpMailNo, Model model, HttpServletRequest req) {
@@ -59,25 +70,25 @@ public class TranspController {
     }
   
     @PostMapping("/InfoSave")
-    public String InfoSave(HttpServletRequest req) {
-    	return transpService.InfoSave(req);
+    public String InfoSave(@ModelAttribute TranspInfoDTO transpInfoDTO) {
+        System.out.println("________________" + transpInfoDTO);
+        
+        // 운송자 정보 저장 처리
+        transpService.InfoSave(transpInfoDTO);
+        
+        // 폼 제출 후 갱신된 견적 정보를 전달하여 페이지 리다이렉트
+        return "redirect:/transpEmail/" + transpInfoDTO.getQuoNo() + "/" + transpInfoDTO.getBizNo() + "/" + transpInfoDTO.getTranspNo();
     }
+
+
     
     @GetMapping("/transpSendEmail")
-    public String sendEmail(@RequestParam(name = "carrier", required = false) String carrier, Model model) {
-        // bizNo가 129인 운송업체 이름만 가져옴
-        List<String> bizNames = transpService.getAllBizNames();
-        // 모델에 bizNames 추가
-        model.addAttribute("bizNames", bizNames);  
-        // 만약 운송업체를 선택하지 않으면 메시지 출력
-        if (carrier == null || carrier.isEmpty()) {
-            model.addAttribute("message", bizNames.isEmpty() ? "운송업체가 존재하지 않습니다." : "운송업체를 선택해주세요.");
-            return "transp/transpSendEmail";
-        }
-        // 이메일 전송 처리 결과 반환
-        String message = transpService.processEmailSending(129, carrier);
-        model.addAttribute("message", message);
-        return "transp/transpSendEmail";  
+    public String sendEmail(Model model,
+        @RequestParam(name = "quoNo") Integer quoNo, 
+        @RequestParam(name = "bizNo", required = false) Integer bizNo) {
+        return transpService.processEmailSending(quoNo, bizNo, model);
     }
+
+    
     
 }
