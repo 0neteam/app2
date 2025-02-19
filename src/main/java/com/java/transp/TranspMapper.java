@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
+import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.mapping.StatementType;
 import org.springframework.data.repository.query.Param;
 
@@ -126,6 +127,20 @@ public interface TranspMapper {
     public List<Integer> clientBizNo(int quoNo);
     
     
+    // 운송 취소를 위한 'mfr_transp'의 운송 상태 업데이트 쿼리
+    @Update("UPDATE mfr_transp SET transpStatus = '운송 취소' WHERE transpNo = #{transpNo}")
+    public int updateTranspStatus(int transpNo);
+
+    // 운송 취소에 필요한 거래처의 이메일을 찾는 쿼리
+    @Select("SELECT mfc.email " +
+            "FROM mfr_transp mt " +
+            "JOIN mfr_quo mq ON mt.quoNo = mq.quoNo " +
+            "JOIN mfr_client mfc ON mq.bizNo = mfc.bizNo " +
+            "WHERE mt.transpNo = #{transpNo}")
+    public String getClientEmailByTranspNo(int transpNo);
+
+    // 운송 취소 후 이메일 발송을 위한 메서드가 있을 경우, 그 기능을 처리할 수 있는 쿼리도 추가.
 }
+    
 
 	

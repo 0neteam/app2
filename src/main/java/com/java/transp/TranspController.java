@@ -1,6 +1,8 @@
 package com.java.transp;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -90,5 +92,28 @@ public class TranspController {
     }
 
     
-    
+    @PostMapping("/transp/cancel/{transpNo}")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> cancelTransp(@PathVariable("transpNo") int transpNo) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            // TranspService의 cancelTransp 메서드를 호출하여 운송 취소 처리
+            Boolean success = transpService.cancelTransp(transpNo);
+
+            if (success) {
+                response.put("success", true);
+                response.put("message", "운송 취소가 완료되었습니다.");
+            } else {
+                response.put("success", false);
+                response.put("message", "운송 취소에 실패했습니다.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.put("success", false);
+            response.put("message", "운송 취소 처리 중 오류가 발생했습니다.");
+        }
+
+        return ResponseEntity.ok(response);
+    }
 }
