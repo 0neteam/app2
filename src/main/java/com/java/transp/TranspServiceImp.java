@@ -161,5 +161,46 @@ public class TranspServiceImp implements TranspService {
 		return transpDao.getMfrQuoByBizNo(quoNo);
 	}
 
-    
+    @Override
+    public Boolean cancelTransp(int transpNo) {
+        // 운송 상태를 '운송 취소'로 업데이트
+        int updatedRows = transpDao.updateTranspStatus(transpNo);
+        if (updatedRows > 0) {
+            // 이메일 발송
+            String clientEmail = transpDao.getClientEmailByTranspNo(transpNo);
+            if (clientEmail != null) {
+                sendCancelEmail(clientEmail);  // 이메일 전송 메서드 호출
+                return true;
+            }
+        }
+        return false;  // 실패 시
+    }
+
+    private void sendCancelEmail(String clientEmail) {
+        // 이메일 본문 설정
+        String emailContent = "<h2>운송 취소 안내</h2>"
+                + "<p>고객님께서 요청하신 운송이 취소되었습니다.</p>";
+
+        try {
+            // 이메일 전송 설정
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+            // 발신자 이메일 주소 설정
+            helper.setFrom(emailFrom);
+            // 수신자 이메일 주소 설정
+            helper.setTo(clientEmail);
+            // 이메일 제목 설정
+            helper.setSubject("운송 취소 안내");
+            // HTML 이메일 본문 설정
+            helper.setText(emailContent, true);
+
+            // 이메일 전송
+            mailSender.send(message);
+            System.out.println("운송 취소 이메일 전송 성공: " + clientEmail);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("운송 취소 이메일 전송 실패: " + clientEmail);
+        }
+    }
 }

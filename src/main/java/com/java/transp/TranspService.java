@@ -21,5 +21,6 @@ public interface TranspService {
     public Boolean sendEmailToClient(int bizNo, int quoNo, int transpNo);
     public List<TranspQuoDTO> getMfrQuoByBizNo(int quoNo);
 
-    
+    // 운송 취소 처리 메서드 추가
+    public Boolean cancelTransp(int transpNo);  // 운송 취소 처리 및 이메일 발송
 }

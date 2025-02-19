@@ -19,4 +19,7 @@ public interface TranspDao {
     public List<TranspQuoDTO> getTranspDetailsByQuoNo(int quoNo);
     public List<Integer> clientBizNo(int quoNo);
 
+    public int updateTranspStatus(int transpNo);
+    public String getClientEmailByTranspNo(int transpNo);
+
 }

@@ -72,5 +72,15 @@ public class TranspDaoImp implements TranspDao {
 		return transpMapper.clientBizNo(quoNo);
 	}
 
+	@Override
+	public int updateTranspStatus(int transpNo) {
+		return transpMapper.updateTranspStatus(transpNo);
+	}
+
+	@Override
+	public String getClientEmailByTranspNo(int transpNo) {
+		return transpMapper.getClientEmailByTranspNo(transpNo);
+	}
+
 
 }

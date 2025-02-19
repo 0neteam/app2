@@ -53,7 +53,7 @@
                  data-driver-name=${i.driverName}, 
                  data-driver-phone=${i.driverPhone}, 
                  data-transp-status=${i.transpStatus != null ? i.transpStatus : '미정'},
-                 data-transp-date=${i.transpDate}"
+                 data-transp-date=${i.transpDate} "
         onclick="showModal(this)" style="cursor: pointer;">
         <td th:text="${iterStat.index + 1}"></td>
         <td th:text="${i.transpNo}"></td>
@@ -64,7 +64,6 @@
         <td th:text="${i.transpStatus != null ? i.transpStatus : '미정'}"></td>
     </tr>
 </tbody>
-
 
 
             </table>
@@ -117,66 +116,89 @@
 	                </table>
 	            </div>
 	            <div class="modal-footer">
-	                <button type="button" class="btn btn-danger">운송 취소</button>
+					<button type="button" class="btn btn-danger" id="cancelTranspButton">운송 취소</button>
 	                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
 	            </div>
 	        </div>
 	    </div>
 	</div>
+
+    <!-- CSRF Token 추가 -->
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
 <script>
-    function showModal(row) {
-        // Modal에 데이터를 채우는 코드
-        document.getElementById("modalTranspNo").innerText = row.getAttribute("data-transp-no");
-        document.getElementById("modalOrderNo").innerText = row.getAttribute("data-order-no");
-        document.getElementById("modalDeparture").innerText = row.getAttribute("data-departure");
-        document.getElementById("modalDstn").innerText = row.getAttribute("data-dstn");
-        document.getElementById("modalDriverName").innerText = row.getAttribute("data-driver-name");
-        document.getElementById("modalDriverPhone").innerText = row.getAttribute("data-driver-phone");
-        document.getElementById("modalTranspStatus").innerText = row.getAttribute("data-transp-status");
-        document.getElementById("modalTranspDate").innerText = row.getAttribute("data-transp-date");
+function showModal(row) {
+    // Modal에 데이터를 채우는 코드
+    const transpNo = row.getAttribute("data-transp-no");
+    const orderNo = row.getAttribute("data-order-no");
+    const departure = row.getAttribute("data-departure");
+    const dstn = row.getAttribute("data-dstn");
+    const driverName = row.getAttribute("data-driver-name");
+    const driverPhone = row.getAttribute("data-driver-phone");
+    const transpStatus = row.getAttribute("data-transp-status");
+    const transpDate = row.getAttribute("data-transp-date");
 
-        var modal = new bootstrap.Modal(document.getElementById('transpModal'));
-        modal.show();
+    // Modal에 존재하는지 확인 후 데이터 넣기
+    document.getElementById("modalTranspNo").innerText = transpNo;
+    document.getElementById("modalOrderNo").innerText = orderNo;
+    document.getElementById("modalDeparture").innerText = departure;
+    document.getElementById("modalDstn").innerText = dstn;
+    document.getElementById("modalDriverName").innerText = driverName;
+    document.getElementById("modalDriverPhone").innerText = driverPhone;
+    document.getElementById("modalTranspStatus").innerText = transpStatus;
+    document.getElementById("modalTranspDate").innerText = transpDate;
 
-        // 운송 취소 버튼 클릭 시 호출되는 함수
-        document.getElementById("cancelTranspButton").onclick = function() {
-            cancelTransp(row.getAttribute("data-transp-no"));
+    var modal = new bootstrap.Modal(document.getElementById('transpModal'));
+    modal.show();
+
+    // 🚀 모달이 열린 후 버튼을 찾도록 setTimeout 추가
+    setTimeout(() => {
+        const cancelButton = document.getElementById("cancelTranspButton");
+        if (cancelButton) {
+            cancelButton.onclick = function() {
+                cancelTransp(transpNo);
+            };
+        } else {
+            console.error("🚨 운송 취소 버튼을 찾을 수 없습니다.");
         }
-    }
+    }, 300);
+}
 
-    // 운송 취소 처리 함수
-    function cancelTransp(transpNo) {
-        fetch('/transp/cancel/' + transpNo, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ transpNo: transpNo })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // 상태 업데이트 및 이메일 발송 성공 시 모달 닫기
-                alert('운송이 취소되었습니다. 이메일을 발송했습니다.');
-                var modal = bootstrap.Modal.getInstance(document.getElementById('transpModal'));
-                modal.hide();
 
-                // 테이블에서 해당 행 업데이트 (운송 상태 변경)
-                const row = document.querySelector('[data-transp-no="'+ transpNo +'"]');
-                if (row) {
-                    row.querySelector('[data-transp-status]').innerText = '운송 취소';
-                }
-            } else {
-                alert('운송 취소에 실패했습니다.');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('운송 취소 처리 중 오류가 발생했습니다.');
-        });
-    }
+	// 운송 취소 처리 함수
+	function cancelTransp(transpNo) {
+	    var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+	    var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+	    fetch('/transp/cancel/' + transpNo, {
+	        method: 'POST',
+	        headers: {
+	            'Content-Type': 'application/json',
+	            [csrfHeader]: csrfToken  // CSRF 토큰을 헤더에 포함
+	        },
+	        body: JSON.stringify({ transpNo: transpNo })
+	    })
+	    .then(response => response.json())
+	    .then(data => {
+	        if (data.success) {
+	            alert('운송이 취소되었습니다. 이메일을 발송했습니다.');
+	            var modal = bootstrap.Modal.getInstance(document.getElementById('transpModal'));
+	            modal.hide();
+	            const row = document.querySelector('[data-transp-no="'+ transpNo +'"]');
+	            if (row) {
+	                row.querySelector('[data-transp-status]').innerText = '운송 취소';
+	            }
+	        } else {
+	            alert('운송 취소에 실패했습니다.');
+	        }
+	    })
+	    .catch(error => {
+	        console.error('Error:', error);
+	        alert('운송 취소 처리 중 오류가 발생했습니다.');
+	    });
+	}
 </script>
-
 
 </main>
 </html>
