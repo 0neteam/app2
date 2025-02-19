@@ -116,4 +116,7 @@ public interface QuoMapper {
 			+ "SET b.qty = (b.qty - a.qty)  "
 			+ "WHERE a.quoNo = #{quoNo}" )
 	public int stockUpdate(int quoNo);
+
+	@Select("select * from mfr_quo WHERE orderNo = #{orderNo} and bizNo = #{bizNo}")
+	public QuoDTO findOne(QuoDTO quoDTO);
 }

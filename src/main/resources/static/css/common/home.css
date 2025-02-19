@@ -1,0 +1,64 @@
+@charset "UTF-8";
+
+#use {
+cursor: pointer;
+list-style-type: none;
+padding-left: 0;
+text-align: center;
+margin: 50px 0;
+}
+
+
+#use li:hover img {
+color: #3c3c33;
+box-shadow: 5px 5px 5px gray;
+animation: rotate_target 2s linear infinite;
+    transform-origin: 50% 50%;
+
+
+}
+
+#use li {
+    padding: 15px; /* 리스트 아이템 전체에 여백 추가 */
+    border-radius: 20px; /* 둥근 모서리 */
+    transition: all 0.3s ease-in-out; /* 부드러운 애니메이션 효과 */
+}
+
+#use li:hover {
+    background: rgba(60, 60, 51, 0.1); /* 살짝 강조되는 배경 */
+    padding: 18px; /* hover 시 패딩 살짝 증가 */
+}
+
+#use li:hover img {
+    color: #3c3c33;
+    border: 3px solid #3c3c33; /* 내부 테두리 */
+    border-radius: 15px; /* 둥근 모서리 */
+    outline: 4px solid rgba(60, 60, 51, 0.5); /* 바깥쪽 테두리 */
+    outline-offset: 6px; /* 바깥 테두리와의 거리 */
+    padding: 10px; /* 이미지 내부 여백 */
+    background: #fff; /* 이미지 주변을 깔끔하게 정리 */
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3); /* 부드러운 그림자 */
+    animation: rotate_target 2s linear infinite;
+    transform-origin: 50% 50%;
+}
+#use img {
+height: 20vh;
+object-fit: scale-down;
+}
+
+#use p {
+padding: 10px 0;
+font-weight: bold;
+font-size: 1.3rem;
+}
+
+
+
+
+@keyframes rotate_target{
+100% {
+    transform: rotateY(360deg);
+    }
+}
+
+

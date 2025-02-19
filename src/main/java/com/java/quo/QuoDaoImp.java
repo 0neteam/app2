@@ -66,4 +66,8 @@ public class QuoDaoImp implements QuoDao{
 		return quoMapper.stockUpdate(quoNo);
 	}
 
+	public QuoDTO findOne(QuoDTO quoDTO) {
+		return quoMapper.findOne(quoDTO);
+	}
+
 }

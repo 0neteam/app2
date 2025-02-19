@@ -11,5 +11,6 @@ public interface QuoService {
 	public String quoChk(String key, int orderNo, Model model);
 	public QuoResOrderDTO setQuo(String key, Integer status, QuoReqOrderDTO quoReqOrderDTO);
 	public String del(int quoNo);
+	public QuoResOrderDTO quoState(Integer status, Integer orderNo, Integer bizNo);
 
 }

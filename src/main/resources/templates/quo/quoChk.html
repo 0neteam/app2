@@ -3,90 +3,102 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default}">
 <main layout:fragment="content" class="container my-2">
+	<script src="/js/quo/quoChk.js"></script>
 	<link rel="stylesheet" href="/css/quo/quo.css">
 	<div class="container section-container p-4 border rounded shadow-sm">
-	<div class="text-center">
-	<h3>견적서 상세조회</h3>
-	<div id="supplierModal">
-		<div class="container-flex">
-			<table id="quoCustomer" class = "table-half">
-				<tbody>
-					<tr>
-						<th rowspan = "5">공급받는자</th>
-						<th>사업자등록번호</th>
-						<td th:text="${r.bizNum}"></td>
-					</tr>
-					<tr>
-						<th>상호</th>
-						<td th:text="${r.bizName}"></td>
-					</tr>
-					<tr>
-						<th>주소</th>
-						<td th:text="${r.adr}"></td>
-					</tr>
-				</tbody>
-			</table>
-			<table id="quoSeller" class = "table-half">
-				<tbody>
-					<tr>
-						<th rowspan = "5">공급자</th>
-						<th>사업자등록번호</th>
-						<td>220-81-62517</td>
-					</tr>
-					<tr>
-						<th>상호</th>
-						<td>제조제조제조업체</td>
-					</tr>
-					<tr>
-						<th>주소</th>
-						<td>신촌버티고타워7층</td>
-					</tr>
-					<tr>
-						<th>Tel.</th>
-						<td>02-323-3223</td>
-					</tr>
-					<tr>
-						<th>Fax.</th>
-						<td>02-323-3224</td>
-					</tr>
-				</tbody>
-			</table>
-			<hr />
+		<div class="text-center">
+			<h3>견적서 상세조회 [<span th:text="${quo.quoStatus}" style="color: cadetblue;"></span>]</h3>
+			<div id="supplierModal">
+				<div class="container-flex">
+					<table id="quoCustomer" class = "table-half">
+						<tbody>
+							<tr>
+								<th rowspan = "5">공급받는자</th>
+								<th>사업자등록번호</th>
+								<td th:text="${biz.bizNum}"></td>
+							</tr>
+							<tr>
+								<th>상호</th>
+								<td th:text="${biz.bizName}"></td>
+							</tr>
+							<tr>
+								<th>주소</th>
+								<td>
+									<span th:text="${biz.adr}" style="margin-right: 5px;"></span>
+									<span th:text="${biz.adrDetail}"></span>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<table id="quoSeller" class = "table-half">
+						<tbody>
+							<tr>
+								<th rowspan = "5">공급자</th>
+								<th>사업자등록번호</th>
+								<td>220-81-62517</td>
+							</tr>
+							<tr>
+								<th>상호</th>
+								<td>제조제조제조업체</td>
+							</tr>
+							<tr>
+								<th>주소</th>
+								<td>신촌버티고타워7층</td>
+							</tr>
+							<tr>
+								<th>Tel.</th>
+								<td>02-323-3223</td>
+							</tr>
+							<tr>
+								<th>Fax.</th>
+								<td>02-323-3224</td>
+							</tr>
+						</tbody>
+					</table>
+					<hr />
+				</div>
+				<table id="quoDetailTable">
+					<thead>
+						<tr>
+						<th>수주번호</th>
+						<td th:text="${quo.quoNo}"></td>
+						<th>작성일자</th>
+						<td th:text="${quo.quoDate}"></td>
+						</tr>
+						<tr>
+							<th>물품 도착지</th>
+							<td th:text="${quo.dstn}" colspan="4"></td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th>품목코드</th>
+							<th>품목명</th>
+							<th>발주수량</th>
+							<th>단가</th>
+							<th>합계</th>
+						</tr>
+						<tr th:each="i, iterStat : ${result}">
+							<td th:text="${i.itemCode}"></td>
+							<td th:text="${i.name}"></td>
+							<td th:text="${i.qty}"></td>
+							<td th:text="${i.price}"></td>
+							<td th:text="${i.qty} * ${i.price}"></td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="d-flex align-items-center my-2 gap-2">
+					<form th:action="@{/}" method="post">
+						<input type="hidden" name="orderNo" id="orderNo" th:value="${quo.orderNo}" />
+						<input type="hidden" name="bizNo" id="bizNo" th:value="${quo.bizNo}" />
+					</form>
+					<th:block th:if="${quo.quoStatus == '견적검토'}">
+						<button type="button" class="btn btn-secondary w-100" id="btn1">발주확정</button>
+						<button type="button" class="btn btn-secondary w-100" id="btn2">발주취소</button>
+					</th:block>
+				</div>
+			</div>
 		</div>
-			<table id="quoDetailTable">
-				<thead>
-            		<tr>
-                       <th>수주번호</th>
-                       <td th:text="${r.quoNo}"></td>
-                       <th>작성일자</th>
-                       <td th:text="${r.quoDate}"></td>
-             		</tr>
-					<tr>
-                        <th>물품 도착지</th>
-                        <td th:text="${r.dstn}" colspan="4"></td>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-					    <th>품목코드</th>
-					    <th>품목명</th>
-					    <th>발주수량</th>
-					    <th>단가</th>
-					    <th>합계</th>
-					</tr>
-					<tr th:each="i, iterStat : ${result}">
-					    <td th:text="${iterStat.index + 1}"></td> 
-						<td th:text="${i.itemCode}"></td>
-                        <td th:text="${i.name}"></td>
-                        <td th:text="${i.qty}"></td>
-                        <td th:text="${i.price}"></td>
-                        <td th:text="${i.qty} * ${i.price}"></td>
-                    </tr>
-                 </tbody>
-			</table>
-	</div>
-	<p th:text="${result}"></p>
-	</div>
 	</div>
 </main>
 </html>

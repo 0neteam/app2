@@ -59,26 +59,26 @@
                     <input type="text" th:value="${bizResult.bizType}" class="form-control" readonly>
                 </div>
             </div>
-            <th:block th:if="${bizResult.apiKeys.size() > 0}">
-                <div class="row form-group">
-                    <div class="col-sm-2">발주 URL</div>
-                    <div class="col-sm-4">
+            <div class="row form-group">
+                <div class="col-sm-2">발주 URL</div>
+                <div class="col-sm-4">
+                    <th:block th:if="${bizResult.apiKeys.size() > 0}">
                         <input type="text" name="url1" id="url1" th:value="${bizResult.apiKeys[0].url}" class="form-control" required readonly>
-                    </div>
-                    <div class="col-sm-2">품목 URL</div>
-                    <div class="col-sm-4">
+                    </th:block>
+                    <th:block th:unless="${bizResult.apiKeys.size() > 0}">
+                        <input type="text" name="url1" id="url1" class="form-control" />
+                    </th:block>
+                </div>
+                <div class="col-sm-2">품목 URL</div>
+                <div class="col-sm-4">
+                    <th:block th:if="${bizResult.apiKeys.size() > 0}">
                         <input type="text" name="url2" id="url2" th:value="${bizResult.apiKeys[1].url}" class="form-control" required readonly>
-                    </div>
+                    </th:block>
+                    <th:block th:unless="${bizResult.apiKeys.size() > 0}">
+                        <input type="text" name="url2" id="url2" class="form-control" />
+                    </th:block>
                 </div>
-            </th:block>
-            <th:block th:unless="${bizResult.apiKeys.size() > 0}">
-                <div class="row form-group">
-                    <div class="col-sm-12">
-                        <button type="button" class="btn btn-primary" id="addApiKey">발주/품목 URL생성</button>
-                    </div>
-                </div>
-            </th:block>
-
+            </div>
             <div class="row form-group">
                 <div class="col-sm-2">대표자</div>
                 <div class="col-sm-4">

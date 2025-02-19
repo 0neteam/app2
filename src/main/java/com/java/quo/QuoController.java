@@ -57,6 +57,15 @@ public class QuoController {
 	public String del(@RequestParam(name="quoNo") Integer quoNo) {
 		return quoService.del(quoNo);
 	}
+
+	@ResponseBody
+	@PostMapping("/quoState")
+	public QuoResOrderDTO quoState(
+			@RequestParam("status") Integer status,
+			@RequestParam("orderNo") Integer orderNo, 
+			@RequestParam("bizNo") Integer bizNo) {
+		return quoService.quoState(status, orderNo, bizNo);
+	}
 	
 	
 

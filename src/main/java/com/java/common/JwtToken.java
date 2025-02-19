@@ -24,7 +24,7 @@ public class JwtToken {
 
     private MacAlgorithm ALGORITHM = Jwts.SIG.HS256;
     private String jwtSecretKey = "c2hlbGxmb2xkZXIxMjM0NTY3ODlEZXZKV1QxMjM0NTY3ODk=";
-    private int interval = 1000;
+    private int interval = 1;
     private String type = "bearer";
     private final KeyCrypt keyCrypt;
 
@@ -49,7 +49,7 @@ public class JwtToken {
 
     private Date getDate() {
 		Calendar date = Calendar.getInstance();
-		date.add(Calendar.MINUTE, interval);
+		date.add(Calendar.YEAR, interval);
 		return date.getTime();
 	}
 

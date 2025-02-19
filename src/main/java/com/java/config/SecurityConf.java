@@ -56,16 +56,18 @@ public class SecurityConf {
         http.cors(cors -> cors.disable());
         http.csrf(csrf -> {
             csrf.ignoringRequestMatchers("/api/**"); // 창고-> 제소사 요청시 
+            csrf.ignoringRequestMatchers("/quoState"); // 제소사 발주 상태 요청시 
         });
     
         
         http.authorizeHttpRequests(req -> {
             req.requestMatchers("/", "/signUp").permitAll(); // 메인 페이지 및 회원가입 페이지는 인증 없이 접근 가능
-            req.requestMatchers("/css/**", "/js/**").permitAll();
+            req.requestMatchers("/css/**", "/js/**", "/img/**").permitAll();
             req.requestMatchers("/webjars/**").permitAll(); // 정적 리소스(webjars) 접근 허용
             
             req.requestMatchers("/user/create/checkemail", "/user/findpw", "/user/loginUpdateAuthCode", "/user/loginUpdateAuthCodeCheck", "/user/loginpwdupdate").permitAll();   
             req.requestMatchers("/biz/create", "/biz/findPwd", "/biz/checkEmail", "/biz/loginUpdateAuthCode", "/biz/loginUpdateAuthCodeCheck", "/biz/loginpwdupdate").permitAll();  
+            req.requestMatchers("/quoChk/**", "/quoState").permitAll();
             req.requestMatchers("/api/**").permitAll();
                        
             req.anyRequest().authenticated(); // 그 외 모든 요청은 인증 필요

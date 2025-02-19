@@ -1,14 +1,24 @@
+spring:
+  profiles:
+    group:
+      dev:
+        - dev
+        - commons
+      prod:
+        - prod
+        - commons
+
+--- # 공통 사용
 server:
-  port: 8080
   servlet:
     session:
       timeout: ${REDIS_TIMEOUT}
-
 spring:
   application:
     name: app2
-  profiles:
-    active: dev
+  config:
+    activate:
+      on-profile: commons
 # 메일 설정
   mail:
     host: ${EMAIL_HOST}
@@ -22,9 +32,6 @@ spring:
           timeout: ${EMAIL_SMTP_TIMEOUT}
           starttls: 
             enable: ${EMAIL_SMTP_ENABLE}
-# ENV 설정
-  config:
-    import: optional:file:.env[.properties]
 # database 설정
   datasource:
     driver-class-name: ${DB_DRIVER}
@@ -51,6 +58,15 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
 
+--- # 개발 시 사용
+server:
+  port: 8002
+spring:
+# ENV 설정
+  config:
+    import: optional:file:.env[.properties]
+    activate:
+      on-profile: dev
 # log level 설정
 logging:
   level:
@@ -59,3 +75,18 @@ logging:
         web: INFO
       thymeleaf: INFO
 
+--- # 배포 시 사용
+server:
+  port: 8080
+spring:
+# ENV 설정
+  config:
+    activate:
+      on-profile: prod
+# log level 설정
+logging:
+  level:
+    org:
+      springframework:
+        web: WARN
+      thymeleaf: WARN
