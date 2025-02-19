@@ -13,6 +13,7 @@ $(() => {
     });
 
     $("tbody tr").on("click", function() {
+        var quoStatus = $(this).attr("data-quoStatus");
         var quoDate = $(this).attr("data-quoDate");
         var dstn = $(this).attr("data-dstn");
         var bizNum = $(this).attr("data-bizNum");
@@ -32,7 +33,6 @@ $(() => {
             method: 'POST',
             data: params
         }).done(data => {
-			console.log(data);
 			let quoCustomer = `<tbody>
 								<tr>
 									<th rowspan = "5">공급받는자</th>
@@ -93,7 +93,10 @@ $(() => {
             
             $("#quoCustomer").html(quoCustomer);
             $("#quoDetailTable").html(quoDetailTable);
-			$("#delBtn").attr("href", "/quo/del?quoNo="+quoNo);
+			$("#delBtn").off().on("click", () => window.location.href = "/quo/del?quoNo="+quoNo);
+			if(quoStatus !== "견적취소" && quoStatus !== "견적검토") {
+				$("#transpBtn").off().on("click", () => window.location.href = "/transpSendEmail?quoNo="+quoNo);
+			}
             $("#supplierModal").modal("show");
         }).fail(error => {
             console.log(error);

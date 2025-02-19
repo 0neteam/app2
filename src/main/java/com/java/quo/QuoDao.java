@@ -17,7 +17,6 @@ public interface QuoDao {
 	public int del(int quoNo);
 	public int stockUpdate(int quoNo);
 	public QuoDTO findOne(QuoDTO quoDTO);
-	
-	
+	public QuoDTO findByQuoNo(int quoNo);
 
 }

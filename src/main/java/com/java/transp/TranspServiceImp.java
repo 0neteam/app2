@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import com.java.biz.BizDTO;
+import com.java.quo.QuoDTO;
+import com.java.quo.QuoDao;
 import com.java.quo.QuoModalDTO;
 
 import jakarta.mail.internet.MimeMessage;
@@ -20,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class TranspServiceImp implements TranspService {
 
 	private final TranspDao transpDao;
+	private final QuoDao quoDao;
 	private final JavaMailSender mailSender;
 	
     @Value("${spring.mail.username}")
@@ -131,6 +134,11 @@ public class TranspServiceImp implements TranspService {
         if (quoNo == null) {
             message = "수주번호가 필요합니다.";
         } else {
+			QuoDTO quoDTO = quoDao.findByQuoNo(quoNo);
+			if(!"발주확정".equals(quoDTO.getQuoStatus())) {
+				return "redirect:/";
+			}
+
 			model.addAttribute("quoNo", quoNo);
 			model.addAttribute("bizNames", getAllBizNames()); 
 

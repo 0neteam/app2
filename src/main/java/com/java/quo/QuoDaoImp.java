@@ -70,4 +70,8 @@ public class QuoDaoImp implements QuoDao{
 		return quoMapper.findOne(quoDTO);
 	}
 
+	public QuoDTO findByQuoNo(int quoNo) {
+		return quoMapper.findByQuoNo(quoNo);
+	}
+
 }

@@ -119,4 +119,8 @@ public interface QuoMapper {
 
 	@Select("select * from mfr_quo WHERE orderNo = #{orderNo} and bizNo = #{bizNo}")
 	public QuoDTO findOne(QuoDTO quoDTO);
+
+	@Select("select * from mfr_quo WHERE quoNo = #{quoNo}")
+	public QuoDTO findByQuoNo(int quoNo);
+
 }
