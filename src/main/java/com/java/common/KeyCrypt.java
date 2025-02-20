@@ -20,6 +20,7 @@ import java.util.Objects;
 
 import javax.crypto.Cipher;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,8 +29,12 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class KeyCrypt {
     
-    private String KEYS_PUBLIC = "access-keys/access-public.key";
-    private String KEYS_PRIVATE = "access-keys/access-private.key";
+    @Value(value = "${access.keys.public}")
+  	private String KEYS_PUBLIC;
+
+  	@Value(value = "${access.keys.private}")
+  	private String KEYS_PRIVATE;
+	
     private String KEYS_INSTANCE = "RSA";    
     private KeyPair _accessKeyPair;
 

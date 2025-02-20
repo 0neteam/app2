@@ -10,6 +10,8 @@ spring:
 
 --- # 공통 사용
 server:
+  domain1: ${SERVER_DOMAIN}
+  domain2: ${TARGET_DOMAIN}
   servlet:
     session:
       timeout: ${REDIS_TIMEOUT}
@@ -61,6 +63,10 @@ springdoc:
   swagger-ui:
     path: /docs
     operationsSorter: method
+access:
+  keys:
+    public: ${PUBLIC_KEY}
+    private: ${PRIVATE_KEY}
 
 --- # 개발 시 사용
 server:

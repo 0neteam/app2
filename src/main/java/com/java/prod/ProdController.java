@@ -136,7 +136,6 @@ public class ProdController {
     @PostMapping("/api/list")
     public QuoResOrderDTO listProd(@RequestHeader("Authorization") String key) {
         QuoResOrderDTO resDTO = QuoResOrderDTO.builder().status(false).build();
-
         try {
             int bizNo = Integer.parseInt(jwtToken.getBizNo(key));
             int status = prodService.findListProds(bizNo);
@@ -147,6 +146,7 @@ public class ProdController {
                     resultMap.put("itemCode", prodDTO.getItemCode());
                     resultMap.put("name", prodDTO.getName());
                     resultList.add(resultMap);
+                    System.out.println(3);
                 }
                 resDTO.setData(resultList);
                 resDTO.setStatus(true);
@@ -160,8 +160,7 @@ public class ProdController {
             log.info("Exception: {}", e.getMessage());
             resDTO.setMsg("적절한 요청이 아닙니다.");
         }
-        
-        return resDTO;        
+        return resDTO;
     }
 
     

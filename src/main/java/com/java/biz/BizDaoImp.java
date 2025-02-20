@@ -2,6 +2,8 @@ package com.java.biz;
 
 import com.java.common.JwtToken;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -13,6 +15,9 @@ public class BizDaoImp implements BizDao {
 
     private final BizMapper bizMapper;
     private final JwtToken jwtToken;
+
+	@Value("${server.domain1}")
+    private String domain;
 
     @Override
     public List<BizDTO> findList(BizReqDTO bizReqDTO) {
@@ -50,8 +55,8 @@ public class BizDaoImp implements BizDao {
             String key = jwtToken.setToken(bizDTO.getBizNo() + "");
             key = key.split(" ")[1];
             List<BizApiKeyDTO> apiKeys = new ArrayList<BizApiKeyDTO>();
-            apiKeys.add(BizApiKeyDTO.builder().bizNo(bizDTO.getBizNo()).type("order").url("/api/order/{status} [1:'신청', 2:'취소', 3:'확정']").key(key).build());
-            apiKeys.add(BizApiKeyDTO.builder().bizNo(bizDTO.getBizNo()).type("list").url("/api/list").key(key).build());
+            apiKeys.add(BizApiKeyDTO.builder().bizNo(bizDTO.getBizNo()).type("order").url(domain+"/api/order/").key(key).build());
+            apiKeys.add(BizApiKeyDTO.builder().bizNo(bizDTO.getBizNo()).type("list").url(domain+"/api/list").key(key).build());
             bizDTO.setApiKeys(apiKeys);
             
             for(BizApiKeyDTO bizApiKeyDTO : apiKeys) {

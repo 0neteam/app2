@@ -79,7 +79,7 @@ public class BizServiceImp implements BizService {
 				String key = "요청 URL 목록 및 거래처 API-KEY\n";
 				for(BizApiKeyDTO bizApiKeyDTO : bizDTO.getApiKeys()) {
 					if("order".equals( bizApiKeyDTO.getType()) ) {
-						body += "발주 URL : " + bizApiKeyDTO.getUrl() + "\n";
+						body += "발주 URL : " + bizApiKeyDTO.getUrl() + "{status} [1:'신청', 2:'취소', 3:'확정']\n";
 					}
 					if("list".equals( bizApiKeyDTO.getType()) ) {
 						body += "품목 URL : " + bizApiKeyDTO.getUrl() + "\n";
