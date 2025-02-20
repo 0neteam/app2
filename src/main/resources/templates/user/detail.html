@@ -58,7 +58,7 @@
             <div class="row mb-3 form-group">
                 <label class="col-sm-2 col-form-label">사용자 권한</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" th:value="${rs.roleName == 'ADMIN' ? '관리자' : rs.roleName == 'DEV' ? '개발자' : rs.roleName == 'USER' ? '일반 사용자' : rs.roleName}" readonly />
+                    <input type="text" class="form-control" th:value="${role}" readonly />
                 </div>
             </div>
             <div class="text-center">

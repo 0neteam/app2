@@ -24,5 +24,7 @@ public interface UserService {
 //	public int authCodeUpdate(UserDTO userDTO);
 	
 	public int pwdupdate(UserDTO userDTO);
+
+	public String userDetail(Integer userNo, Model model);
 	
 }

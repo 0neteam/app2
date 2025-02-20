@@ -110,7 +110,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
 		
 		int status = userDAO.save(user);
 		if(status == 1) {			
-			status = userDAO.saveUserRole(UserRole.builder().userNo(user.getUserNo()).roleNo(2).build());
+			status = userDAO.saveUserRole(UserRole.builder().userNo(user.getUserNo()).roleNo(4).build());
 			if(status == 1) {
 				
 				// 로그인 여부 확인
@@ -190,7 +190,19 @@ public class UserServiceImp implements UserService, UserDetailsService {
 		UserDTO userDTO = userDAO.detailByUserNo(uniFunc.getUserNo()+"");
 		if(userDTO == null) return "redirect:/";
 
+		String role = "";
+		List<RoleDTO> roles = userDAO.findByRole(userDTO.getUserNo());
+		for(int i = 0; i < roles.size(); i++) {
+			RoleDTO roleDTO = roles.get(i);
+			if(i != 0) role += ", ";
+			if("ADMIN".equals(roleDTO.getName())) role += "관리자";
+			if("DEV".equals(roleDTO.getName())) role += "개발자";
+			if("USER".equals(roleDTO.getName())) role += "일반";
+			if("INIT".equals(roleDTO.getName())) role += "미승인";
+		}
+
 		model.addAttribute("rs", userDTO);
+		model.addAttribute("role", role);
 		
 		return "user/detail";
 	}
@@ -201,12 +213,15 @@ public class UserServiceImp implements UserService, UserDetailsService {
 		String userNo = req.getParameter("userNo");
 		
 		UserDTO userDTO = userDAO.detailByUserNo(userNo);
-		model.addAttribute("rs", userDTO);
-		
-		System.out.println("///////////////userDTO///////////////");
-		System.out.println("userDTO : " + userDTO);
-		
-		return "user/edit";
+		if(userDTO != null) {
+			RoleDTO roleDTO = userDAO.findByUserNoRole(userDTO.getUserNo());
+			if(roleDTO != null) {
+				userDTO.setRoleName(roleDTO.getName());
+			}
+			model.addAttribute("rs", userDTO);
+			return "user/edit";
+		}
+		return "redirect:/";
 	}
 
 //	@Override
@@ -225,7 +240,24 @@ public class UserServiceImp implements UserService, UserDetailsService {
 	}
 
 	
+	public String userDetail(Integer userNo, Model model) {
+		UserDTO userDTO = userDAO.detailByUserNo(userNo + "");
+		if(userDTO == null) return "redirect:/";
 
-	
+		String role = "";
+		List<RoleDTO> roles = userDAO.findByRole(userDTO.getUserNo());
+		for(int i = 0; i < roles.size(); i++) {
+			RoleDTO roleDTO = roles.get(i);
+			if(i != 0) role += ", ";
+			if("ADMIN".equals(roleDTO.getName())) role += "관리자";
+			if("DEV".equals(roleDTO.getName())) role += "개발자";
+			if("USER".equals(roleDTO.getName())) role += "일반";
+			if("INIT".equals(roleDTO.getName())) role += "미승인";
+		}
+
+		model.addAttribute("rs", userDTO);
+		model.addAttribute("role", role);
+		return "user/detail";
+	}
 	
 }

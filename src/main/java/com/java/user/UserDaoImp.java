@@ -104,4 +104,8 @@ public class UserDaoImp implements UserDao {
 		return userMapper.pwdupdate(userDTO);
 	}
 
+	public RoleDTO findByUserNoRole(int userNo) {
+		return userMapper.findByUserNoRole(userNo);
+	}
+
 }

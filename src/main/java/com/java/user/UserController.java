@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -278,4 +279,11 @@ public class UserController {
 		
 		return ListBizDTO;
 	}
+
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@GetMapping("/user/detail/{userNo:[0-9]+}")
+	public String userDetail(@PathVariable("userNo") Integer userNo, Model model) {
+		return userService.userDetail(userNo, model);
+	}
+
 }

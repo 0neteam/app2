@@ -135,3 +135,9 @@ function handleSubmit(event) {
         event.preventDefault(); // 폼 제출 방지
     }
 }
+
+$( () => {
+    $(".btn-detail").on("click", (e) => {
+        window.location.href = "/user/detail/" + $(e.target).attr("data-user-no");
+    });
+});

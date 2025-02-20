@@ -33,4 +33,7 @@ public interface UserDao {
 //	public int authCodeUpdate(UserDTO userDTO);
 	
 	public int pwdupdate(UserDTO userDTO);
+
+	public RoleDTO findByUserNoRole(int userNo);
+	
 }
