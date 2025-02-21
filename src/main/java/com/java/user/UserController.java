@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -215,6 +216,9 @@ public class UserController {
 	// 3차 진행시 문의 바람
 	private final UserMapper userMapper;
 
+	@Value("${spring.mail.username}")
+    private String emailFrom;
+
 	// 직원 메일 인증코드 Redis 저장
 	@ResponseBody
 	@PostMapping("/user/loginUpdateAuthCode")
@@ -231,7 +235,7 @@ public class UserController {
 		uniFunc.saveVerificationCode(userDTO.getAuthCode(), 60); // Redis 인증 코드 저장 (60초)
 		
 		MailDTO mailDTO = MailDTO.builder()
-		.emailFrom("mfr.0neteam.co.kr@gmail.com")
+		.emailFrom(emailFrom)
 		.emailTo(userDTO.getEmail())
 		.emailSubject("인증코드를 확인해주세요.")
 		.emailBody(uniFunc.generateEmailContent(userDTO.getAuthCode(), userDTO.getName(), "templates/user/emailTemplate.html"))

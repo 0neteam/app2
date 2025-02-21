@@ -41,6 +41,7 @@ function openPostcode() {
 
             $("#zipcode").val(data.zonecode);
             $("#adr").val(data.roadAddress);
+            $("#address").val(data.roadAddress);
         }
     }).open();
 }
