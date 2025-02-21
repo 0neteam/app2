@@ -77,10 +77,13 @@ public interface TranspMapper {
 	@Insert("INSERT INTO mfr_transp_info (bizNo, transpNo, driverName, driverPhone) VALUE (#{bizNo}, #{transpNo}, #{driverName}, #{driverPhone})")
 	public int InfoSave(TranspInfoDTO transpInfoDTO);
 	
+	@Select("SELECT * FROM mfr_transp WHERE transpNo = #{transpNo}")
+	public TranspDTO findTransInfo(int transpNo);
+
 	@Select("SELECT * FROM mfr_transp_info WHERE transpNo = #{transpNo}")
 	public TranspInfoDTO findDriverInfo(@Param("transpNo") int transpNo);
 
-    @Select("SELECT bizNo, bizName FROM mfr_client WHERE bizNo = 129")  // 운송업체 bizNo가 129
+    @Select("SELECT bizNo, bizName FROM mfr_client WHERE bizType = '운수' AND useYN = 'Y'")
     public List<BizDTO> getAllBizNames();
 	
     @Select("SELECT email FROM mfr_client WHERE bizNo = #{bizNo}")
@@ -128,8 +131,8 @@ public interface TranspMapper {
     
     
     // 운송 취소를 위한 'mfr_transp'의 운송 상태 업데이트 쿼리
-    @Update("UPDATE mfr_transp SET transpStatus = '운송 취소' WHERE transpNo = #{transpNo}")
-    public int updateTranspStatus(int transpNo);
+    @Update("UPDATE mfr_transp SET transpStatus = #{transpStatus} WHERE transpNo = #{transpNo}")
+    public int updateTranspStatus(TranspDTO transpDTO);
 
     // 운송 취소에 필요한 거래처의 이메일을 찾는 쿼리
     @Select("SELECT mfc.email " +

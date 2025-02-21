@@ -28,6 +28,9 @@ public class TranspServiceImp implements TranspService {
     @Value("${spring.mail.username}")
     private String emailFrom;
 
+	@Value("${server.domain1}")
+    private String domain;
+
 	@Override
 	public String transpList(Model model, HttpServletRequest req) {
 		List<TranspDTO> transpList = transpDao.transpList();
@@ -54,15 +57,12 @@ public class TranspServiceImp implements TranspService {
 
 
 	@Override
-	public String InfoSave(TranspInfoDTO transpInfoDTO) {
-	    try {
-	        if (transpDao.InfoSave(transpInfoDTO) == null) {
-	            return "redirect:/transpEmail/" + transpInfoDTO.getQuoNo() + "/" + transpInfoDTO.getBizNo() + "/" + transpInfoDTO.getTranspNo();
-	        }
-	    } catch (NumberFormatException e) {
-	        e.printStackTrace();
-	    }
-	    return "redirect:/";  // 실패시 홈 페이지 등으로 리다이렉트
+	public TranspResDTO InfoSave(TranspInfoDTO transpInfoDTO) {
+	    boolean status = (transpDao.InfoSave(transpInfoDTO) > 0) ? true : false;
+		if(status) {
+			status = (transpDao.updateTranspStatus(TranspDTO.builder().transpNo(transpInfoDTO.getTranspNo()).transpStatus("배송중").build()) > 0) ? true : false;
+		}
+	    return TranspResDTO.builder().status(status).build();
 	}
 
 	
@@ -106,7 +106,7 @@ public class TranspServiceImp implements TranspService {
 //	            + "<p>출발지: " + firstQuo.getDeparture() + "</p>"
 //	            + "<p>도착지: " + firstQuo.getDstn() + "</p>"
 	            + "<p>운송자 정보를 입력하려면 아래 링크를 클릭하세요.</p>"
-	            + "<p><a href='http://localhost:8080/transpEmail/" + quoNo + "/" + clientBizNoValue  + "/" + transpNo + "'>운송자 정보 입력</a></p>";
+	            + "<p><a href='" + domain + "/transpEmail/" + quoNo + "/" + clientBizNoValue  + "/" + transpNo + "'>운송자 정보 입력</a></p>";
 
 		try {
 			// 이메일 전송 로직
@@ -172,19 +172,18 @@ public class TranspServiceImp implements TranspService {
     @Override
     public Boolean cancelTransp(int transpNo) {
         // 운송 상태를 '운송 취소'로 업데이트
-        int updatedRows = transpDao.updateTranspStatus(transpNo);
+        int updatedRows = transpDao.updateTranspStatus(TranspDTO.builder().transpNo(transpNo).transpStatus("배송취소").build());
         if (updatedRows > 0) {
             // 이메일 발송
             String clientEmail = transpDao.getClientEmailByTranspNo(transpNo);
             if (clientEmail != null) {
-                sendCancelEmail(clientEmail);  // 이메일 전송 메서드 호출
-                return true;
+                return sendCancelEmail(clientEmail);  // 이메일 전송 메서드 호출
             }
         }
         return false;  // 실패 시
     }
 
-    private void sendCancelEmail(String clientEmail) {
+    private boolean sendCancelEmail(String clientEmail) {
         // 이메일 본문 설정
         String emailContent = "<h2>운송 취소 안내</h2>"
                 + "<p>고객님께서 요청하신 운송이 취소되었습니다.</p>";
@@ -206,9 +205,21 @@ public class TranspServiceImp implements TranspService {
             // 이메일 전송
             mailSender.send(message);
             System.out.println("운송 취소 이메일 전송 성공: " + clientEmail);
+			return true;
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("운송 취소 이메일 전송 실패: " + clientEmail);
         }
+		return false;
     }
+
+	public TranspDTO findTransInfo(int transpNo) {
+		return transpDao.findTransInfo(transpNo);
+	}
+
+	public TranspResDTO successTransp(int transpNo) {
+		boolean status = (transpDao.updateTranspStatus(TranspDTO.builder().transpNo(transpNo).transpStatus("배송완료").build()) > 0) ? true : false;
+		return TranspResDTO.builder().status(status).build();
+	}
+
 }

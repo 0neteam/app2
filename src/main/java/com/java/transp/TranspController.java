@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
@@ -57,6 +58,8 @@ public class TranspController {
         model.addAttribute("quoNo", quoNo);
         model.addAttribute("bizNo", bizNo);
         model.addAttribute("transpNo", transpNo);
+
+        model.addAttribute("transp", transpService.findTransInfo(transpNo));  // 운송 정보 전달
         model.addAttribute("quo", transpService.getMfrQuoByBizNo(quoNo));  // 견적 정보 전달
         
         return "transp/transpEmail";  // 초기 화면은 폼과 함께 보여짐
@@ -71,18 +74,14 @@ public class TranspController {
         return "transp/transp";
     }
   
+    @ResponseBody
     @PostMapping("/InfoSave")
-    public String InfoSave(@ModelAttribute TranspInfoDTO transpInfoDTO) {
+    public TranspResDTO InfoSave(@ModelAttribute TranspInfoDTO transpInfoDTO) {
         System.out.println("________________" + transpInfoDTO);
-        
+        if(transpInfoDTO.getBizNo() == 0) return TranspResDTO.builder().status(false).build();
         // 운송자 정보 저장 처리
-        transpService.InfoSave(transpInfoDTO);
-        
-        // 폼 제출 후 갱신된 견적 정보를 전달하여 페이지 리다이렉트
-        return "redirect:/transpEmail/" + transpInfoDTO.getQuoNo() + "/" + transpInfoDTO.getBizNo() + "/" + transpInfoDTO.getTranspNo();
+        return transpService.InfoSave(transpInfoDTO);
     }
-
-
     
     @GetMapping("/transpSendEmail")
     public String sendEmail(Model model,
@@ -91,29 +90,26 @@ public class TranspController {
         return transpService.processEmailSending(quoNo, bizNo, model);
     }
 
-    
-    @PostMapping("/transp/cancel/{transpNo}")
+
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> cancelTransp(@PathVariable("transpNo") int transpNo) {
-        Map<String, Object> response = new HashMap<>();
-
-        try {
-            // TranspService의 cancelTransp 메서드를 호출하여 운송 취소 처리
-            Boolean success = transpService.cancelTransp(transpNo);
-
-            if (success) {
-                response.put("success", true);
-                response.put("message", "운송 취소가 완료되었습니다.");
-            } else {
-                response.put("success", false);
-                response.put("message", "운송 취소에 실패했습니다.");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.put("success", false);
-            response.put("message", "운송 취소 처리 중 오류가 발생했습니다.");
-        }
-
-        return ResponseEntity.ok(response);
+    @PostMapping("/transp/success/{transpNo}")
+    public TranspResDTO successTransp(@PathVariable("transpNo") int transpNo) {
+        System.out.println("_________________" + transpNo);
+        return transpService.successTransp(transpNo);
     }
+    
+    @ResponseBody
+    @PostMapping("/transp/cancel/{transpNo}")
+    public TranspResDTO cancelTransp(@PathVariable("transpNo") int transpNo) {
+        TranspResDTO transpResDTO = TranspResDTO.builder().build();
+        if (transpService.cancelTransp(transpNo)) {
+            transpResDTO.setStatus(true);
+            transpResDTO.setMsg("운송 취소가 완료되었습니다.");
+        } else {
+            transpResDTO.setStatus(false);
+            transpResDTO.setMsg("운송 취소에 실패했습니다.");
+        }
+        return transpResDTO;
+    }
+
 }

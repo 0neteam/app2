@@ -31,9 +31,8 @@ public class TranspDaoImp implements TranspDao {
 	}
 	
 	@Override
-	public TranspInfoDTO InfoSave(TranspInfoDTO transpInfoDTO) {
-		int status = transpMapper.InfoSave(transpInfoDTO);
-		return (status == 1) ? transpInfoDTO : null;
+	public int InfoSave(TranspInfoDTO transpInfoDTO) {
+		return transpMapper.InfoSave(transpInfoDTO);
 	}
 	
 
@@ -73,8 +72,8 @@ public class TranspDaoImp implements TranspDao {
 	}
 
 	@Override
-	public int updateTranspStatus(int transpNo) {
-		return transpMapper.updateTranspStatus(transpNo);
+	public int updateTranspStatus(TranspDTO transpDTO) {
+		return transpMapper.updateTranspStatus(transpDTO);
 	}
 
 	@Override
@@ -82,5 +81,8 @@ public class TranspDaoImp implements TranspDao {
 		return transpMapper.getClientEmailByTranspNo(transpNo);
 	}
 
+	public TranspDTO findTransInfo(int transpNo) {
+		return transpMapper.findTransInfo(transpNo);
+	}
 
 }

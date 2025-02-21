@@ -10,7 +10,7 @@ public interface TranspDao {
 	public List<TranspDTO> transpList();
 	public List<TranspDTO> transpSearch(String category, String search);
     public List<TranspModalDTO> transpModal(int no);
-	public TranspInfoDTO InfoSave(TranspInfoDTO transpInfoDTO);
+	public int InfoSave(TranspInfoDTO transpInfoDTO);
     public TranspInfoDTO findDriverInfo(int transpMailNo);
 	public List<BizDTO> getAllBizNames();
 	public String bizNoEmail(int bizNo);
@@ -19,7 +19,9 @@ public interface TranspDao {
     public List<TranspQuoDTO> getTranspDetailsByQuoNo(int quoNo);
     public List<Integer> clientBizNo(int quoNo);
 
-    public int updateTranspStatus(int transpNo);
+    public int updateTranspStatus(TranspDTO transpDTO);
     public String getClientEmailByTranspNo(int transpNo);
+
+    public TranspDTO findTransInfo(int transpNo);
 
 }

@@ -135,11 +135,16 @@ public class ProdController {
     @ResponseBody
     @PostMapping("/api/list")
     public QuoResOrderDTO listProd(@RequestHeader("Authorization") String key) {
+        System.out.println(1);
         QuoResOrderDTO resDTO = QuoResOrderDTO.builder().status(false).build();
+        System.out.println(2);
         try {
             int bizNo = Integer.parseInt(jwtToken.getBizNo(key));
+            System.out.println("3_______" + bizNo);
             int status = prodService.findListProds(bizNo);
+            System.out.println(4);
             if (status == 1) { // 거래처 확인 성공
+                System.out.println(5);
                 List<Map<String, Object>> resultList = new ArrayList<>();
                 for(ProdDTO prodDTO : prodService.getListProds()) {
                     Map<String, Object> resultMap = new HashMap<>();
@@ -150,6 +155,7 @@ public class ProdController {
                 }
                 resDTO.setData(resultList);
                 resDTO.setStatus(true);
+                System.out.println(6);
             } 
         } catch (NumberFormatException e) {
             // 숫자 파싱 실패 시 예외 처리
@@ -160,6 +166,7 @@ public class ProdController {
             log.info("Exception: {}", e.getMessage());
             resDTO.setMsg("적절한 요청이 아닙니다.");
         }
+        System.out.println("7_______"+resDTO);
         return resDTO;
     }
 
